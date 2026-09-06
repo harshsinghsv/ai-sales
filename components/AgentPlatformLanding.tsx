@@ -190,67 +190,111 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       <AnthropicShowcase onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
-          5. CAPABILITIES BENTO (Upgraded with React Bits SpotlightCards)
+          5. CAPABILITIES (Minimal 4-Pillar Architectural Moats)
          ───────────────────────────────────────────────────────────── */}
-      <section id="capabilities" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
+      <section id="capabilities" className="py-20 bg-[#FAF9F5] border-y border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] border border-[#D97757]/20 text-[#D97757] text-xs font-mono font-medium mb-3">
               <Zap className="w-3.5 h-3.5" />
               <span>CORE ARCHITECTURAL MOATS</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141413] tracking-tight">
               Engineered to Protect Margin While Closing Faster
             </h2>
-            <p className="mt-4 text-base text-[#5E5D59]">
-              Built with real-time voice and autonomous negotiation primitives.
+            <p className="mt-3 text-sm sm:text-base text-[#5E5D59]">
+              Four core engineering primitives that turn real-time voice into an autonomous negotiation engine.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <SpotlightCard className="col-span-1 md:col-span-2 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
-              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-5">
-                <Activity className="w-6 h-6" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Pillar 1 */}
+            <div className="p-6 rounded-2xl bg-white border border-[#E8E6DC] shadow-xs flex flex-col justify-between hover:border-[#D97757]/40 transition-all">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-4">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#D97757] font-semibold mb-1">
+                  &lt;500ms Turnaround
+                </div>
+                <h3 className="font-serif text-lg font-bold text-[#141413] mb-2">
+                  Sub-500ms Voice RTC
+                </h3>
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Agora SD-RTN edge routing, Deepgram Nova-3 Multi, and MiniMax 2.8 Turbo in a unified cloud pipeline.
+                </p>
               </div>
-              <div className="text-xs font-mono uppercase tracking-wider text-[#D97757] mb-1 font-semibold">Sub-500ms Turnaround</div>
-              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">Sub-500ms Voice RTC Pipeline</h3>
-              <p className="text-sm text-[#5E5D59] leading-relaxed max-w-xl">
-                Zero browser SpeechRecognition quirks. Traverses Agora SD-RTN with Deepgram Nova-3 Multi STT and MiniMax Speech-2.8 Turbo synthesis, delivering sub-half-second natural conversational turns.
-              </p>
-            </SpotlightCard>
+              <div className="pt-4 mt-4 border-t border-[#E8E6DC] flex items-center gap-1.5 text-[11px] font-mono text-[#8C8984]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Agora SD-RTN Edge</span>
+              </div>
+            </div>
 
-            <SpotlightCard className="col-span-1 md:col-span-1 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
-              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-5">
-                <ShieldCheck className="w-6 h-6" />
+            {/* Pillar 2 */}
+            <div className="p-6 rounded-2xl bg-white border border-[#E8E6DC] shadow-xs flex flex-col justify-between hover:border-[#D97757]/40 transition-all">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-4">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-wider text-amber-700 font-semibold mb-1">
+                  Margin Defense
+                </div>
+                <h3 className="font-serif text-lg font-bold text-[#141413] mb-2">
+                  18% Floor Guard
+                </h3>
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Strict algorithmic boundary that prevents excessive discounting and requires multi-year reciprocal terms.
+                </p>
               </div>
-              <div className="text-xs font-mono uppercase tracking-wider text-amber-700 mb-1 font-semibold">Margin Defense</div>
-              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">18% Margin Floor Guard</h3>
-              <p className="text-sm text-[#5E5D59] leading-relaxed">
-                Algorithmic concession boundary. While human sales reps frequently cave to 30% discounts, our engine strictly bounds concessions and demands multi-year commitments in reciprocity.
-              </p>
-            </SpotlightCard>
+              <div className="pt-4 mt-4 border-t border-[#E8E6DC] flex items-center gap-1.5 text-[11px] font-mono text-[#8C8984]">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                <span>Policy Enforced</span>
+              </div>
+            </div>
 
-            <SpotlightCard className="col-span-1 md:col-span-1 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
-              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-emerald-700 mb-5">
-                <Workflow className="w-6 h-6" />
+            {/* Pillar 3 */}
+            <div className="p-6 rounded-2xl bg-white border border-[#E8E6DC] shadow-xs flex flex-col justify-between hover:border-[#D97757]/40 transition-all">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-4">
+                  <Workflow className="w-5 h-5" />
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-wider text-emerald-700 font-semibold mb-1">
+                  Autonomous Stack
+                </div>
+                <h3 className="font-serif text-lg font-bold text-[#141413] mb-2">
+                  Tri-Channel Sync
+                </h3>
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Autonomous tool execution across HubSpot CRM deals, Google Calendar appointments, and Slack rooms.
+                </p>
               </div>
-              <div className="text-xs font-mono uppercase tracking-wider text-emerald-700 mb-1 font-semibold">Autonomous Stack</div>
-              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">Tri-Channel Sync</h3>
-              <p className="text-sm text-[#5E5D59] leading-relaxed">
-                Autonomous execution across HubSpot CRM deals, Google Calendar appointments, and Slack notification webhooks with real-time sentiment analytics.
-              </p>
-            </SpotlightCard>
+              <div className="pt-4 mt-4 border-t border-[#E8E6DC] flex items-center gap-1.5 text-[11px] font-mono text-[#8C8984]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>HubSpot · GCal · Slack</span>
+              </div>
+            </div>
 
-            <SpotlightCard className="col-span-1 md:col-span-2 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
-              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-indigo-700 mb-5">
-                <Globe className="w-6 h-6" />
+            {/* Pillar 4 */}
+            <div className="p-6 rounded-2xl bg-white border border-[#E8E6DC] shadow-xs flex flex-col justify-between hover:border-[#D97757]/40 transition-all">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-4">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-wider text-indigo-700 font-semibold mb-1">
+                  Bilingual Acoustic
+                </div>
+                <h3 className="font-serif text-lg font-bold text-[#141413] mb-2">
+                  Code-Switching
+                </h3>
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Native English and Hindi (Hinglish) code-switching for multinational enterprise buyers and procurement.
+                </p>
               </div>
-              <div className="text-xs font-mono uppercase tracking-wider text-indigo-700 mb-1 font-semibold">Global Acoustic Engine</div>
-              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">Multi-Language Code-Switching</h3>
-              <p className="text-sm text-[#5E5D59] leading-relaxed max-w-xl">
-                Fluent code-switching across English and Hindi (Hinglish) using Deepgram's multi-language acoustic model, perfectly tailored for multinational procurement teams and global deal negotiations.
-              </p>
-            </SpotlightCard>
+              <div className="pt-4 mt-4 border-t border-[#E8E6DC] flex items-center gap-1.5 text-[11px] font-mono text-[#8C8984]">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                <span>Deepgram Nova-3 Multi</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
