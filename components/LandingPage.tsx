@@ -31,9 +31,9 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnecting }) => {
-  const [name, setName] = useState('Rahul Sharma');
+  const [name, setName] = useState('Tina');
   const [company, setCompany] = useState('Razorpay');
-  const [email, setEmail] = useState('rahul.sharma@razorpay.com');
+  const [email, setEmail] = useState('gargiesingh321@gmail.com');
   const [seats, setSeats] = useState(50);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('annual');
   const [showConfigModal, setShowConfigModal] = useState(false);
@@ -519,7 +519,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                   <User className="absolute left-3 top-2.5 size-4 text-[rgba(27,29,30,0.4)]" />
                   <input type="text" value={name} onChange={(e) => setName(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 rounded-xl bg-white border border-[rgba(27,29,30,0.14)] text-xs text-[#1b1d1e] placeholder:text-[rgba(27,29,30,0.35)] focus:outline-none focus:border-[#4928fd]"
-                    placeholder="e.g. Rahul Sharma" />
+                    placeholder="e.g. Geeta" />
                 </div>
               </div>
               <div>

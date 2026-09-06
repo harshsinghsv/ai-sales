@@ -280,9 +280,9 @@ export function useAgoraVoice() {
       localUidRef.current = tokenData.uid;
 
       const seed: SalesSessionSeed = {
-        customer_name: initialInfo?.name || 'Rahul Sharma',
+        customer_name: initialInfo?.name || 'Tina',
         company: initialInfo?.company || 'Razorpay',
-        email: initialInfo?.email || 'rahul.sharma@razorpay.com',
+        email: initialInfo?.email || 'gargiesingh321@gmail.com',
         seat_count: initialInfo?.seats || 50,
       };
 
