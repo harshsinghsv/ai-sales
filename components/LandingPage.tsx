@@ -577,8 +577,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
         </div>
 
         {/* Carousel Container with Peeking Sides */}
-        <div className="relative">
-          <div className="w-full rounded-3xl overflow-hidden relative shadow-md min-h-[460px] sm:min-h-[520px] flex flex-col justify-between p-8 sm:p-14 text-white bg-[#181410]">
+        <div className="relative flex items-stretch gap-4 sm:gap-6 -mx-4 sm:-mx-6 lg:-mx-12 px-4 sm:px-6 lg:px-12">
+          {/* Left Peeking Card (Previous Customer Story) */}
+          <div
+            onClick={handlePrevStory}
+            className="hidden md:flex w-36 lg:w-48 shrink-0 rounded-3xl bg-[#C5BFB5] overflow-hidden relative items-center justify-center p-6 cursor-pointer opacity-60 hover:opacity-85 transition-opacity select-none"
+            title="Previous story"
+          >
+            <img
+              src={CUSTOMER_STORIES[(storyIndex - 1 + CUSTOMER_STORIES.length) % CUSTOMER_STORIES.length].logoUrl}
+              alt="Previous story"
+              className="w-24 object-contain brightness-0 invert opacity-80"
+            />
+          </div>
+
+          {/* Center Main Card */}
+          <div className="flex-1 w-full rounded-3xl overflow-hidden relative shadow-md min-h-[460px] sm:min-h-[520px] flex flex-col justify-between p-8 sm:p-14 text-white bg-[#181410]">
             {/* Real Customer Photographic / Video Background */}
             <img
               src={currentStory.posterUrl}
@@ -650,6 +664,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Right Peeking Card (Next Customer Story) */}
+          <div
+            onClick={handleNextStory}
+            className="hidden md:flex w-36 lg:w-48 shrink-0 rounded-3xl bg-[#C5BFB5] overflow-hidden relative items-center justify-center p-6 cursor-pointer opacity-60 hover:opacity-85 transition-opacity select-none"
+            title="Next story"
+          >
+            <img
+              src={CUSTOMER_STORIES[(storyIndex + 1) % CUSTOMER_STORIES.length].logoUrl}
+              alt="Next story"
+              className="w-24 object-contain brightness-0 invert opacity-80"
+            />
           </div>
         </div>
 
