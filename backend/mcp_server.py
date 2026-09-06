@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Optional
 
 from mcp.server.mcpserver import MCPServer, Context
 
+from backend.config import settings
 from backend.middleware.custom_llm import (
     broadcast_tool_call,
     execute_tool_call,
@@ -273,6 +274,72 @@ async def escalate_to_human(
     )
 
 
+@mcp.tool()
+async def end_call(
+    ctx: Context,
+    reason: Optional[str] = None,
+    conversation_id: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Actually hang up the call RIGHT NOW. Call this the moment you say your
+    closing line and the buyer confirms they need nothing else — do not just
+    say goodbye and keep talking or leave the call open. Speaking a farewell
+    without calling this tool does not end the call; the buyer stays connected
+    with no agent responding, which is a broken experience.
+
+    Args:
+        reason: Why the call is ending (e.g. "meeting booked, buyer done",
+            "buyer declined, nothing further to discuss").
+    """
+    return await _run(
+        "end_call",
+        {"reason": reason},
+        ctx,
+        conversation_id,
+    )
+
+
+def _allowed_mcp_hosts() -> List[str]:
+    """
+    Host header values the MCP transport will accept.
+
+    The MCP SDK turns DNS-rebinding protection on by default with an EMPTY
+    allowlist, so every request whose Host isn't listed is rejected with
+    "421 Invalid Host header". Locally nothing looks wrong (localhost is
+    listed below), but the moment this is deployed behind a real domain,
+    Agora's tool calls are refused at the door and the agent silently loses
+    every tool — it can still talk, so the failure is invisible until a
+    booking never happens.
+
+    The public host is therefore derived from PUBLIC_BASE_URL automatically,
+    so deploying somewhere new can't silently break tool calling again.
+    """
+    from urllib.parse import urlparse
+
+    hosts = [
+        "localhost",
+        "localhost:*",
+        "127.0.0.1",
+        "127.0.0.1:*",
+    ]
+
+    public = (settings.PUBLIC_BASE_URL or "").strip()
+    if public:
+        parsed = urlparse(public if "//" in public else f"https://{public}")
+        if parsed.hostname:
+            hosts.append(parsed.hostname)
+            hosts.append(f"{parsed.hostname}:*")
+            if parsed.port:
+                hosts.append(f"{parsed.hostname}:{parsed.port}")
+
+    for extra in (settings.MCP_ALLOWED_HOSTS or "").split(","):
+        extra = extra.strip()
+        if extra:
+            hosts.append(extra)
+
+    # Preserve order while removing duplicates, purely for readable logs.
+    return list(dict.fromkeys(hosts))
+
+
 def build_mcp_app():
     """
     Starlette app serving the MCP streamable-HTTP transport.
@@ -281,8 +348,24 @@ def build_mcp_app():
     engine expects when calling a remote MCP server; json_response avoids
     requiring an SSE-capable client.
     """
+    from mcp.server.transport_security import TransportSecuritySettings
+
+    allowed_hosts = _allowed_mcp_hosts()
+    logger.info("MCP transport accepting Host headers: %s", allowed_hosts)
+
     return mcp.streamable_http_app(
         streamable_http_path="/",
         stateless_http=True,
         json_response=True,
+        transport_security=TransportSecuritySettings(
+            allowed_hosts=allowed_hosts,
+            # Agora's engine calls this server-to-server with no Origin header,
+            # which the SDK already permits; listing the public origin keeps
+            # browser-based MCP inspectors working too.
+            allowed_origins=[
+                h if h.startswith("http") else f"https://{h}"
+                for h in allowed_hosts
+                if not h.endswith(":*")
+            ],
+        ),
     )

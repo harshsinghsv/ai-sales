@@ -20,6 +20,7 @@ from backend.config import settings
 from backend.deal_engine.engine import calculate_quote, evaluate_concession_request
 from backend.services.agora_convo_client import agora_convo_client, generate_agora_rtc_token
 from backend.services.tts_shim import tts_shim, OpenAITTSRequest
+from backend.services.calendar_client import calendar_client
 from backend.middleware.custom_llm import (
     handle_chat_completion,
     ws_manager,
@@ -74,7 +75,7 @@ async def health_check():
         "agora_configured": agora_convo_client.is_configured,
         "sarvam_configured": bool(settings.SARVAM_API_KEY),
         "hubspot_configured": bool(settings.HUBSPOT_ACCESS_TOKEN),
-        "google_calendar_configured": bool(settings.GOOGLE_CALENDAR_CREDENTIALS),
+        "google_calendar_configured": calendar_client.is_configured,
         "slack_configured": bool(settings.SLACK_WEBHOOK_URL),
         "version": "1.0.0"
     }

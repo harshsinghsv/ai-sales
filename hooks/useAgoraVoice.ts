@@ -156,6 +156,21 @@ export function useAgoraVoice() {
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
+
+          if (data.type === 'CALL_END_REQUESTED') {
+            // The backend broadcasts this to every connected browser tab, not
+            // just this call — only act if it's actually for the session
+            // currently running here, or one demo call could hang up another.
+            if (
+              data.conversation_id === currentChannelRef.current &&
+              !endingRef.current
+            ) {
+              endingRef.current = true;
+              void endCallRef.current();
+            }
+            return;
+          }
+
           if (data.type === 'AGENT_TOOL_CALL') {
             setToolCalls((prev) =>
               [
@@ -377,6 +392,14 @@ export function useAgoraVoice() {
           'The Agora agent could not be started — check credentials and the backend.',
         );
       }
+
+      // An agent with an unreachable MCP endpoint still talks perfectly well,
+      // it just silently can't act — no bookings, no discounts, no CRM. Make
+      // that loud rather than discovering it mid-demo when nothing happens.
+      agentData?.warnings?.forEach((warning) => {
+        console.error('[invite-agent warning]', warning);
+        addToast('deal', '⚠ Agent tools offline', warning);
+      });
 
       // 3c. Join the RTC channel and publish the microphone.
       const AgoraRTC = (await import('agora-rtc-sdk-ng')).default;
@@ -648,7 +671,11 @@ export function useAgoraVoice() {
     setVolumeLevel(0);
     setPartialText('');
     setIsMuted(false);
-    endingRef.current = false;
+    // Deliberately NOT clearing endingRef here. Leaving the channel makes the
+    // agent's 'user-left' event fire moments later; if the guard were already
+    // released, that handler would call endCall() a second time — which hits
+    // Agora with a duplicate stop (400 ErrConflict) and tries to close an
+    // already-closed mic track. startCall() clears it for the next call.
   }, []);
 
   // Keep the ref pointing at the current endCall for use inside RTC handlers.

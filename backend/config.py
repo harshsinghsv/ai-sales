@@ -82,6 +82,15 @@ class Settings(BaseSettings):
     # RTC uid the human specialist joins as.
     HUMAN_AGENT_RTC_UID: int = int(os.getenv("HUMAN_AGENT_RTC_UID", "7777"))
 
+    # Extra Host header values the MCP server accepts, comma separated.
+    # The MCP SDK enables DNS-rebinding protection by default with an EMPTY
+    # allowlist, which means any deployed domain is rejected with
+    # "421 Invalid Host header" while localhost keeps working — the agent then
+    # silently has no tools. The host from PUBLIC_BASE_URL is added
+    # automatically (see mcp_server.build_mcp_app); use this only for extra
+    # hostnames, e.g. a Railway *.up.railway.app URL alongside a custom domain.
+    MCP_ALLOWED_HOSTS: str = os.getenv("MCP_ALLOWED_HOSTS", "")
+
     # --- Agora MCP ----------------------------------------------------------
     # Comma-separated MCP server URLs the Conversational AI agent may call
     # tools from (transport: streamable_http). Wired into llm.mcp_servers.

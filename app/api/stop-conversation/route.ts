@@ -4,6 +4,17 @@ import { BACKEND_HTTP_URL, getServerAgoraCredentials } from '@/lib/agora';
 import { releaseAgentSession } from '@/lib/agent-registry';
 import type { StopConversationRequest } from '@/types/conversation';
 
+/**
+ * Stopping an agent that is already stopping is a success, not a failure.
+ *
+ * Agora is inconsistent about where it puts the explanation: the observed 400
+ * is `{detail: "ErrConflict", reason: "Conflict: The task is already in the
+ * process of shutting down."}`, i.e. the human-readable phrase lands in
+ * `reason`, while an earlier variant put it in `detail` with
+ * `reason: "InvalidRequest"`. So check every field for the phrase rather than
+ * matching one exact shape, and treat conflict/not-found statuses as
+ * already-stopped.
+ */
 function isAgentAlreadyStoppingOrStopped(error: unknown): boolean {
   if (!error || typeof error !== 'object') return false;
 
@@ -14,20 +25,22 @@ function isAgentAlreadyStoppingOrStopped(error: unknown): boolean {
   };
 
   const statusCode = maybeErr.statusCode;
-  const reason = maybeErr.body?.reason?.toLowerCase();
-  const detail =
-    maybeErr.body?.detail?.toLowerCase() ??
-    maybeErr.message?.toLowerCase() ??
-    '';
+  if (statusCode === 404 || statusCode === 409) return true;
 
-  if (statusCode === 404) return true;
-  if (
-    reason === 'invalidrequest' &&
-    detail.includes('already in the process of shutting down')
-  ) {
-    return true;
-  }
-  return false;
+  const haystack = [
+    maybeErr.body?.detail,
+    maybeErr.body?.reason,
+    maybeErr.message,
+  ]
+    .filter((v): v is string => typeof v === 'string')
+    .join(' | ')
+    .toLowerCase();
+
+  return (
+    haystack.includes('already in the process of shutting down') ||
+    haystack.includes('errconflict') ||
+    haystack.includes('not found')
+  );
 }
 
 /**

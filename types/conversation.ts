@@ -35,6 +35,13 @@ export interface AgentResponse {
   state: string;
   /** FastAPI conversation id — equals the channel name. */
   conversation_id: string;
+  /**
+   * Non-fatal problems detected while starting the agent — most importantly,
+   * an unreachable MCP endpoint, which leaves the agent able to talk but
+   * unable to actually book, discount, or sync anything. Surfaced in the UI
+   * so the failure is never silent.
+   */
+  warnings?: string[];
 }
 
 /** Request body for POST /api/stop-conversation. */

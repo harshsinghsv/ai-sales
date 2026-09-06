@@ -245,6 +245,19 @@ SALES_TOOLS: List[Dict[str, Any]] = [
                 "required": ["reason"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "end_call",
+            "description": "Actually hangs up the call. Speaking a farewell alone does not end the call — this tool must be called in the same turn as the closing line, or the buyer stays connected with no one responding.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "reason": {"type": "string", "description": "Why the call is ending, e.g. 'meeting booked, buyer done'."}
+                }
+            }
+        }
     }
 ]
 
@@ -570,6 +583,27 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
             toast_title="🚨 Human Specialist Escalated",
             toast_detail=f"Live handoff link dispatched: {reason}"
         )
+
+    elif name == "end_call":
+        # Saying a farewell out loud does not end an RTC call by itself — the
+        # agent has no direct way to leave the channel or stop itself, so
+        # without this the buyer stays connected with no one responding after
+        # Emily "hangs up" verbally. This broadcasts a request that the
+        # frontend (which does control the RTC session) acts on immediately.
+        reason = args.get("reason", "Conversation complete.")
+        if not session.outcome:
+            session.outcome = "lead_qualified"
+
+        await ws_manager.broadcast(
+            {
+                "type": "CALL_END_REQUESTED",
+                "conversation_id": session.conversation_id,
+                "reason": reason,
+                "timestamp": int(time.time() * 1000),
+            }
+        )
+        res = {"status": "call_ending", "reason": reason}
+
     return res
 
 

@@ -258,8 +258,8 @@ def test_pipeline_config_exposes_deal_engine_mcp_url(client):
 
 
 def test_mcp_tools_are_registered():
-    """All six sales actions must be exposed over MCP — this is what makes the
-    agent agentic when Agora's managed OpenAI drives the conversation."""
+    """All seven sales actions must be exposed over MCP — this is what makes
+    the agent agentic when Agora's managed OpenAI drives the conversation."""
     import asyncio
     from backend.mcp_server import mcp
 
@@ -272,7 +272,36 @@ def test_mcp_tools_are_registered():
         "book_meeting",
         "update_session_state",
         "escalate_to_human",
+        "end_call",
     }
+
+
+def test_end_call_broadcasts_a_scoped_hangup_request(monkeypatch):
+    """end_call has no direct way to leave the RTC channel itself — it must
+    broadcast a request the frontend acts on, scoped to this conversation_id
+    so it can never hang up a different, unrelated live call."""
+    import asyncio
+    from backend.middleware import custom_llm
+    from backend.middleware.custom_llm import get_or_create_session, execute_tool_call
+
+    captured = {}
+
+    async def fake_broadcast(message):
+        if message.get("type") == "CALL_END_REQUESTED":
+            captured.update(message)
+
+    monkeypatch.setattr(custom_llm.ws_manager, "broadcast", fake_broadcast)
+
+    async def run():
+        session = get_or_create_session("test_end_call_01")
+        return await execute_tool_call(
+            "end_call", {"reason": "meeting booked, buyer done"}, session
+        )
+
+    result = asyncio.run(run())
+    assert result["status"] == "call_ending"
+    assert captured["conversation_id"] == "test_end_call_01"
+    assert captured["reason"] == "meeting booked, buyer done"
 
 
 def test_mcp_tool_delegates_to_deal_engine():

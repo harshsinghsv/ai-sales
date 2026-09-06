@@ -135,6 +135,40 @@ function buildTts(config: AgentPipelineConfig): BaseTTS {
  * explicitly to match Agora's own documented example, even though the SDK
  * would default it to the same value.
  */
+/**
+ * Verifies Agora's cloud will actually be able to reach our MCP server.
+ *
+ * Agora validates only the *syntax* of `llm.mcp_servers[].endpoint` when the
+ * agent starts, never its reachability. So a dead tunnel (trycloudflare URLs
+ * expire the moment cloudflared stops) produces a perfectly happy 200 from
+ * invite-agent, an agent with zero working tools, and an assistant that
+ * confidently says "I've booked your meeting" while nothing happens at all.
+ * That silent failure is far worse than a loud one, so probe it up front.
+ *
+ * Any HTTP response at all means the host is live — a 404/405 from the MCP
+ * transport is fine here. Only a network-level failure (DNS, refused, timeout)
+ * means Agora won't be able to get through either.
+ */
+async function probeMcpReachable(
+  url: string,
+): Promise<{ reachable: boolean; detail: string }> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(url, {
+      method: 'GET',
+      signal: controller.signal,
+      cache: 'no-store',
+    });
+    clearTimeout(timeout);
+    return { reachable: true, detail: `HTTP ${res.status}` };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : String(error);
+    return { reachable: false, detail: message };
+  }
+}
+
 function buildMcpServers(
   config: AgentPipelineConfig,
 ): McpServersItem[] | undefined {
@@ -215,6 +249,31 @@ export async function POST(request: NextRequest) {
     // cockpit WebSocket, and the post-call deal memo.
     const conversationId = channel_name;
     const config = await fetchPipelineConfig(conversationId, seed);
+
+    // If Agora can't reach our MCP server, the agent starts fine but has no
+    // tools — it can talk about pricing and bookings without being able to do
+    // either. Surface that immediately instead of letting the demo lie.
+    const warnings: string[] = [];
+    if (config.deal_engine_mcp_url) {
+      const probe = await probeMcpReachable(config.deal_engine_mcp_url);
+      if (!probe.reachable) {
+        const host = (() => {
+          try {
+            return new URL(config.deal_engine_mcp_url!).host;
+          } catch {
+            return config.deal_engine_mcp_url!;
+          }
+        })();
+        console.error(
+          `[invite-agent] MCP endpoint unreachable (${host}): ${probe.detail}`,
+        );
+        warnings.push(
+          `Agent tools are OFFLINE: Agora cannot reach the deal engine at ${host} ` +
+            `(${probe.detail}). Emily can talk, but cannot book meetings, apply ` +
+            `discounts, or sync CRM. Check PUBLIC_BASE_URL points at a live public tunnel.`,
+        );
+      }
+    }
 
     // --- 2. Build the agent ---
     // area: change to Area.EU or Area.AP for European or Asia-Pacific deployments.
@@ -298,6 +357,7 @@ export async function POST(request: NextRequest) {
       create_ts: Math.floor(Date.now() / 1000),
       state: 'RUNNING',
       conversation_id: conversationId,
+      warnings,
     } as AgentResponse);
   } catch (error) {
     console.error('Error starting conversation:', error);
