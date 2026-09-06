@@ -89,22 +89,22 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
   const showThinkingSkeleton = thinking && !partialText;
 
   return (
-    <div className="relative flex flex-col h-full min-h-0 bg-white border border-[rgba(27,29,30,0.1)] rounded-2xl shadow-[0_1px_3px_rgba(27,29,30,0.06)]">
+    <div className="relative flex flex-col h-full min-h-0 bg-white border border-[#E8E6DC] rounded-2xl shadow-sm">
       {/* Transcript Header */}
-      <div className="flex items-center justify-between gap-3 px-5 pt-4 pb-3.5 border-b border-[rgba(27,29,30,0.08)]">
+      <div className="flex items-center justify-between gap-3 px-5 pt-4 pb-3.5 border-b border-[#E8E6DC]">
         <div className="flex items-center gap-2.5 min-w-0">
-          <MessageSquare className="size-3.5 text-[#4928fd] shrink-0" aria-hidden />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[#1b1d1e] truncate">
+          <MessageSquare className="size-3.5 text-[#D97757] shrink-0" aria-hidden />
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#141413] truncate">
             Live transcript
           </h3>
           {turns.length > 0 && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#eeeafe] text-[#4928fd] tabular-nums shrink-0">
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#FAF0EC] text-[#D97757] tabular-nums shrink-0">
               {turns.length}
             </span>
           )}
         </div>
-        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-[#1e6b1a] shrink-0">
-          <span aria-hidden className="size-1.5 rounded-full bg-[#22a06b] animate-softpulse" />
+        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-[#788C5D] shrink-0">
+          <span aria-hidden className="size-1.5 rounded-full bg-[#788C5D] animate-pulse" />
           <span>Deepgram STT · Hinglish</span>
         </div>
       </div>
@@ -119,12 +119,12 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
       >
         {turns.length === 0 && !partialText && !showThinkingSkeleton && (
           <div className="h-full min-h-52 flex flex-col items-center justify-center text-center py-12">
-            <div className="size-9 rounded-full bg-[#eeeafe] border border-[#4928fd]/15 flex items-center justify-center mb-2.5">
-              <Sparkles className="size-4 text-[#4928fd]" aria-hidden />
+            <div className="size-9 rounded-full bg-[#FAF0EC] border border-[#D97757]/20 flex items-center justify-center mb-2.5">
+              <Sparkles className="size-4 text-[#D97757]" aria-hidden />
             </div>
-            <p className="text-xs text-[#1b1d1e]/70 font-medium">Listening for buyer voice…</p>
-            <p className="text-[11px] text-[rgba(27,29,30,0.42)] mt-1 max-w-64 leading-relaxed">
-              Speak in English or Hindi, or open Demo controls to try a scenario.
+            <p className="text-xs text-[#141413] font-medium">Listening for buyer voice…</p>
+            <p className="text-[11px] text-[#5E5D59] mt-1 max-w-64 leading-relaxed">
+              Speak in English or Hindi, or select a scenario below to begin.
             </p>
           </div>
         )}
@@ -139,22 +139,22 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
                 className={cn(
                   'size-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 border',
                   isAgent
-                    ? 'bg-[#eeeafe] text-[#4928fd] border-[#4928fd]/20'
-                    : 'bg-[rgba(27,29,30,0.05)] text-[rgba(27,29,30,0.6)] border-[rgba(27,29,30,0.1)]'
+                    ? 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/30'
+                    : 'bg-[#FAF9F5] text-[#5E5D59] border-[#E8E6DC]'
                 )}
               >
-                {initials(speakerName)}
+                {isAgent ? '✻' : initials(speakerName)}
               </div>
               <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                 <div className="flex items-center justify-between gap-2 px-0.5">
-                  <span className="text-[11px] font-bold text-[#1b1d1e] truncate">
+                  <span className="text-[11px] font-bold text-[#141413] truncate">
                     {speakerName}
-                    <span className="ml-1.5 font-medium text-[rgba(27,29,30,0.5)]">
+                    <span className="ml-1.5 font-medium text-[#87867F]">
                       {isAgent ? '· Sales Agent' : '· Buyer'}
                     </span>
                   </span>
                   <span className="flex items-center gap-1 shrink-0">
-                    <span className="text-[10px] font-medium text-[rgba(27,29,30,0.5)] tabular-nums">
+                    <span className="text-[10px] font-medium text-[#87867F] tabular-nums">
                       {formatTime(turn.timestamp)}
                     </span>
                     <TurnCopyButton text={turn.text} />
@@ -165,8 +165,8 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
                   className={cn(
                     'p-3.5 rounded-2xl leading-relaxed text-[13px] transition-all',
                     isAgent
-                      ? 'rounded-tl-md bg-[#eeeafe]/60 border border-[#4928fd]/15 text-[#1b1d1e]'
-                      : 'rounded-tr-md bg-[rgba(27,29,30,0.03)] border border-[rgba(27,29,30,0.08)] text-[#1b1d1e]'
+                      ? 'rounded-tl-md bg-[#FAF0EC] border border-[#D97757]/20 text-[#141413]'
+                      : 'rounded-tr-md bg-[#FAF9F5] border border-[#E8E6DC] text-[#141413]'
                   )}
                 >
                   <p className="whitespace-pre-wrap">{turn.text}</p>
@@ -185,12 +185,12 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
         {/* Thinking skeleton */}
         {showThinkingSkeleton && (
           <div className="flex items-start gap-2.5" aria-label="Agent is thinking">
-            <div className="size-6 rounded-full bg-[#eeeafe] border border-[#4928fd]/20 shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold text-[#4928fd]">
-              A
+            <div className="size-6 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold text-[#D97757]">
+              ✻
             </div>
             <div className="flex-1 space-y-2">
-              <div className="skeleton h-12 rounded-2xl rounded-tl-md" />
-              <div className="skeleton h-3 w-24 rounded-full" />
+              <div className="skeleton h-12 rounded-2xl rounded-tl-md bg-[#FAF0EC]/60" />
+              <div className="skeleton h-3 w-24 rounded-full bg-[#E8E6DC]" />
             </div>
           </div>
         )}
@@ -200,23 +200,23 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
           <div className="flex items-start gap-2.5">
             <div
               aria-hidden
-              className="size-6 rounded-full bg-[rgba(27,29,30,0.05)] border border-[rgba(27,29,30,0.1)] shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold text-[rgba(27,29,30,0.6)]"
+              className="size-6 rounded-full bg-[#FAF9F5] border border-[#E8E6DC] shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold text-[#5E5D59]"
             >
-              {initials(partialSpeaker === 'agent' ? 'Emily' : displayBuyer)}
+              {partialSpeaker === 'agent' ? '✻' : initials(displayBuyer)}
             </div>
             <div className="flex-1 min-w-0 flex flex-col gap-1.5">
               <div className="flex items-center justify-between px-0.5">
-                <span className="text-[11px] font-semibold text-[rgba(27,29,30,0.55)]">
+                <span className="text-[11px] font-semibold text-[#87867F]">
                   {partialSpeaker === 'agent' ? 'Emily (streaming…)' : `${displayBuyer} (streaming…)`}
                 </span>
-                <span className="flex items-center gap-1 text-[10px] text-[#2f7a1d] font-medium">
-                  <span aria-hidden className="size-1.5 rounded-full bg-[#79d45e] animate-softpulse" />
+                <span className="flex items-center gap-1 text-[10px] text-[#788C5D] font-medium">
+                  <span aria-hidden className="size-1.5 rounded-full bg-[#788C5D] animate-pulse" />
                   transcribing
                 </span>
               </div>
-              <div className="p-3.5 rounded-2xl rounded-tl-md border border-dashed border-[rgba(27,29,30,0.15)] bg-[rgba(27,29,30,0.02)] text-[#1b1d1e]/70 italic text-[13px] animate-pulse">
+              <div className="p-3.5 rounded-2xl rounded-tl-md border border-dashed border-[#E8E6DC] bg-[#FAF9F5] text-[#141413] italic text-[13px] animate-pulse">
                 {partialText}
-                <span aria-hidden className="not-italic text-[rgba(27,29,30,0.35)]"> ▍</span>
+                <span aria-hidden className="not-italic text-[#D97757]"> ▍</span>
               </div>
             </div>
           </div>

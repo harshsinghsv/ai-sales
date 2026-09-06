@@ -34,23 +34,23 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
   interrupted,
   isRecordingSTT,
 }) => {
-  // Warm terracotta & amber ramps tuned for Claude Enterprise theme
+  // Warm terracotta, clay & amber ramps tuned for Claude Enterprise theme
   let agentState: AgentState = null;
-  let colors: [string, string] = ['#F5D0C5', '#D97757'];
+  let colors: [string, string] = ['#FAF0EC', '#D97757'];
   let glow = 'rgba(217,119,87,0.24)';
 
   if (state === 'listening') {
     agentState = 'listening';
-    colors = ['#93C5FD', '#2563EB'];
-    glow = 'rgba(37,99,235,0.28)';
+    colors = ['#E8E6DC', '#D97757'];
+    glow = 'rgba(217,119,87,0.30)';
   } else if (state === 'thinking') {
     agentState = 'thinking';
-    colors = ['#FDE68A', '#D97706'];
-    glow = 'rgba(217,119,6,0.30)';
+    colors = ['#F6E683', '#D97757'];
+    glow = 'rgba(246,230,131,0.35)';
   } else if (state === 'speaking') {
     agentState = 'talking';
-    colors = ['#F97316', '#D97757'];
-    glow = 'rgba(217,119,87,0.36)';
+    colors = ['#D97757', '#C96442'];
+    glow = 'rgba(217,119,87,0.42)';
   }
 
   const manualInput = state === 'listening' ? Math.min(1, Math.max(0, volume * 1.6)) : 0;
@@ -68,18 +68,17 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
     : 'Ready';
 
   const dotColor =
-    state === 'listening' ? '#79d45e' : state === 'thinking' ? '#ffaf68' : state === 'speaking' ? '#4928fd' : 'rgba(27,29,30,0.3)';
+    state === 'listening' ? '#788C5D' : state === 'thinking' ? '#D97757' : state === 'speaking' ? '#D97757' : '#87867F';
 
   return (
     <div className="relative flex flex-col items-center justify-center">
-      {/* Orb — sits directly on the page, just a soft ambient glow behind it
-          for depth. No heavy dark housing; the orb graphic is its own disc. */}
+      {/* Orb — sits directly on the page, with subtle Claude terracotta glow */}
       <div className="relative size-44 sm:size-52">
         <div
-          className="absolute inset-[-10px] rounded-full transition-all duration-500 blur-2xl opacity-70"
+          className="absolute inset-[-10px] rounded-full transition-all duration-500 blur-2xl opacity-75"
           style={{ background: glow }}
         />
-        <div className="relative h-full w-full overflow-hidden rounded-full">
+        <div className="relative h-full w-full overflow-hidden rounded-full border border-[#E8E6DC]/40 shadow-xl">
           <ElevenLabsOrb
             agentState={agentState}
             colors={colors}
@@ -91,23 +90,23 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
         </div>
 
         {interrupted && (
-          <div className="absolute inset-0 rounded-full border-2 border-[#d1293d]/60 animate-ping pointer-events-none" />
+          <div className="absolute inset-0 rounded-full border-2 border-[#D97757]/60 animate-ping pointer-events-none" />
         )}
       </div>
 
-      {/* Live Audio Waveform */}
+      {/* Live Audio Waveform in Claude Terracotta */}
       <div className="mt-5 h-7 flex items-center justify-center">
         <ElevenLabsWaveform
           active={state === 'listening' || state === 'speaking'}
           volume={volume}
           barColor={
             state === 'listening'
-              ? '#4F46E5'
+              ? '#788C5D'
               : state === 'speaking'
-              ? '#6D28D9'
+              ? '#D97757'
               : state === 'thinking'
-              ? '#F59E0B'
-              : '#A78BFA'
+              ? '#F6E683'
+              : '#D97757'
           }
           barCount={24}
           height={28}
