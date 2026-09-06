@@ -2,18 +2,19 @@
 
 import React from 'react';
 import { ArrowRight, PhoneCall, Zap, ShieldCheck, Activity, Workflow, Globe } from 'lucide-react';
-import { DotPattern } from '@/components/ui/dot-pattern';
-import { ShimmerButton } from '@/components/ui/shimmer-button';
-import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
-import { BorderBeam } from '@/components/ui/border-beam';
-import { Marquee } from '@/components/ui/marquee';
-import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Navbar } from '@/components/Navbar';
 import { AnthropicShowcase } from '@/components/AnthropicShowcase';
 import { IntegrationBeams } from '@/components/IntegrationBeams';
 import { ConcessionSimulator } from '@/components/ConcessionSimulator';
 import { AgentVoiceConsole } from '@/components/AgentVoiceConsole';
 import { Footer } from '@/components/Footer';
+import { Squares } from '@/components/reactbits/Squares';
+import { BlurText } from '@/components/reactbits/BlurText';
+import { StarBorder } from '@/components/reactbits/StarBorder';
+import { SpotlightCard } from '@/components/reactbits/SpotlightCard';
+import { TiltedCard } from '@/components/reactbits/TiltedCard';
+import { BorderBeam } from '@/components/ui/border-beam';
+import { Marquee } from '@/components/ui/marquee';
 
 interface AgentPlatformLandingProps {
   onLaunchDemo: () => void;
@@ -45,28 +46,37 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       />
 
       {/* ─────────────────────────────────────────────────────────────
-          2. HERO SECTION (21st.dev DotPattern + Shimmer + BorderBeam)
+          2. HERO SECTION (React Bits Squares + BlurText + StarBorder)
          ───────────────────────────────────────────────────────────── */}
       <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-24 overflow-hidden border-b border-[#E8E6DC]">
-        {/* 21st.dev Background DotPattern with radial fade */}
-        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] opacity-35" />
+        {/* React Bits Squares interactive canvas background */}
+        <Squares
+          speed={0.35}
+          squareSize={48}
+          borderColor="#E8E6DC80"
+          hoverFillColor="#D9775715"
+        />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Value Prop */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* 21st.dev Animated Shiny Text Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-xs font-mono mb-6 cursor-pointer hover:border-[#D97757]/60 transition-colors">
+              {/* Eyebrow Pill */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-xs font-mono mb-6 shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-[#D97757] animate-pulse" />
-                <AnimatedShinyText className="font-semibold text-xs text-[#D97757]">
+                <span className="font-semibold text-xs text-[#D97757]">
                   Agora Conversational AI · Sub-500ms Voice RTC
-                </AnimatedShinyText>
+                </span>
               </div>
 
-              {/* Main Headline */}
+              {/* Main Headline with React Bits BlurText */}
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-[#141413] leading-[1.08] mb-6">
-                The Autonomous Sales Agent that{' '}
-                <span className="italic font-normal text-[#D97757]">Negotiates</span> in Real-Time Voice.
+                <BlurText
+                  text="The Autonomous Sales Agent that Negotiates in Real-Time Voice."
+                  delay={45}
+                  highlightWord="Negotiates"
+                  highlightClass="text-[#D97757] italic font-normal"
+                />
               </h1>
 
               {/* Editorial Subtitle */}
@@ -74,31 +84,29 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 Trained on enterprise margin policies, objection handling trees, and multi-tier procurement strategies. Listens, defends pricing floors, and closes high-ticket deals over voice — syncing directly with HubSpot, Google Calendar, and Slack.
               </p>
 
-              {/* Primary Call to Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto mb-10">
-                {/* 21st.dev Shimmer Button */}
-                <ShimmerButton
+              {/* Primary Action Buttons with React Bits StarBorder */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-10">
+                <StarBorder
                   onClick={onLaunchDemo}
-                  shimmerColor="#D97757"
-                  className="shadow-xl"
+                  color="#D97757"
+                  className="w-full sm:w-auto"
                 >
-                  <span className="flex items-center gap-2 font-semibold text-sm">
+                  <span className="flex items-center gap-2">
                     <span>Experience Claude Enterprise Demo</span>
                     <ArrowRight className="w-4 h-4 text-[#D97757]" />
                   </span>
-                </ShimmerButton>
+                </StarBorder>
 
-                <ShimmerButton
+                <StarBorder
                   onClick={onStartDirectCall}
-                  shimmerColor="#D97757"
-                  background="#262624"
-                  className="shadow-md"
+                  color="#D97757"
+                  className="w-full sm:w-auto"
                 >
-                  <span className="flex items-center gap-2 font-semibold text-sm">
+                  <span className="flex items-center gap-2">
                     <PhoneCall className="w-4 h-4 text-[#D97757]" />
                     <span>Start Voice Call with Emily</span>
                   </span>
-                </ShimmerButton>
+                </StarBorder>
               </div>
 
               {/* Telemetry Strip */}
@@ -122,24 +130,26 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               </div>
             </div>
 
-            {/* Right Column: 21st.dev BorderBeam Container + Agent Voice Console */}
+            {/* Right Column: React Bits TiltedCard + Agent Voice Console */}
             <div className="lg:col-span-6 w-full relative">
-              <div className="relative rounded-2xl border border-[#E8E6DC] bg-[#141413] p-1 shadow-2xl overflow-hidden">
-                <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
-                <BorderBeam
-                  size={280}
-                  duration={12}
-                  colorFrom="#D97757"
-                  colorTo="#F59E0B"
-                />
-              </div>
+              <TiltedCard maxRotate={6} scale={1.02}>
+                <div className="relative rounded-2xl border border-[#E8E6DC] bg-[#141413] p-1 shadow-2xl overflow-hidden">
+                  <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+                  <BorderBeam
+                    size={280}
+                    duration={12}
+                    colorFrom="#D97757"
+                    colorTo="#F59E0B"
+                  />
+                </div>
+              </TiltedCard>
             </div>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. 21ST.DEV MARQUEE TICKER (Live Platform Signals)
+          3. MARQUEE TICKER (Live Platform Signals)
          ───────────────────────────────────────────────────────────── */}
       <div className="py-4 bg-[#F5F4ED] border-b border-[#E8E6DC] overflow-hidden">
         <Marquee pauseOnHover repeat={4} className="[--gap:2rem]">
@@ -161,7 +171,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       <AnthropicShowcase onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
-          5. 21ST.DEV BENTO GRID (Core Architectural Moats)
+          5. CAPABILITIES BENTO (Upgraded with React Bits SpotlightCards)
          ───────────────────────────────────────────────────────────── */}
       <section id="capabilities" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -174,48 +184,60 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               Engineered to Protect Margin While Closing Faster
             </h2>
             <p className="mt-4 text-base text-[#5E5D59]">
-              Built with 21st-century voice and negotiation primitives.
+              Built with real-time voice and autonomous negotiation primitives.
             </p>
           </div>
 
-          <BentoGrid>
-            <BentoCard
-              name="Sub-500ms Voice RTC Pipeline"
-              className="col-span-1 md:col-span-2"
-              Icon={Activity}
-              description="Zero browser SpeechRecognition quirks. Traverses Agora SD-RTN with Deepgram Nova-3 Multi STT and MiniMax Speech-2.8 Turbo synthesis, delivering sub-half-second turnaround latency."
-              cta="Explore Pipeline Spec"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <SpotlightCard className="col-span-1 md:col-span-2 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-5">
+                <Activity className="w-6 h-6" />
+              </div>
+              <div className="text-xs font-mono uppercase tracking-wider text-[#D97757] mb-1 font-semibold">Sub-500ms Turnaround</div>
+              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">Sub-500ms Voice RTC Pipeline</h3>
+              <p className="text-sm text-[#5E5D59] leading-relaxed max-w-xl">
+                Zero browser SpeechRecognition quirks. Traverses Agora SD-RTN with Deepgram Nova-3 Multi STT and MiniMax Speech-2.8 Turbo synthesis, delivering sub-half-second natural conversational turns.
+              </p>
+            </SpotlightCard>
 
-            <BentoCard
-              name="18% Margin Floor Guard"
-              className="col-span-1 md:col-span-1"
-              Icon={ShieldCheck}
-              description="Algorithmic concession boundary. Human reps frequently cave to 30% discounts; our engine strictly bounds concessions while demanding multi-year commitments in reciprocity."
-              cta="Test Concession Engine"
-            />
+            <SpotlightCard className="col-span-1 md:col-span-1 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-5">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div className="text-xs font-mono uppercase tracking-wider text-amber-700 mb-1 font-semibold">Margin Defense</div>
+              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">18% Margin Floor Guard</h3>
+              <p className="text-sm text-[#5E5D59] leading-relaxed">
+                Algorithmic concession boundary. While human sales reps frequently cave to 30% discounts, our engine strictly bounds concessions and demands multi-year commitments in reciprocity.
+              </p>
+            </SpotlightCard>
 
-            <BentoCard
-              name="Tri-Channel Autonomous Stack"
-              className="col-span-1 md:col-span-1"
-              Icon={Workflow}
-              description="Autonomous execution across HubSpot CRM deals, Google Calendar appointments, and Slack notification webhooks with real-time sentiment analytics."
-              cta="View CRM Sync Flow"
-            />
+            <SpotlightCard className="col-span-1 md:col-span-1 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-emerald-700 mb-5">
+                <Workflow className="w-6 h-6" />
+              </div>
+              <div className="text-xs font-mono uppercase tracking-wider text-emerald-700 mb-1 font-semibold">Autonomous Stack</div>
+              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">Tri-Channel Sync</h3>
+              <p className="text-sm text-[#5E5D59] leading-relaxed">
+                Autonomous execution across HubSpot CRM deals, Google Calendar appointments, and Slack notification webhooks with real-time sentiment analytics.
+              </p>
+            </SpotlightCard>
 
-            <BentoCard
-              name="Multi-Language Code Switching"
-              className="col-span-1 md:col-span-2"
-              Icon={Globe}
-              description="Fluent code-switching across English and Hindi (Hinglish) using Deepgram's multi-language acoustic model, perfectly suited for global procurement teams."
-              cta="Inspect Acoustic Models"
-            />
-          </BentoGrid>
+            <SpotlightCard className="col-span-1 md:col-span-2 p-8 shadow-xs hover:shadow-md transition-shadow" spotlightColor="rgba(217, 119, 87, 0.18)">
+              <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-indigo-700 mb-5">
+                <Globe className="w-6 h-6" />
+              </div>
+              <div className="text-xs font-mono uppercase tracking-wider text-indigo-700 mb-1 font-semibold">Global Acoustic Engine</div>
+              <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">Multi-Language Code-Switching</h3>
+              <p className="text-sm text-[#5E5D59] leading-relaxed max-w-xl">
+                Fluent code-switching across English and Hindi (Hinglish) using Deepgram's multi-language acoustic model, perfectly tailored for multinational procurement teams and global deal negotiations.
+              </p>
+            </SpotlightCard>
+          </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. 21ST.DEV ANIMATED BEAM (Pipeline Flow Visualizer)
+          6. REAL-TIME DATA PATH (Kept & Highlighted - As Requested!)
          ───────────────────────────────────────────────────────────── */}
       <section id="pipeline" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -242,7 +264,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       <ConcessionSimulator onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
-          8. CLOSING CTA BANNER (With Matching 21st.dev ShimmerButtons)
+          8. CLOSING CTA BANNER (With React Bits StarBorder Buttons)
          ───────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#141413] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -260,36 +282,29 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            {/* Button 1: ShimmerButton */}
-            <ShimmerButton
+            <StarBorder
               onClick={onLaunchDemo}
-              shimmerColor="#D97757"
-              className="w-full sm:w-auto shadow-2xl"
+              color="#D97757"
+              className="w-full sm:w-auto"
             >
-              <span className="flex items-center gap-2 font-semibold text-base">
-                <span>View Customer Demo (Claude Enterprise)</span>
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </ShimmerButton>
+              <span>View Customer Demo (Claude Enterprise)</span>
+              <ArrowRight className="w-4 h-4 text-[#D97757]" />
+            </StarBorder>
 
-            {/* Button 2: Matching ShimmerButton (As requested by user!) */}
-            <ShimmerButton
+            <StarBorder
               onClick={onStartDirectCall}
-              shimmerColor="#D97757"
-              background="#262624"
-              className="w-full sm:w-auto shadow-xl"
+              color="#D97757"
+              className="w-full sm:w-auto"
             >
-              <span className="flex items-center gap-2 font-semibold text-base text-white">
-                <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                <span>Start Voice Call with Emily</span>
-              </span>
-            </ShimmerButton>
+              <PhoneCall className="w-4 h-4 text-[#D97757]" />
+              <span>Start Voice Call with Emily</span>
+            </StarBorder>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          9. 21ST.DEV GLOWING SITEMAP FOOTER
+          9. ENTERPRISE FOOTER
          ───────────────────────────────────────────────────────────── */}
       <Footer onLaunchDemo={onLaunchDemo} />
     </div>

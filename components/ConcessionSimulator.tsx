@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { Sliders, Lock, ArrowRight, ShieldCheck, TrendingUp, CheckCircle2, AlertCircle } from 'lucide-react';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { SpotlightCard } from '@/components/reactbits/SpotlightCard';
+import { TiltedCard } from '@/components/reactbits/TiltedCard';
 
 interface ConcessionSimulatorProps {
   onLaunchDemo: () => void;
@@ -50,8 +52,8 @@ export const ConcessionSimulator: React.FC<ConcessionSimulatorProps> = ({ onLaun
           </p>
         </div>
 
-        {/* 21st.dev Simulator Card */}
-        <div className="max-w-5xl mx-auto rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-xl">
+        {/* React Bits SpotlightCard */}
+        <SpotlightCard className="max-w-5xl mx-auto p-6 sm:p-10 shadow-xl" spotlightColor="rgba(217, 119, 87, 0.16)">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left Controls (6 cols) */}
             <div className="lg:col-span-6 space-y-8">
@@ -138,87 +140,89 @@ export const ConcessionSimulator: React.FC<ConcessionSimulatorProps> = ({ onLaun
               </div>
             </div>
 
-            {/* Right Financial Readout (6 cols) with 21st.dev BorderBeam */}
+            {/* Right Financial Readout (6 cols) with React Bits TiltedCard + BorderBeam */}
             <div className="lg:col-span-6 relative">
-              <div className="relative rounded-2xl bg-[#141413] p-7 text-white shadow-2xl border border-white/10 space-y-6 overflow-hidden font-mono text-xs">
-                {/* Header */}
-                <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-white font-sans font-semibold text-sm">Deal Engine Evaluation</span>
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">
-                    POLICY APPROVED
-                  </span>
-                </div>
-
-                {/* Core Figures */}
-                <div className="space-y-3.5">
-                  <div className="flex justify-between items-baseline">
-                    <span className="text-xs text-white/70">Base List ARR:</span>
-                    <span className="font-mono text-sm text-white/60 line-through">
-                      ${rawAnnualList.toLocaleString()}
+              <TiltedCard maxRotate={6} scale={1.02}>
+                <div className="relative rounded-2xl bg-[#141413] p-7 text-white shadow-2xl border border-white/10 space-y-6 overflow-hidden font-mono text-xs">
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-white font-sans font-semibold text-sm">Deal Engine Evaluation</span>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">
+                      POLICY APPROVED
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-baseline">
-                    <span className="text-xs text-white/70">Agent Concession Tradeoff:</span>
-                    <span className="font-mono text-sm text-[#D97757] font-semibold">
-                      -{maxConcessionPct}% (-${discountAmount.toLocaleString()})
-                    </span>
+                  {/* Core Figures */}
+                  <div className="space-y-3.5">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-xs text-white/70">Base List ARR:</span>
+                      <span className="font-mono text-sm text-white/60 line-through">
+                        ${rawAnnualList.toLocaleString()}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-xs text-white/70">Agent Concession Tradeoff:</span>
+                      <span className="font-mono text-sm text-[#D97757] font-semibold">
+                        -{maxConcessionPct}% (-${discountAmount.toLocaleString()})
+                      </span>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/10 flex justify-between items-baseline">
+                      <span className="text-sm font-semibold text-white">Closed Contract ARR:</span>
+                      <span className="font-serif text-2xl font-bold text-emerald-400">
+                        ${negotiatedAnnual.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="pt-3 border-t border-white/10 flex justify-between items-baseline">
-                    <span className="text-sm font-semibold text-white">Closed Contract ARR:</span>
-                    <span className="font-serif text-2xl font-bold text-emerald-400">
-                      ${negotiatedAnnual.toLocaleString()}
-                    </span>
+                  {/* Margin Gauge Visualizer */}
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-white/70">Gross Margin Preserved:</span>
+                      <span className="font-bold text-white font-mono">{marginPreservedPct.toFixed(1)}% (${marginPreserved.toLocaleString()})</span>
+                    </div>
+                    <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${marginPreservedPct}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-white/40 pt-0.5">
+                      <span>Floor Boundary: 82.0%</span>
+                      <span>100% Full List</span>
+                    </div>
                   </div>
+
+                  {/* Call to Action using 21st.dev ShimmerButton */}
+                  <div className="pt-2">
+                    <ShimmerButton
+                      onClick={onLaunchDemo}
+                      shimmerColor="#D97757"
+                      className="w-full shadow-lg"
+                    >
+                      <span className="flex items-center justify-center gap-2 font-semibold text-xs text-white">
+                        <span>Experience This Deal in Live Voice Demo</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </ShimmerButton>
+                  </div>
+
+                  {/* 21st.dev BorderBeam */}
+                  <BorderBeam
+                    size={240}
+                    duration={12}
+                    colorFrom="#D97757"
+                    colorTo="#F59E0B"
+                  />
                 </div>
-
-                {/* Margin Gauge Visualizer */}
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-white/70">Gross Margin Preserved:</span>
-                    <span className="font-bold text-white font-mono">{marginPreservedPct.toFixed(1)}% (${marginPreserved.toLocaleString()})</span>
-                  </div>
-                  <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                    <div
-                      className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${marginPreservedPct}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] text-white/40 pt-0.5">
-                    <span>Floor Boundary: 82.0%</span>
-                    <span>100% Full List</span>
-                  </div>
-                </div>
-
-                {/* Call to Action using 21st.dev ShimmerButton */}
-                <div className="pt-2">
-                  <ShimmerButton
-                    onClick={onLaunchDemo}
-                    shimmerColor="#D97757"
-                    className="w-full shadow-lg"
-                  >
-                    <span className="flex items-center justify-center gap-2 font-semibold text-xs text-white">
-                      <span>Experience This Deal in Live Voice Demo</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </ShimmerButton>
-                </div>
-
-                {/* 21st.dev BorderBeam */}
-                <BorderBeam
-                  size={240}
-                  duration={12}
-                  colorFrom="#D97757"
-                  colorTo="#F59E0B"
-                />
-              </div>
+              </TiltedCard>
             </div>
           </div>
-        </div>
+        </SpotlightCard>
       </div>
     </section>
   );

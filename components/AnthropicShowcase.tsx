@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { SpotlightCard } from '@/components/reactbits/SpotlightCard';
+import { TiltedCard } from '@/components/reactbits/TiltedCard';
 
 interface Step {
   id: string;
@@ -130,8 +132,8 @@ export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLa
           })}
         </div>
 
-        {/* Main Showcase Container with 21st.dev BorderBeam */}
-        <div className="relative rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-xl overflow-hidden">
+        {/* Main Showcase Container with React Bits SpotlightCard */}
+        <SpotlightCard className="p-6 sm:p-10 shadow-xl" spotlightColor="rgba(217, 119, 87, 0.15)">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left 7 cols: Step Description & Voice Dialogue */}
             <div className="lg:col-span-7 space-y-6">
@@ -185,75 +187,77 @@ export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLa
               </div>
             </div>
 
-            {/* Right 5 cols: Live Deal Ledger with 21st.dev BorderBeam */}
+            {/* Right 5 cols: Live Deal Ledger with React Bits TiltedCard + BorderBeam */}
             <div className="lg:col-span-5 relative">
-              <div className="relative rounded-2xl bg-[#141413] p-6 text-white shadow-2xl border border-white/10 space-y-5 font-mono text-xs overflow-hidden">
-                <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-white font-sans font-semibold text-sm">Claude Enterprise Ledger</span>
+              <TiltedCard maxRotate={6} scale={1.02}>
+                <div className="relative rounded-2xl bg-[#141413] p-6 text-white shadow-2xl border border-white/10 space-y-5 font-mono text-xs overflow-hidden">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-white font-sans font-semibold text-sm">Claude Enterprise Ledger</span>
+                    </div>
+                    <span className="text-[10px] text-white/50">SESSION #AG-9428</span>
                   </div>
-                  <span className="text-[10px] text-white/50">SESSION #AG-9428</span>
-                </div>
 
-                <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-                  <div className="flex justify-between text-[11px]">
-                    <span className="text-white/60">Product Tier:</span>
-                    <span className="text-[#D97757] font-semibold">Claude Enterprise (250 Seats)</span>
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-white/60">Product Tier:</span>
+                      <span className="text-[#D97757] font-semibold">Claude Enterprise (250 Seats)</span>
+                    </div>
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-white/60">List ARR:</span>
+                      <span className="text-white font-semibold">$225,000 / yr</span>
+                    </div>
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-white/60">Negotiated ARR:</span>
+                      <span className="text-emerald-400 font-semibold">$198,000 / yr (-12%)</span>
+                    </div>
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-white/60">Metric Status:</span>
+                      <span className="text-amber-300 font-semibold">{activeStep.metricVal}</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-[11px]">
-                    <span className="text-white/60">List ARR:</span>
-                    <span className="text-white font-semibold">$225,000 / yr</span>
-                  </div>
-                  <div className="flex justify-between text-[11px]">
-                    <span className="text-white/60">Negotiated ARR:</span>
-                    <span className="text-emerald-400 font-semibold">$198,000 / yr (-12%)</span>
-                  </div>
-                  <div className="flex justify-between text-[11px]">
-                    <span className="text-white/60">Metric Status:</span>
-                    <span className="text-amber-300 font-semibold">{activeStep.metricVal}</span>
-                  </div>
-                </div>
 
-                <div className="space-y-2 text-[11px] text-white/70">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>HubSpot Deal Created in Stage 3</span>
+                  <div className="space-y-2 text-[11px] text-white/70">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>HubSpot Deal Created in Stage 3</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>Google Calendar Executive Invite Dispatched</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>Slack #deals Alert Fired with Sentiment Score</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Google Calendar Executive Invite Dispatched</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span>Slack #deals Alert Fired with Sentiment Score</span>
-                  </div>
-                </div>
 
-                <div className="pt-2">
-                  <ShimmerButton
-                    onClick={onLaunchDemo}
-                    shimmerColor="#D97757"
-                    className="w-full shadow-lg"
-                  >
-                    <span className="flex items-center justify-center gap-2 font-semibold text-xs text-white">
-                      <span>Launch Claude Enterprise Customer Demo</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </ShimmerButton>
-                </div>
+                  <div className="pt-2">
+                    <ShimmerButton
+                      onClick={onLaunchDemo}
+                      shimmerColor="#D97757"
+                      className="w-full shadow-lg"
+                    >
+                      <span className="flex items-center justify-center gap-2 font-semibold text-xs text-white">
+                        <span>Launch Claude Enterprise Customer Demo</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </ShimmerButton>
+                  </div>
 
-                {/* 21st.dev BorderBeam on Ledger */}
-                <BorderBeam
-                  size={200}
-                  duration={10}
-                  colorFrom="#D97757"
-                  colorTo="#F59E0B"
-                />
-              </div>
+                  {/* 21st.dev BorderBeam on Ledger */}
+                  <BorderBeam
+                    size={200}
+                    duration={10}
+                    colorFrom="#D97757"
+                    colorTo="#F59E0B"
+                  />
+                </div>
+              </TiltedCard>
             </div>
           </div>
-        </div>
+        </SpotlightCard>
       </div>
     </section>
   );
