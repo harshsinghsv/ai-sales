@@ -636,7 +636,7 @@ export function useAgoraVoice() {
 
   /**
    * Text typed into the cockpit is injected into the live agent pipeline, so
-   * Aarav answers out loud exactly as if it had been spoken. Falls back to the
+   * Emily answers out loud exactly as if it had been spoken. Falls back to the
    * transcript-only path if the Next.js process no longer holds the session.
    */
   const sendManualMessage = useCallback(async (text: string) => {

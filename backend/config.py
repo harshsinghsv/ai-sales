@@ -47,7 +47,7 @@ class Settings(BaseSettings):
     # Sarvam vendor settings for Agora's native ASR/TTS slots. The Agora
     # `sarvam` TTS vendor takes a bulbul:v3 speaker id + BCP-47 target language,
     # which is a different namespace from SARVAM_TTS_VOICE above (used by our
-    # own /v1/audio/speech shim). "abhilash" is the male v3 voice for Aarav.
+    # own /v1/audio/speech shim).
     # Only used when AGORA_STT_VENDOR / AGORA_TTS_VENDOR are set to "sarvam"
     # (BYOK); the default pipeline uses Agora-managed models instead.
     SARVAM_STT_LANGUAGE: str = os.getenv("SARVAM_STT_LANGUAGE", "hi-IN")
@@ -63,13 +63,13 @@ class Settings(BaseSettings):
 
     # Deepgram ASR. Managed mode accepts the preset models nova-2 / nova-3.
     # Set DEEPGRAM_LANGUAGE to "hi" for Hindi, or "multi" (nova-3) for
-    # Hindi/English code-switching, which is how Aarav's buyers actually speak.
+    # Hindi/English code-switching, which is how Emily's buyers actually speak.
     DEEPGRAM_MODEL: str = os.getenv("DEEPGRAM_MODEL", "nova-3")
     DEEPGRAM_LANGUAGE: str = os.getenv("DEEPGRAM_LANGUAGE", "multi")
 
     # MiniMax TTS. Managed mode accepts speech-2.6-turbo / speech-2.8-turbo.
     # MINIMAX_VOICE_ID selects the voice; leave blank to use Agora's default.
-    # Set it to a Hindi voice id from the MiniMax voice list for a Hindi Aarav.
+    # Set it to a voice id from the MiniMax voice list for Emily.
     MINIMAX_MODEL: str = os.getenv("MINIMAX_MODEL", "speech-2.8-turbo")
     MINIMAX_VOICE_ID: str = os.getenv("MINIMAX_VOICE_ID", "")
 

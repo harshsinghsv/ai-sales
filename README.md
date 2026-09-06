@@ -1,6 +1,6 @@
 # Adaptive AI Sales & Negotiation Agent
 
-Real-time voice sales agent ("Aarav", Claude Enterprise) built on the
+Real-time voice sales agent ("Emily", Claude Enterprise) built on the
 [Agora Conversational AI Engine](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs)
 quickstart architecture, with a Python deal engine, live deal cockpit, and
 HubSpot / Google Calendar / Slack integrations.
@@ -71,7 +71,7 @@ call and simply starts hearing a person.
 The LLM slot has two modes, selected by `AGORA_LLM_MODE`:
 
 - `managed_openai` (default) — Agora-hosted OpenAI credentials, driven by the
-  stage-aware Aarav persona built in `backend/middleware/sales_persona.py`.
+  stage-aware Emily persona built in `backend/middleware/sales_persona.py`.
 - `custom` — Agora calls the FastAPI `/v1/chat/completions` middleware, which
   runs the deal engine, tool calls, CRM sync, and cockpit broadcasts.
 

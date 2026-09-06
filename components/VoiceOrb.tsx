@@ -64,7 +64,7 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
     : state === 'thinking'
     ? 'Evaluating terms...'
     : state === 'speaking'
-    ? 'Aarav is speaking'
+    ? 'Emily is speaking'
     : 'Ready';
 
   const dotColor =

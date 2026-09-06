@@ -103,7 +103,7 @@ function buildStt(config: AgentPipelineConfig): BaseSTT {
 /**
  * TTS slot. MiniMax runs on Agora-managed credentials; omitting `key`,
  * `groupId` and `url` is what selects managed mode. voiceId is optional —
- * set MINIMAX_VOICE_ID to a Hindi voice for a Hindi-speaking Aarav.
+ * set MINIMAX_VOICE_ID to a voice for Emily.
  */
 function buildTts(config: AgentPipelineConfig): BaseTTS {
   if (config.tts_vendor === 'sarvam') {
@@ -170,7 +170,7 @@ function requireCredentials(): { appId: string; appCertificate: string } {
 }
 
 /**
- * Fetches the adaptive Aarav persona and pipeline settings from FastAPI.
+ * Fetches the adaptive Emily persona and pipeline settings from FastAPI.
  * The Python deal engine owns stage detection and prompt construction — this
  * route never rebuilds that logic, it only transports the result into Agora.
  */

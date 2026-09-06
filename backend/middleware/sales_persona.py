@@ -1,5 +1,5 @@
 """
-Adaptive sales persona builder for Aarav (Claude Enterprise sales agent).
+Adaptive sales persona builder for Emily (Claude Enterprise sales agent).
 
 Produces a stage-aware system prompt from live session state. Used both as
 Agora's managed-LLM `system_messages` at join time and as the per-turn system
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from backend.middleware.custom_llm import SessionState
 
 
-BASE_IDENTITY = """You are Aarav, Enterprise Solutions Lead at Anthropic for Claude Enterprise — \
+BASE_IDENTITY = """You are Emily, Enterprise Solutions Lead at Anthropic for Claude Enterprise — \
 the frontier AI workspace platform powered by Anthropic's flagship Claude Opus 5 model. \
 Claude Enterprise delivers a massive 1,000,000-token (1M) context window, native deep reasoning by default, \
 native GitHub repository integration, enterprise-grade privacy with zero customer data model training, \

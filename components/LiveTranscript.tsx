@@ -131,7 +131,7 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
 
         {turns.map((turn) => {
           const isAgent = turn.speaker === 'agent';
-          const speakerName = isAgent ? 'Aarav' : displayBuyer;
+          const speakerName = isAgent ? 'Emily' : displayBuyer;
           return (
             <div key={turn.id} className="group flex items-start gap-2.5">
               <div
@@ -202,12 +202,12 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
               aria-hidden
               className="size-6 rounded-full bg-[rgba(27,29,30,0.05)] border border-[rgba(27,29,30,0.1)] shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold text-[rgba(27,29,30,0.6)]"
             >
-              {initials(partialSpeaker === 'agent' ? 'Aarav' : displayBuyer)}
+              {initials(partialSpeaker === 'agent' ? 'Emily' : displayBuyer)}
             </div>
             <div className="flex-1 min-w-0 flex flex-col gap-1.5">
               <div className="flex items-center justify-between px-0.5">
                 <span className="text-[11px] font-semibold text-[rgba(27,29,30,0.55)]">
-                  {partialSpeaker === 'agent' ? 'Aarav (streaming…)' : `${displayBuyer} (streaming…)`}
+                  {partialSpeaker === 'agent' ? 'Emily (streaming…)' : `${displayBuyer} (streaming…)`}
                 </span>
                 <span className="flex items-center gap-1 text-[10px] text-[#2f7a1d] font-medium">
                   <span aria-hidden className="size-1.5 rounded-full bg-[#79d45e] animate-softpulse" />

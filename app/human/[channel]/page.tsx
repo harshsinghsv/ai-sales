@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
  * Human specialist takeover console.
  *
  * Opened from the escalation alert. The specialist joins the buyer's live
- * Agora RTC channel — the same channel Aarav is in — so the buyer experiences
+ * Agora RTC channel — the same channel Emily is in — so the buyer experiences
  * a seamless handoff mid-call, with the full prior transcript and current deal
  * terms already on screen.
  */
@@ -60,7 +60,7 @@ export default function HumanHandoffPage({
           {agentPresent && (
             <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#eeeafe] border border-[#4928fd]/20 text-[#4928fd]">
               <Bot className="size-3" aria-hidden />
-              Aarav in channel
+              Emily in channel
             </span>
           )}
 

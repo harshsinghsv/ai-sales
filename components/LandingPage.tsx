@@ -143,7 +143,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             <Button variant="claude" size="lg" onClick={() => setShowConfigModal(true)} disabled={isConnecting}>
               <span className="inline-flex items-center gap-2">
                 <Headphones className="size-4" />
-                {isConnecting ? 'Connecting to Aarav…' : 'Consult with Aarav (AI Solutions Lead)'}
+                {isConnecting ? 'Connecting to Emily…' : 'Consult with Emily (AI Solutions Lead)'}
               </span>
             </Button>
             <Button variant="outline" size="lg" href="#why">
@@ -370,7 +370,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
           <div className="text-center mb-12">
             <span className="text-xs font-semibold uppercase tracking-wider text-[#D97757]">Pricing Tiers</span>
             <h2 className="font-serif text-3xl text-[#141413] tracking-tight mt-2">Transparent enterprise volume pricing</h2>
-            <p className="text-sm text-[rgba(20,20,19,0.62)] mt-1">Consult and negotiate tailored agreement terms with Aarav, our AI Solutions Lead.</p>
+            <p className="text-sm text-[rgba(20,20,19,0.62)] mt-1">Consult and negotiate tailored agreement terms with Emily, our AI Solutions Lead.</p>
 
             <div className="mt-6 inline-flex items-center p-1 rounded-full bg-[rgba(20,20,19,0.05)]">
               {(['monthly', 'annual'] as const).map(cycle => (
@@ -430,7 +430,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                 </div>
               </div>
               <Button variant="claude" size="sm" className="mt-8 w-full justify-center" onClick={() => { setSeats(50); setShowConfigModal(true); }}>
-                Negotiate with Aarav
+                Negotiate with Emily
               </Button>
             </div>
 
@@ -461,8 +461,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             <div className="size-2 rounded-full bg-[#D97757] animate-softpulse flex-shrink-0 mt-1" />
             <p className="text-[11px] text-[rgba(20,20,19,0.62)] leading-relaxed">
               <span className="text-[#D97757] font-semibold">Demo Note (EchoSphere Hackathon):</span>{' '}
-              The &quot;Talk to Sales&quot; and &quot;Negotiate with Aarav&quot; buttons connect you to a live AI voice agent powered by{' '}
-              <span className="text-[#141413] font-medium">Agora Conversational AI Engine + MCP tool calling</span>. Aarav acts as Anthropic&apos;s AI Enterprise Solutions Lead — presenting Claude Opus 5, qualifying team size, addressing ChatGPT objections, negotiating volume terms with a strict margin floor, and syncing qualified leads to HubSpot CRM in real time.
+              The &quot;Talk to Sales&quot; and &quot;Negotiate with Emily&quot; buttons connect you to a live AI voice agent powered by{' '}
+              <span className="text-[#141413] font-medium">Agora Conversational AI Engine + MCP tool calling</span>. Emily acts as Anthropic&apos;s AI Enterprise Solutions Lead — presenting Claude Opus 5, qualifying team size, addressing ChatGPT objections, negotiating volume terms with a strict margin floor, and syncing qualified leads to HubSpot CRM in real time.
             </p>
           </div>
         </div>
@@ -487,13 +487,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             Ready to deploy 1M context intelligence across your org?
           </h2>
           <p className="mt-4 text-sm text-[rgba(20,20,19,0.62)]">
-            Consult with Aarav — our AI Solutions Lead — and build a tailored volume quote for your organization in under 5 minutes.
+            Consult with Emily — our AI Solutions Lead — and build a tailored volume quote for your organization in under 5 minutes.
           </p>
           <div className="mt-8 flex justify-center">
             <Button variant="claude" size="lg" onClick={() => setShowConfigModal(true)} disabled={isConnecting}>
               <span className="inline-flex items-center gap-2">
                 <Headphones className="size-4" />
-                Talk to Aarav — Build Your Quote
+                Talk to Emily — Build Your Quote
               </span>
             </Button>
           </div>
@@ -513,7 +513,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                   <Headphones className="size-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-[#141413]">Consult with Aarav — Claude Enterprise</h3>
+                  <h3 className="text-sm font-bold text-[#141413]">Consult with Emily — Claude Enterprise</h3>
                   <p className="text-[11px] text-[rgba(20,20,19,0.5)]">AI Solutions Lead · Agora Convo AI · Bilingual</p>
                 </div>
               </div>
@@ -521,8 +521,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             </div>
 
             <p className="mt-4 text-xs text-[rgba(20,20,19,0.65)] leading-relaxed">
-              You&apos;ll be connected to <strong className="text-[#141413]">Aarav</strong>, Anthropic&apos;s AI Enterprise Solutions Lead.
-              He&apos;ll evaluate your team size, address context and security questions, calculate tier pricing, and negotiate volume agreements with real-time MCP tool calling.
+              You&apos;ll be connected to <strong className="text-[#141413]">Emily</strong>, Anthropic&apos;s AI Enterprise Solutions Lead.
+              She&apos;ll evaluate your team size, address context and security questions, calculate tier pricing, and negotiate volume agreements with real-time MCP tool calling.
             </p>
 
             <div className="mt-5 space-y-4">
@@ -577,7 +577,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
               <Button variant="claude" size="sm" onClick={handleLaunch} disabled={isConnecting}>
                 <span className="inline-flex items-center gap-2">
                   <Headphones className="size-3.5" />
-                  {isConnecting ? 'Connecting to Aarav…' : 'Start Voice Consultation'}
+                  {isConnecting ? 'Connecting to Emily…' : 'Start Voice Consultation'}
                 </span>
               </Button>
             </div>

@@ -8,7 +8,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Claude Enterprise · Anthropic | Enterprise Sales & Solutions Lead",
-  description: "Explore Claude Enterprise with Aarav, Anthropic's AI Enterprise Solutions Lead. Real-time voice consultation for Claude Opus 5, 1M context window, GitHub integration, and enterprise volume pricing.",
+  description: "Explore Claude Enterprise with Emily, Anthropic's AI Enterprise Solutions Lead. Real-time voice consultation for Claude Opus 5, 1M context window, GitHub integration, and enterprise volume pricing.",
 };
 
 export default function RootLayout({

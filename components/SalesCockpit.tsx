@@ -42,7 +42,7 @@ const STATE_PILL: Record<VoiceState, { label: string; classes: string; dot: stri
     dot: 'bg-[#ffaf68] animate-softpulse',
   },
   speaking: {
-    label: 'Aarav is speaking',
+    label: 'Emily is speaking',
     classes: 'bg-[#eeeafe] text-[#4928fd] border-[#4928fd]/25',
     dot: 'bg-[#4928fd] animate-softpulse',
   },
@@ -137,7 +137,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
             </span>
             <span className="text-[rgba(27,29,30,0.25)] shrink-0">/</span>
             <span className="text-xs text-[rgba(27,29,30,0.55)] font-medium truncate hidden min-[400px]:block">
-              Solutions Executive (Aarav)
+              Solutions Executive (Emily)
             </span>
           </div>
           <div
@@ -200,7 +200,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
               <div className="flex items-center gap-2 min-w-0">
                 <span aria-hidden className={cn('size-2 rounded-full shrink-0', pill.dot)} />
                 <span className="text-xs font-semibold text-[#1b1d1e] truncate">
-                  Aarav · Solutions Lead (Anthropic)
+                  Emily · Solutions Lead (Anthropic)
                 </span>
               </div>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-[#D97757] shrink-0">
@@ -304,8 +304,8 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     type="text"
                     value={customInput}
                     onChange={(e) => setCustomInput(e.target.value)}
-                    placeholder="Ask Aarav or negotiate deal terms…"
-                    aria-label="Message Aarav"
+                    placeholder="Ask Emily or negotiate deal terms…"
+                    aria-label="Message Emily"
                     className="w-full pl-4 pr-9 py-2.5 rounded-full bg-[rgba(27,29,30,0.04)] border border-transparent text-xs text-[#1b1d1e] placeholder:text-[rgba(27,29,30,0.4)] focus:outline-none focus:bg-white focus:border-[#D97757]/40 font-sans transition-all"
                   />
                   <CornerDownLeft
