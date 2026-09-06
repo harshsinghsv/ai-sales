@@ -13,6 +13,7 @@ import {
   Plus,
   Minus
 } from 'lucide-react';
+import MovingBorderButton from '@/components/ui/moving-border-button';
 
 interface LandingPageProps {
   onStartCall: (info: { name: string; company: string; email: string; seats: number }) => void;
@@ -434,27 +435,53 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
           0. AGORA PLATFORM DEMO NAVIGATION BAR (Back to Platform)
          ───────────────────────────────────────────────────────────── */}
       {onBackToPlatform && (
-        <div className="bg-[#141413] text-white text-xs px-4 py-2 border-b border-white/10">
-          <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D97757] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D97757]" />
-              </span>
-              <span className="font-mono text-[#D97757] font-semibold tracking-wider text-[11px] uppercase">
-                Customer Demo Showcase
-              </span>
-              <span className="text-white/60 text-[11px] hidden sm:inline">
-                · Showing Anthropic Claude Enterprise equipped with the Agora Sales Agent
-              </span>
+        <div className="relative z-50 bg-[#0B0910] border-b border-white/[0.08] text-white overflow-hidden backdrop-blur-xl">
+          {/* Ambient subtle warm glow & highlight top line */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(217,119,87,0.14),rgba(0,0,0,0))] pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#D97757]/40 to-transparent pointer-events-none" />
+
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 py-2 flex items-center justify-between gap-4 relative z-10">
+            {/* Left: Showcase Badge & Context */}
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#D97757]/10 border border-[#D97757]/30 text-[#D97757] shadow-[0_0_12px_rgba(217,119,87,0.15)] shrink-0">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D97757] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D97757]" />
+                </span>
+                <span className="font-mono text-[10.5px] font-semibold tracking-wider uppercase">
+                  Customer Demo Showcase
+                </span>
+              </div>
+
+              <div className="hidden sm:flex items-center gap-2 text-xs text-white/80 min-w-0 font-sans">
+                <span className="text-white/20">|</span>
+                <span className="text-white/60">Simulated Buyer Experience:</span>
+                <span className="font-medium text-white/95 flex items-center gap-1">
+                  <span className="text-[#D97757] font-bold text-xs">✻</span>
+                  Claude Enterprise
+                </span>
+                <span className="text-white/30 hidden md:inline">•</span>
+                <span className="hidden md:inline-flex items-center gap-1.5 text-zinc-300 font-mono text-[11px] bg-white/[0.04] px-2 py-0.5 rounded border border-white/[0.08]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Agora Voice AI Sales Agent Active
+                </span>
+              </div>
             </div>
-            <button
-              onClick={onBackToPlatform}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 text-white text-[11px] font-medium transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-3 h-3 text-[#D97757]" />
-              <span>Back to Agent Platform</span>
-            </button>
+
+            {/* Right: Back to Platform Button with Moving Border Glow */}
+            <div className="flex items-center gap-2 shrink-0">
+              <MovingBorderButton
+                type="button"
+                onClick={onBackToPlatform}
+                variant="terracotta"
+                borderWidth={1.5}
+                className="h-8 shadow-sm cursor-pointer"
+                faceClassName="px-3.5 py-1 text-xs font-semibold text-zinc-100 group-hover:text-white gap-1.5"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-[#D97757] group-hover:-translate-x-0.5 transition-transform duration-200" />
+                <span>Back to Agent Platform</span>
+              </MovingBorderButton>
+            </div>
           </div>
         </div>
       )}
@@ -474,13 +501,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
               </span>
             </a>
             {onBackToPlatform && (
-              <button
-                onClick={onBackToPlatform}
-                className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono text-[#6B6966] bg-[#F5F4ED] hover:bg-[#E8E6DC] border border-[#E8E6DC] transition-colors cursor-pointer ml-2"
-              >
-                <ArrowLeft className="w-3 h-3 text-[#D97757]" />
-                <span>Agent Platform</span>
-              </button>
+              <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium text-[#D97757] bg-[#FAF0EC] border border-[#D97757]/25 ml-2 select-none">
+                Demo Mode
+              </span>
             )}
           </div>
 
