@@ -5,6 +5,7 @@ Orchestrates Deal Engine tools, CRM logging, Calendar booking, and real-time sta
 """
 import asyncio
 import json
+import time
 import logging
 import uuid
 from typing import Dict, Any, List, Optional, Set
@@ -50,6 +51,29 @@ class ConnectionManager:
 
 
 ws_manager = ConnectionManager()
+
+# In-memory queue of human-escalation requests, so the Sales Team Console
+# (app/team) can show pending calls even if it connects to the WebSocket after
+# the escalation already fired — a live broadcast alone would be missed by a
+# console that wasn't open yet. Capped so a long-running demo doesn't leak
+# memory; oldest entries drop off first.
+ESCALATION_QUEUE_MAX = 50
+escalation_queue: List[Dict[str, Any]] = []
+
+
+def record_escalation(entry: Dict[str, Any]) -> None:
+    escalation_queue.append(entry)
+    del escalation_queue[:-ESCALATION_QUEUE_MAX]
+
+
+def resolve_escalation(conversation_id: str) -> bool:
+    """Marks the most recent open escalation for a conversation as handled.
+    Returns False if none was found (already resolved, or never existed)."""
+    for entry in reversed(escalation_queue):
+        if entry["conversation_id"] == conversation_id and not entry["resolved"]:
+            entry["resolved"] = True
+            return True
+    return False
 
 
 # In-Memory Session State Store keyed by conversation_id
@@ -241,6 +265,48 @@ async def broadcast_session_update(session: SessionState, toast_service: Optiona
     await ws_manager.broadcast(payload)
 
 
+async def broadcast_tool_call(
+    conversation_id: str,
+    tool: str,
+    args: Dict[str, Any],
+    result: Dict[str, Any],
+    source: str = "mcp",
+    duration_ms: Optional[int] = None,
+):
+    """
+    Announces a tool invocation to the Deal Cockpit so the UI can show the
+    agent's actions as they happen.
+
+    `source` records which surface performed the call — "mcp" when Agora's
+    Conversational AI Engine called our MCP server itself, "middleware" when it
+    ran inside the custom-LLM path. Surfacing the difference is the point: it
+    shows the Agora engine doing the tool orchestration.
+    """
+    await ws_manager.broadcast(
+        {
+            "type": "AGENT_TOOL_CALL",
+            "conversation_id": conversation_id,
+            "tool": tool,
+            "source": source,
+            "args": args,
+            "result_summary": _summarize_tool_result(result),
+            "duration_ms": duration_ms,
+            "timestamp": int(time.time() * 1000),
+        }
+    )
+
+
+def _summarize_tool_result(result: Dict[str, Any]) -> str:
+    """One short line describing what a tool actually did, for the UI feed."""
+    if not isinstance(result, dict):
+        return str(result)[:160]
+    for key in ("message", "status", "summary", "tier_name"):
+        value = result.get(key)
+        if isinstance(value, str) and value:
+            return value[:160]
+    return ", ".join(f"{k}={v}" for k, v in list(result.items())[:3])[:160]
+
+
 # Session memory is updated by the LLM itself via the update_session_state
 # tool — no regex extraction. Seat changes still recompute the tier so the
 # margin floor always tracks the right plan.
@@ -396,15 +462,34 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
         meeting_type = args.get("meeting_type") or "Enterprise Solution Architecture Demo"
         res = await calendar_client.book_meeting(
             attendee_email=email_val,
+            # The buyer's requested time, in their own words ("tomorrow at 3pm").
+            # Previously dropped, which silently booked every demo at the same
+            # default slot no matter what was agreed on the call.
+            start_time_iso=args.get("datetime_str"),
             meeting_type=meeting_type,
             notes=f"Seats: {session.requirements.seat_count}. Tier: {session.deal_state.tier_name}"
         )
         session.outcome = "demo_booked"
+
+        # Never claim an invite was sent when it was only simulated.
+        is_real = not res.get("is_sandbox", True)
+        if is_real:
+            toast_title = "Meeting Booked - Invite Sent"
+            toast_detail = (
+                f"{res.get('start_time')} - Google Calendar invite emailed to {email_val}"
+            )
+        else:
+            toast_title = "Meeting Booked (Simulated)"
+            toast_detail = (
+                f"{res.get('start_time')} - no real invite sent; "
+                "connect Google Calendar to make this live"
+            )
+
         await broadcast_session_update(
             session,
             toast_service="calendar",
-            toast_title="Google Calendar Demo Booked",
-            toast_detail=f"Google Meet invite sent to {email_val} ({res.get('start_time')})"
+            toast_title=toast_title,
+            toast_detail=toast_detail
         )
         return res
 
@@ -419,6 +504,15 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
         session.escalated = True
         session.outcome = "escalated"
 
+        # Live handoff: the specialist opens this link and joins the buyer's
+        # own Agora RTC channel, so the escalation is a real voice takeover
+        # rather than a notification the buyer never sees.
+        from backend.config import settings as _settings
+
+        handoff_url = (
+            f"{_settings.HUMAN_HANDOFF_BASE_URL}/human/{session.conversation_id}"
+        )
+
         res = await escalation_client.dispatch_escalation(
             reason=reason,
             urgency=urgency,
@@ -427,13 +521,37 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
             seat_count=session.requirements.seat_count,
             deal_tier=session.deal_state.tier_name,
             objections=[o.model_dump() for o in session.objections_raised],
-            transcript_summary=f"Escalation trigger: {reason}. Customer requirements: {session.requirements.seat_count} seats."
+            transcript_summary=f"Escalation trigger: {reason}. Customer requirements: {session.requirements.seat_count} seats.",
+            suggested_next_step=f"Join the live call now: {handoff_url}",
+        )
+        if isinstance(res, dict):
+            res["handoff_url"] = handoff_url
+
+        escalation_record = {
+            "conversation_id": session.conversation_id,
+            "customer_name": session.customer.name or "Prospective Buyer",
+            "company": session.customer.company or "Unspecified",
+            "seat_count": session.requirements.seat_count,
+            "tier_name": session.deal_state.tier_name,
+            "reason": reason,
+            "urgency": urgency,
+            "handoff_url": handoff_url,
+            "timestamp": int(time.time() * 1000),
+            "resolved": False,
+        }
+        record_escalation(escalation_record)
+
+        # HUMAN_HANDOFF_REQUESTED is the live "ring" — a Sales Team Console
+        # already connected sees it instantly. A console that connects later
+        # hydrates the same data from GET /api/escalations instead.
+        await ws_manager.broadcast(
+            {"type": "HUMAN_HANDOFF_REQUESTED", **escalation_record}
         )
         await broadcast_session_update(
             session,
             toast_service="slack",
             toast_title="🚨 Human Specialist Escalated",
-            toast_detail=f"Slack alert dispatched: {reason}"
+            toast_detail=f"Live handoff link dispatched: {reason}"
         )
     return res
 

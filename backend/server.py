@@ -25,18 +25,34 @@ from backend.middleware.custom_llm import (
     ws_manager,
     sessions,
     get_or_create_session,
-    broadcast_session_update
+    broadcast_session_update,
+    escalation_queue,
+    resolve_escalation,
 )
 
 # Configure structured logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("server")
 
+# The MCP streamable-HTTP transport needs its session manager running for the
+# lifetime of the process, so its lifespan is adopted by the FastAPI app.
+from backend.mcp_server import build_mcp_app
+
+mcp_app = build_mcp_app()
+
 app = FastAPI(
     title="Adaptive AI Sales & Negotiation Agent",
-    description="Agora Conversational AI + Sarvam AI + HubSpot + Google Calendar + Deal Engine",
-    version="1.0.0"
+    description=(
+        "Agora Conversational AI (Deepgram ASR + managed OpenAI + MiniMax TTS) "
+        "+ Deal Engine MCP server + HubSpot + Google Calendar"
+    ),
+    version="1.1.0",
+    lifespan=mcp_app.router.lifespan_context,
 )
+
+# Deal Engine MCP server. Agora's Conversational AI Engine calls this directly
+# via llm.mcp_servers; the per-session conversation id rides in ?cid=.
+app.mount("/mcp", mcp_app)
 
 # Enable CORS for Next.js web application
 app.add_middleware(
@@ -112,6 +128,11 @@ async def speech_tts(payload: OpenAITTSRequest):
 async def speech_to_text(file: UploadFile = File(...)):
     """
     Transcribes incoming microphone audio via Sarvam saaras:v3 speech-to-text API.
+
+    DEPRECATED as of the Agora quickstart migration. The browser no longer runs
+    its own STT — Agora's cloud pipeline transcribes with the native Sarvam ASR
+    vendor and delivers transcripts over RTM. Kept for offline/manual testing;
+    no frontend code path calls it.
     """
     try:
         content = await file.read()
@@ -149,6 +170,95 @@ async def speech_to_text(file: UploadFile = File(...)):
 
 
 # -------------------------------------------------------------
+# 3c. Agent Pipeline Config (consumed by /api/invite-agent in Next.js)
+# -------------------------------------------------------------
+@app.get("/api/agent/pipeline-config")
+async def agent_pipeline_config(
+    conversation_id: str,
+    customer_name: Optional[str] = None,
+    company: Optional[str] = None,
+    email: Optional[str] = None,
+    seat_count: Optional[int] = None,
+):
+    """
+    Serves the ASR/LLM/TTS pipeline configuration for a session so the Next.js
+    /api/invite-agent route can build the Agora agent without duplicating any
+    business logic. Python remains the single source of truth for the adaptive
+    Aarav persona and stage detection; this endpoint only transports it.
+
+    Seeds the session with buyer context first so the returned system prompt
+    already reflects the correct negotiation stage on the agent's first turn.
+    """
+    from backend.middleware.sales_persona import build_system_prompt
+    from backend.services.agora_convo_client import (
+        MANAGED_GREETING,
+        MANAGED_FAILURE_MESSAGE,
+    )
+
+    session = get_or_create_session(conversation_id)
+    if customer_name:
+        session.customer.name = customer_name
+    if company:
+        session.customer.company = company
+    if email:
+        session.customer.email = email
+    if seat_count:
+        session.requirements.seat_count = seat_count
+
+    mode = (settings.AGORA_LLM_MODE or "managed_openai").lower()
+    if mode not in ("managed_openai", "custom"):
+        mode = "managed_openai"
+
+    config: Dict[str, Any] = {
+        "conversation_id": conversation_id,
+        "llm_mode": mode,
+        "system_prompt": build_system_prompt(session),
+        "greeting_message": MANAGED_GREETING,
+        "failure_message": MANAGED_FAILURE_MESSAGE,
+        "llm_model": settings.AGORA_LLM_MODEL,
+        "llm_temperature": settings.AGORA_LLM_TEMPERATURE,
+        "stt_vendor": (settings.AGORA_STT_VENDOR or "deepgram").lower(),
+        "tts_vendor": (settings.AGORA_TTS_VENDOR or "minimax").lower(),
+        "deepgram": {
+            "model": settings.DEEPGRAM_MODEL,
+            "language": settings.DEEPGRAM_LANGUAGE,
+        },
+        "minimax": {
+            "model": settings.MINIMAX_MODEL,
+            "voice_id": settings.MINIMAX_VOICE_ID,
+        },
+        "sarvam": {
+            "api_key": settings.SARVAM_API_KEY,
+            "stt_language": settings.SARVAM_STT_LANGUAGE,
+            "tts_speaker": settings.SARVAM_TTS_SPEAKER,
+            "tts_target_language_code": settings.SARVAM_TTS_TARGET_LANGUAGE,
+            "tts_sample_rate": settings.SARVAM_TTS_SAMPLE_RATE,
+        },
+        # Our Deal Engine MCP server, scoped to this conversation via ?cid= so
+        # the model never has to remember or echo a session id.
+        "deal_engine_mcp_url": (
+            f"{settings.PUBLIC_BASE_URL}/mcp/?cid={conversation_id}"
+            if settings.AGORA_MCP_ENABLE_DEAL_ENGINE
+            else None
+        ),
+        # Additional MCP servers the Agora agent may call tools from. Agora's
+        # engine performs the tool calls itself (transport: streamable_http).
+        "mcp_server_urls": [
+            u.strip()
+            for u in (settings.AGORA_MCP_SERVER_URLS or "").split(",")
+            if u.strip()
+        ],
+    }
+
+    if mode == "custom":
+        config["custom_llm_url"] = f"{settings.PUBLIC_BASE_URL}/v1/chat/completions"
+        config["custom_llm_api_key"] = "teamsync_negotiation_token"
+        config["llm_model"] = settings.SARVAM_CHAT_MODEL
+
+    return config
+
+
+# -------------------------------------------------------------
 # 4. Voice Call & Session Management
 # -------------------------------------------------------------
 class StartCallRequest(BaseModel):
@@ -164,6 +274,12 @@ class StartCallRequest(BaseModel):
 async def start_call_session(req: StartCallRequest):
     """
     Initializes a new sales negotiation session and triggers Agora Conversational AI Agent join.
+
+    DEPRECATED as of the Agora quickstart migration. The Next.js route
+    /api/invite-agent now owns the agent lifecycle (token, join, stop), so the
+    browser no longer calls this. Calling it while a Next-started agent is live
+    would put a SECOND agent in the same channel. Retained for backend-only
+    testing and the deal playground; prefer /api/agent/pipeline-config.
     """
     channel = req.channel_name or f"sales_{uuid.uuid4().hex[:6]}"
     conversation_id = channel
@@ -344,6 +460,31 @@ class ConcessionRequest(BaseModel):
 async def post_concession(req: ConcessionRequest):
     decision = evaluate_concession_request(req.seat_count, req.requested_discount_pct, req.current_tier)
     return decision
+
+
+# -------------------------------------------------------------
+# 5b. Human Escalation Queue (Sales Team Console)
+# -------------------------------------------------------------
+@app.get("/api/escalations")
+async def list_escalations(include_resolved: bool = False):
+    """
+    Returns pending (and optionally resolved) human-handoff requests, newest
+    first. The Sales Team Console calls this on load to hydrate its queue,
+    then relies on the /ws HUMAN_HANDOFF_REQUESTED broadcast for live updates —
+    this covers a console that opens after the escalation already fired.
+    """
+    items = escalation_queue if include_resolved else [
+        e for e in escalation_queue if not e["resolved"]
+    ]
+    return {"escalations": list(reversed(items))}
+
+
+@app.post("/api/escalations/{conversation_id}/resolve")
+async def resolve_escalation_endpoint(conversation_id: str):
+    """Marks an escalation as picked up once a specialist opens the handoff
+    console for it, so it drops off other specialists' pending queues."""
+    found = resolve_escalation(conversation_id)
+    return {"resolved": found}
 
 
 # -------------------------------------------------------------

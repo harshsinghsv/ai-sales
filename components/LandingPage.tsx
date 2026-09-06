@@ -449,7 +449,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             <p className="text-[11px] text-[rgba(27,29,30,0.62)] leading-relaxed">
               <span className="text-[#4928fd] font-semibold">Demo note (EchoSphere Hackathon):</span>{' '}
               The &quot;Talk to Sales&quot; / &quot;Negotiate with Aarav&quot; buttons connect to a live AI voice agent powered by{' '}
-              <span className="text-[#1b1d1e]/70">Agora Conversational AI Engine + Sarvam AI</span>. Aarav acts as TeamSync&apos;s enterprise sales rep — handling pricing, Jira objections, negotiation, and HubSpot CRM logging in real-time Hinglish.
+              <span className="text-[#1b1d1e]/70">Agora Conversational AI Engine + MCP tool calling</span>. Aarav acts as TeamSync&apos;s enterprise sales rep — handling pricing, Jira objections, negotiation, and HubSpot CRM logging in real-time Hinglish.
             </p>
           </div>
         </div>
@@ -501,7 +501,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-[#1b1d1e]">Talk to Aarav — TeamSync Sales</h3>
-                  <p className="text-[11px] text-[rgba(27,29,30,0.5)]">AI voice agent · Agora RTC · Sarvam Hinglish</p>
+                  <p className="text-[11px] text-[rgba(27,29,30,0.5)]">AI voice agent · Agora Convo AI · Hinglish</p>
                 </div>
               </div>
               <button onClick={() => setShowConfigModal(false)} className="text-[rgba(27,29,30,0.4)] hover:text-[#1b1d1e] p-1 text-sm">✕</button>
@@ -584,7 +584,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             <span>EchoSphere Hackathon · Knotic Track</span>
           </div>
           <div className="flex items-center gap-3 text-[rgba(27,29,30,0.35)]">
-            <span>Agora RTC</span><span>·</span><span>Sarvam AI</span><span>·</span><span>HubSpot v3</span><span>·</span><span>Google Calendar</span>
+            <span>Agora Convo AI</span><span>·</span><span>Agora MCP</span><span>·</span><span>HubSpot v3</span><span>·</span><span>Google Calendar</span>
           </div>
         </div>
       </footer>

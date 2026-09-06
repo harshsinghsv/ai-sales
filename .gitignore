@@ -4,15 +4,12 @@
 .env.*.local
 !.env.example
 
-# --- Next.js / Frontend ------------------------------------------------------
-frontend/.next/
-frontend/out/
-frontend/build/
-frontend/dist/
-frontend/node_modules/
-frontend/.vercel/
-frontend/tsconfig.tsbuildinfo
-frontend/next-env.d.ts
+# --- Next.js / Frontend (app now lives at repo root) -------------------------
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
 
 # --- Node / npm / yarn / pnpm ------------------------------------------------
 node_modules/

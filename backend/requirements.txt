@@ -1,0 +1,25 @@
+# Adaptive AI Sales & Negotiation Agent — backend dependencies.
+# Install:  python -m pip install -r backend/requirements.txt
+
+fastapi==0.141.1
+uvicorn==0.52.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-dotenv==1.2.3
+# IANA timezone database — ZoneInfo has no system tzdata on Windows/slim images,
+# needed for GOOGLE_CALENDAR_TIMEZONE (e.g. Asia/Kolkata) to resolve.
+tzdata==2026.2
+httpx==0.28.1
+
+# Multipart + websockets back the /api/stt upload and the Deal Cockpit socket.
+python-multipart==0.0.32
+websockets==17.1
+
+# Deal Engine MCP server (streamable HTTP transport) consumed by Agora's
+# Conversational AI Engine via llm.mcp_servers.
+mcp==2.1.1
+
+# RTC token generation for the legacy backend-side agent join.
+agora-token-builder==1.0.0
+
+pytest==9.1.1

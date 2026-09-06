@@ -106,3 +106,57 @@ export interface PostCallDealMemo {
     is_sandbox?: boolean;
   };
 }
+
+/**
+ * Per-turn latency sample emitted by Agora's Conversational AI Engine over RTM
+ * (AGENT_METRICS). `type` names the pipeline module — asr, llm, tts — and
+ * `value` is the measured latency in milliseconds.
+ */
+export interface PipelineMetric {
+  id: string;
+  module: string;
+  name: string;
+  valueMs: number;
+  timestamp: number;
+}
+
+/**
+ * A tool invocation announced by the backend over the cockpit WebSocket.
+ * `source` distinguishes calls Agora's engine made against our MCP server
+ * from calls that ran inside the custom-LLM middleware.
+ */
+export interface ToolCallEvent {
+  id: string;
+  tool: string;
+  source: 'mcp' | 'middleware';
+  args: Record<string, unknown>;
+  resultSummary: string;
+  durationMs: number | null;
+  timestamp: number;
+}
+
+/** A barge-in: the buyer cut the agent off mid-sentence. */
+export interface InterruptionEvent {
+  id: string;
+  turnId: number;
+  timestamp: number;
+}
+
+/**
+ * A live "ring" for a human specialist: the buyer asked for a person, or the
+ * agent hit a negotiation deadlock. Backed by GET /api/escalations (queue
+ * hydration on load) and the HUMAN_HANDOFF_REQUESTED WebSocket broadcast
+ * (live updates), shown on the Sales Team Console (/team).
+ */
+export interface EscalationRequest {
+  conversation_id: string;
+  customer_name: string;
+  company: string;
+  seat_count: number | null;
+  tier_name: string;
+  reason: string;
+  urgency: 'low' | 'medium' | 'high';
+  handoff_url: string;
+  timestamp: number;
+  resolved: boolean;
+}
