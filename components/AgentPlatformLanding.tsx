@@ -18,6 +18,7 @@ import { TiltedCard } from '@/components/reactbits/TiltedCard';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { Marquee } from '@/components/ui/marquee';
 import { RainbowButton } from '@/components/ui/rainbow-button';
+import { MovingBorderButton } from '@/components/ui/moving-border-button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge-2';
 
@@ -116,29 +117,31 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               </span>
             </div>
 
-            <button
+            <MovingBorderButton
               type="submit"
-              className="px-8 py-3.5 sm:py-4 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 whitespace-nowrap text-sm sm:text-base font-semibold bg-white hover:bg-gray-100 text-[#0A070D] shadow-[0_0_30px_rgba(255,255,255,0.35)] cursor-pointer flex items-center justify-center gap-2"
+              className="h-auto w-full sm:w-auto"
+              faceClassName="py-3.5 sm:py-4 px-8 text-sm sm:text-base font-semibold text-white whitespace-nowrap"
             >
               <span>Launch Live Demo</span>
-              <ArrowRight className="w-4 h-4 text-[#0A070D]" />
-            </button>
+              <ArrowRight className="w-4 h-4 text-white" />
+            </MovingBorderButton>
           </form>
 
           {/* Symmetrical Quick Action Buttons with 21st.dev Rainbow Button */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <RainbowButton
+            <MovingBorderButton
               type="button"
               onClick={onStartDirectCall}
-              className="py-3.5 sm:py-4 px-7 sm:px-8 rounded-full text-xs sm:text-sm font-semibold shadow-[0_0_30px_rgba(217,119,87,0.35)] active:scale-95"
+              className="h-auto"
+              faceClassName="py-3.5 sm:py-4 px-7 sm:px-8 text-xs sm:text-sm font-semibold text-white"
             >
-              <PhoneCall className="w-4 h-4 text-[#FFA87D]" />
+              <PhoneCall className="w-4 h-4 text-[#D97757]" />
               <span>Start Voice Call with Emily</span>
               <span className="relative flex h-1.5 w-1.5 ml-1">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
-            </RainbowButton>
+            </MovingBorderButton>
 
             <a
               href="#demo-showcase"
@@ -385,13 +388,14 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <RainbowButton
+            <MovingBorderButton
               onClick={onStartDirectCall}
-              className="w-full sm:w-auto py-3.5 sm:py-4 px-8 rounded-full shadow-[0_0_30px_rgba(217,119,87,0.35)]"
+              className="w-full sm:w-auto h-auto"
+              faceClassName="py-3.5 sm:py-4 px-8 text-sm font-semibold text-white"
             >
-              <PhoneCall className="w-4 h-4 text-[#FFA87D]" />
+              <PhoneCall className="w-4 h-4 text-[#D97757]" />
               <span>Start Voice Call with Emily</span>
-            </RainbowButton>
+            </MovingBorderButton>
 
             <StarBorder
               onClick={onLaunchDemo}

@@ -12,6 +12,7 @@ import {
 import { Card, CardHeader, CardContent, CardToolbar } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge-2';
 import { StatisticCard10 } from '@/components/ui/demo';
+import { MovingBorderButton } from '@/components/ui/moving-border-button';
 
 interface StageNode {
   step: string;
@@ -254,14 +255,15 @@ export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLa
               <span className="text-[#141413] font-medium">{activeStage.log}</span>
             </div>
 
-            <button
+            <MovingBorderButton
               type="button"
               onClick={onLaunchDemo}
-              className="px-4 py-2 rounded-full text-xs font-semibold text-white bg-[#141413] hover:bg-[#252321] transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-xs active:scale-95"
+              className="h-auto shrink-0"
+              faceClassName="px-4 py-2 text-xs font-semibold text-white gap-1.5"
             >
               <span>Launch Demo</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </MovingBorderButton>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Sliders, ArrowRight, Lock } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardToolbar, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge-2';
+import { MovingBorderButton } from '@/components/ui/moving-border-button';
 
 interface ConcessionSimulatorProps {
   onLaunchDemo: () => void;
@@ -205,14 +206,15 @@ export const ConcessionSimulator: React.FC<ConcessionSimulatorProps> = ({ onLaun
               <Lock className="w-3.5 h-3.5 text-[#D97757]" />
               <span>Policy Rule: Customer requests &gt;18% discount require VP sign-off or extended terms.</span>
             </div>
-            <button
+            <MovingBorderButton
               type="button"
               onClick={onLaunchDemo}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-semibold text-white bg-[#141413] hover:bg-[#252321] transition-all cursor-pointer flex items-center justify-center gap-2 shadow-sm active:scale-95"
+              className="w-full sm:w-auto h-auto"
+              faceClassName="px-5 py-2.5 text-xs font-semibold text-white gap-2"
             >
               <span>Test Concession in Live Voice</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </MovingBorderButton>
           </div>
         </Card>
       </div>
