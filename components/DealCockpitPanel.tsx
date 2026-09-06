@@ -90,29 +90,29 @@ export const DealCockpitPanel: React.FC<DealCockpitPanelProps> = ({ session }) =
           >
             {displayName ?? <span className="text-[rgba(27,29,30,0.35)]">Unknown buyer</span>}
           </div>
-          <div className="mt-2.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1b1d1e]/85">
-            <Users className="size-3.5 text-[#4928fd]" aria-hidden />
+          <div className="mt-2.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#141413]">
+            <Users className="size-3.5 text-[#D97757]" aria-hidden />
             <span className="tabular-nums">
               {requirements.seat_count != null ? requirements.seat_count : '—'} seats
             </span>
-            <span aria-hidden className="text-[rgba(27,29,30,0.3)]">·</span>
+            <span aria-hidden className="text-[#87867F]">·</span>
             <span className="truncate">{deal_state.tier_name}</span>
           </div>
         </div>
 
-        <div className="min-w-0 rounded-xl bg-[#eeeafe]/50 border border-[#4928fd]/15 p-4">
-          <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#4928fd]">
+        <div className="min-w-0 rounded-xl bg-[#FAF0EC] border border-[#D97757]/20 p-4">
+          <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#D97757]">
             Effective rate
           </span>
           <div className="mt-1.5 flex items-baseline gap-1.5">
-            <span className="text-[32px] leading-none font-bold text-[#1b1d1e] tracking-tight tabular-nums">
+            <span className="text-[32px] leading-none font-bold text-[#141413] tracking-tight tabular-nums font-serif-anthropic">
               ${deal_state.effective_price_per_seat.toFixed(2)}
             </span>
-            <span className="text-xs text-[rgba(27,29,30,0.5)]">/seat/mo</span>
+            <span className="text-xs text-[#5E5D59]">/seat/mo</span>
           </div>
 
           <div
-            className="mt-3 h-1.5 w-full rounded-full bg-[rgba(27,29,30,0.08)] overflow-hidden"
+            className="mt-3 h-1.5 w-full rounded-full bg-[#E8E6DC] overflow-hidden"
             role="progressbar"
             aria-label="Margin buffer remaining"
             aria-valuenow={Math.round(marginRemaining)}
@@ -126,13 +126,13 @@ export const DealCockpitPanel: React.FC<DealCockpitPanelProps> = ({ session }) =
             />
           </div>
           <div className="flex justify-between gap-2 text-[11px] mt-1.5">
-            <span className="text-[rgba(27,29,30,0.6)] tabular-nums">{marginRemaining.toFixed(0)}% margin left</span>
+            <span className="text-[#5E5D59] tabular-nums">{marginRemaining.toFixed(0)}% margin left</span>
             <span
               className={cn(
                 'tabular-nums font-semibold',
                 deal_state.current_offer_pct_off > 0
-                  ? 'text-[#b3661d]'
-                  : 'text-[rgba(27,29,30,0.5)]'
+                  ? 'text-[#D97757]'
+                  : 'text-[#87867F]'
               )}
             >
               {deal_state.current_offer_pct_off > 0
