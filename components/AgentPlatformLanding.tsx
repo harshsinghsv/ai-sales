@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   Sparkles,
@@ -12,23 +11,17 @@ import {
   Activity,
   Calendar,
   Database,
-  Layers,
-  ChevronRight,
-  CheckCircle2,
-  Lock,
-  MessageSquare,
   Sliders,
   Building2,
-  BarChart3,
   Cpu,
-  Globe,
   Headphones,
-  FileCheck,
-  Clock,
-  Send,
-  Workflow
+  Lock,
+  Workflow,
+  CheckCircle2,
+  TrendingUp,
+  Volume2
 } from 'lucide-react';
-import { AgentMascot, AgentMascotMini } from './AgentMascot';
+import { AgentVoiceConsole } from './AgentVoiceConsole';
 
 interface AgentPlatformLandingProps {
   onLaunchDemo: () => void;
@@ -48,10 +41,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   const baseListPricePerSeat = 75; // $75/seat/month for Claude Enterprise
   const rawAnnualList = seatCount * baseListPricePerSeat * 12;
 
-  // Concession logic:
-  // 1 yr: 0% base, up to 5% if > 200 seats
-  // 2 yr: 10% base, up to 14% if > 200 seats
-  // 3 yr: 15% base, up to 18% if > 500 seats
+  // Margin Defense & Concession Logic:
   let maxConcessionPct = 0;
   if (termYears === 1) {
     maxConcessionPct = seatCount >= 200 ? 5 : 0;
@@ -111,89 +101,54 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] selection:bg-[#D97757]/20 selection:text-[#141413] antialiased">
       {/* ---------------------------------------------------- */}
-      {/* Top Banner: Judge & Demo Navigation Quick Switcher  */}
+      {/* Platform Navigation Bar (Single, High-Precision Nav) */}
       {/* ---------------------------------------------------- */}
-      <div className="bg-[#141413] text-white text-xs px-4 py-2 border-b border-white/10 flex items-center justify-between">
-        <div className="flex items-center gap-2.5 max-w-7xl mx-auto w-full justify-between">
-          <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D97757] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D97757]" />
-            </span>
-            <span className="font-mono text-[#D97757] font-semibold tracking-wider uppercase text-[10px]">
-              Live Showcase
-            </span>
-            <span className="hidden sm:inline text-white/70">
-              Autonomous Sales Agent Platform — Powered by Agora Conversational AI
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onLaunchDemo}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D97757] hover:bg-[#C96442] text-white text-[11px] font-semibold transition-all shadow-xs cursor-pointer"
-            >
-              <span>View Customer Demo (Claude Enterprise)</span>
-              <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ---------------------------------------------------- */}
-      {/* Platform Navigation Bar                              */}
-      {/* ---------------------------------------------------- */}
-      <header className="sticky top-0 z-50 bg-[#FAF9F5]/90 backdrop-blur-md border-b border-[#E8E6DC] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          {/* Logo & Platform Title */}
+      <header className="sticky top-0 z-50 bg-[#FAF9F5]/95 backdrop-blur-md border-b border-[#E8E6DC] transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-17 flex items-center justify-between">
+          {/* Logo & Brand */}
           <div className="flex items-center gap-3">
-            <AgentMascotMini size={38} />
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-serif text-lg font-bold tracking-tight text-[#141413]">
-                  Agora Sales Engine
-                </span>
-                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FAF0EC] text-[#D97757] font-semibold border border-[#D97757]/20">
-                  v2.8 Turbo
-                </span>
-              </div>
-              <p className="text-[11px] text-[#6B6966] font-mono hidden sm:block">
-                Real-Time Voice Negotiation & Deal Closer
-              </p>
+            <span className="text-[#D97757] text-2xl font-bold leading-none select-none">✻</span>
+            <div className="flex items-baseline gap-2">
+              <span className="font-serif text-xl font-semibold tracking-tight text-[#141413]">
+                Agora Voice Agent
+              </span>
+              <span className="text-[11px] font-mono text-[#8C8984] hidden sm:inline">
+                Enterprise Edition
+              </span>
             </div>
           </div>
 
-          {/* Nav Anchors */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm text-[#4D4C47] font-medium">
-            <a href="#anthropic-story" className="hover:text-[#D97757] transition-colors">
+          {/* Clean Nav Links */}
+          <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5E5D59] font-medium">
+            <a href="#showcase" className="hover:text-[#141413] transition-colors">
               Customer Story
             </a>
-            <a href="#core-capabilities" className="hover:text-[#D97757] transition-colors">
+            <a href="#capabilities" className="hover:text-[#141413] transition-colors">
               Capabilities
             </a>
-            <a href="#concession-simulator" className="hover:text-[#D97757] transition-colors">
-              Concession Simulator
+            <a href="#simulator" className="hover:text-[#141413] transition-colors">
+              Deal Simulator
             </a>
-            <a href="#architecture" className="hover:text-[#D97757] transition-colors">
+            <a href="#architecture" className="hover:text-[#141413] transition-colors">
               Architecture
             </a>
           </nav>
 
-          {/* Header Action Buttons */}
-          <div className="flex items-center gap-3">
+          {/* Action CTAs */}
+          <div className="flex items-center gap-2.5">
             <button
               onClick={onStartDirectCall}
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-[#141413] bg-[#F5F4ED] hover:bg-[#E8E6DC] border border-[#E8E6DC] transition-colors cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#141413] bg-[#F5F4ED] hover:bg-[#E8E6DC] border border-[#E8E6DC] transition-colors cursor-pointer"
             >
               <PhoneCall className="w-3.5 h-3.5 text-[#D97757]" />
-              <span>Talk to Agent Now</span>
+              <span>Talk to Emily</span>
             </button>
 
             <button
               onClick={onLaunchDemo}
-              className="inline-flex items-center gap-2 px-4.5 py-2 rounded-xl text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] shadow-md hover:shadow-lg transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] shadow-sm hover:shadow transition-all cursor-pointer"
             >
-              <span>Launch Demo</span>
+              <span>Customer Demo (Claude Enterprise)</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#D97757]" />
             </button>
           </div>
@@ -201,124 +156,84 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       </header>
 
       {/* ---------------------------------------------------- */}
-      {/* Hero Section: Editorial Headline + Animated Mascot   */}
+      {/* Hero Section: Editorial Typography + Live Console    */}
       {/* ---------------------------------------------------- */}
-      <section className="relative pt-12 pb-20 sm:pt-16 sm:pb-28 overflow-hidden">
-        {/* Subtle Background Radial Grid Accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(#E8E6DC_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="relative pt-12 pb-20 sm:pt-16 sm:pb-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Editorial Value Proposition */}
-            <div className="lg:col-span-7 flex flex-col items-start text-left">
-              {/* Pill Eyebrow */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/25 text-[#D97757] text-xs font-mono font-medium mb-6"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>AGORA CONVERSATIONAL AI ENGINE · SUB-500MS VOICE RTC</span>
-              </motion.div>
+            <div className="lg:col-span-6 flex flex-col items-start text-left">
+              {/* Refined Eyebrow Pill */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] border border-[#D97757]/25 text-[#D97757] text-xs font-mono font-medium mb-6">
+                <span className="w-2 h-2 rounded-full bg-[#D97757] animate-pulse" />
+                <span>AGORA CONVERSATIONAL AI · SUB-500MS VOICE RTC</span>
+              </div>
 
-              {/* Main Headline in Anthropic Serif */}
-              <motion.h1
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#141413] leading-[1.08] mb-6"
-              >
+              {/* Main Editorial Headline */}
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-[#141413] leading-[1.08] mb-6">
                 The Autonomous Enterprise Sales Agent that{' '}
                 <span className="italic font-normal text-[#D97757]">Negotiates</span> in Real-Time Voice.
-              </motion.h1>
+              </h1>
 
               {/* Editorial Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-lg sm:text-xl text-[#6B6966] leading-relaxed max-w-2xl mb-8 font-sans"
-              >
+              <p className="text-base sm:text-lg text-[#5E5D59] leading-relaxed max-w-xl mb-8 font-sans">
                 Trained on company margin policies, objection trees, and multi-tier procurement strategies.
                 Listens, defends pricing floors, and closes high-ticket deals over voice — syncing directly
                 with HubSpot, Google Calendar, and Slack.
-              </motion.p>
+              </p>
 
-              {/* Primary & Secondary CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-10"
-              >
-                {/* Primary Demo Button */}
+              {/* Primary CTAs */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto mb-10">
                 <button
                   onClick={onLaunchDemo}
-                  className="group relative inline-flex items-center justify-center gap-3 px-7 py-4 rounded-2xl bg-[#141413] text-white hover:bg-[#262624] font-semibold text-base shadow-xl hover:shadow-2xl transition-all cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#141413] text-white hover:bg-[#262624] font-semibold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
                 >
-                  <span>View Live Demo (Claude Enterprise)</span>
-                  <ArrowRight className="w-4 h-4 text-[#D97757] group-hover:translate-x-1 transition-transform" />
-                  <span className="absolute -top-2.5 -right-2 px-2 py-0.5 bg-[#D97757] text-white text-[10px] font-mono font-bold rounded-full shadow-xs">
-                    ACTIVE
-                  </span>
+                  <span>Experience Claude Enterprise Demo</span>
+                  <ArrowRight className="w-4 h-4 text-[#D97757] group-hover:translate-x-0.5 transition-transform" />
                 </button>
 
-                {/* Direct Call Button */}
                 <button
                   onClick={onStartDirectCall}
-                  className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] font-semibold text-base shadow-sm hover:shadow transition-all cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] font-semibold text-sm transition-all cursor-pointer"
                 >
                   <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                  <span>Start Voice Call with Emily</span>
+                  <span>Start Instant Call with Emily</span>
                 </button>
-              </motion.div>
+              </div>
 
-              {/* Real-time Performance Metrics Ribbon */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full pt-6 border-t border-[#E8E6DC]"
-              >
+              {/* Real-time Telemetry Strip */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full pt-6 border-t border-[#E8E6DC]">
                 <div>
                   <div className="text-2xl font-serif font-bold text-[#141413]">420ms</div>
-                  <div className="text-xs text-[#6B6966] font-mono mt-0.5">RTC Turn Latency</div>
+                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">RTC Turn Latency</div>
                 </div>
                 <div>
                   <div className="text-2xl font-serif font-bold text-[#D97757]">18.0%</div>
-                  <div className="text-xs text-[#6B6966] font-mono mt-0.5">Margin Floor Guard</div>
+                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Margin Floor Guard</div>
                 </div>
                 <div>
                   <div className="text-2xl font-serif font-bold text-[#141413]">100%</div>
-                  <div className="text-xs text-[#6B6966] font-mono mt-0.5">Cloud Voice (No Dups)</div>
+                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Cloud Voice (No Dups)</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-serif font-bold text-emerald-700">3-Stack</div>
-                  <div className="text-xs text-[#6B6966] font-mono mt-0.5">HubSpot · GCal · Slack</div>
+                  <div className="text-2xl font-serif font-bold text-emerald-700">Tri-Stack</div>
+                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">HubSpot · GCal · Slack</div>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
-            {/* Right Column: Animated AI Mascot & Telemetry */}
-            <div className="lg:col-span-5 flex justify-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="w-full max-w-md"
-              >
-                <AgentMascot />
-              </motion.div>
+            {/* Right Column: Live Interactive Agent Voice Console (NO AI SLOP) */}
+            <div className="lg:col-span-6 w-full">
+              <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
             </div>
           </div>
         </div>
       </section>
 
       {/* ---------------------------------------------------- */}
-      {/* Customer Showcase Spotlight: How Anthropic Uses Emily */}
+      {/* Customer Showcase: How Anthropic Deploys Emily       */}
       {/* ---------------------------------------------------- */}
-      <section id="anthropic-story" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
+      <section id="showcase" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
@@ -330,32 +245,30 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 How Anthropic Deploys Our Voice Agent for Claude Enterprise
               </h2>
             </div>
-            <p className="text-sm text-[#6B6966] max-w-md">
-              Experience the live customer demo configured for enterprise seat tiers, compliance qualification, and automated deal booking.
+            <p className="text-sm text-[#5E5D59] max-w-md">
+              A real demonstration of how an enterprise client configures seat tiers, compliance gates, and automated deal booking.
             </p>
           </div>
 
-          {/* Anthropic Showcase Card Container */}
-          <div className="rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-xl shadow-[#141413]/5">
+          <div className="rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-lg">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Details */}
               <div className="lg:col-span-7 space-y-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] font-serif font-bold text-lg">
-                    C
+                    ✻
                   </div>
                   <div>
                     <h3 className="font-serif text-xl font-bold text-[#141413]">
                       Claude Enterprise Solutions · Agent Emily
                     </h3>
-                    <p className="text-xs text-[#6B6966] font-mono">
+                    <p className="text-xs text-[#8C8984] font-mono">
                       Target Audience: Heads of AI, Engineering Directors, Procurement VPs
                     </p>
                   </div>
                 </div>
 
                 <p className="text-sm sm:text-base text-[#4D4C47] leading-relaxed">
-                  When prospects visit the Claude Enterprise solution page, they don't fill out a static form to wait 48 hours for an SDR callback. Instead, <span className="font-semibold text-[#141413]">Emily</span> engages in a real-time voice call:
+                  When prospects explore Claude Enterprise solutions, they don't wait days for an SDR email. Instead, <span className="font-semibold text-[#141413]">Emily</span> conducts an instant real-time voice negotiation:
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -375,13 +288,13 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                       <span>Seat & Margin Defense</span>
                     </div>
                     <p className="text-xs text-[#6B6966]">
-                      Quotes $75/seat list price and only concedes up to 18% in exchange for multi-year enterprise commitments.
+                      Defends $75/seat list price and only concedes up to 18% in exchange for multi-year commitments.
                     </p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-[#F5F4ED] border border-[#E8E6DC]">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-[#141413] mb-1">
-                      <Database className="w-4 h-4 text-emerald-700" />
+                    <div className="flex items-center gap-2 font-semibold text-xs text-emerald-700 mb-1">
+                      <Database className="w-4 h-4" />
                       <span>HubSpot CRM Deal Creation</span>
                     </div>
                     <p className="text-xs text-[#6B6966]">
@@ -390,12 +303,12 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                   </div>
 
                   <div className="p-4 rounded-2xl bg-[#F5F4ED] border border-[#E8E6DC]">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-[#141413] mb-1">
-                      <Calendar className="w-4 h-4 text-indigo-700" />
+                    <div className="flex items-center gap-2 font-semibold text-xs text-indigo-700 mb-1">
+                      <Calendar className="w-4 h-4" />
                       <span>Google Calendar Booking</span>
                     </div>
                     <p className="text-xs text-[#6B6966]">
-                      Dispatches direct calendar invites for Anthropic enterprise account executives upon term agreement.
+                      Dispatches direct calendar invites for Anthropic account executives upon term agreement.
                     </p>
                   </div>
                 </div>
@@ -403,7 +316,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 <div className="pt-2">
                   <button
                     onClick={onLaunchDemo}
-                    className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#141413] hover:bg-[#262624] text-white font-semibold text-sm transition-all shadow-md cursor-pointer"
+                    className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#141413] hover:bg-[#262624] text-white font-semibold text-sm transition-all shadow-sm cursor-pointer"
                   >
                     <span>Launch Claude Enterprise Customer Experience</span>
                     <ArrowRight className="w-4 h-4 text-[#D97757]" />
@@ -411,29 +324,29 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 </div>
               </div>
 
-              {/* Right Visual: Cockpit Mockup Preview */}
+              {/* Right Visual: Clean Dark Metric Ledger */}
               <div className="lg:col-span-5">
-                <div className="rounded-2xl bg-[#141413] p-5 text-white shadow-2xl border border-white/10 space-y-4 font-mono text-xs">
+                <div className="rounded-2xl bg-[#141413] p-6 text-white shadow-xl border border-white/10 space-y-4 font-mono text-xs">
                   <div className="flex items-center justify-between pb-3 border-b border-white/10">
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-white/90 font-sans font-semibold">Live Sales Cockpit</span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      <span className="text-white font-sans font-semibold">Live Deal Ledger</span>
                     </div>
-                    <span className="text-[10px] text-white/50">SESSION #AG-9428</span>
+                    <span className="text-[10px] text-white/40">CONFIG: CLAUDE ENTERPRISE</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
                     <div className="flex justify-between text-[11px]">
                       <span className="text-white/60">Target Tier:</span>
-                      <span className="text-[#D97757] font-semibold">Claude Enterprise (500 Seats)</span>
+                      <span className="text-[#D97757] font-semibold">Claude Enterprise (250 Seats)</span>
                     </div>
                     <div className="flex justify-between text-[11px]">
                       <span className="text-white/60">List ARR:</span>
-                      <span className="text-white font-semibold">$450,000 / yr</span>
+                      <span className="text-white font-semibold">$225,000 / yr</span>
                     </div>
                     <div className="flex justify-between text-[11px]">
                       <span className="text-white/60">Negotiated ARR:</span>
-                      <span className="text-emerald-400 font-semibold">$396,000 / yr (12% off)</span>
+                      <span className="text-emerald-400 font-semibold">$198,000 / yr (12% off)</span>
                     </div>
                     <div className="flex justify-between text-[11px]">
                       <span className="text-white/60">Tradeoff:</span>
@@ -441,10 +354,10 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-[11px] leading-relaxed">
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-[11px] leading-relaxed">
                     <div className="text-[#D97757] font-bold mb-1">Emily (Voice):</div>
                     <p className="text-white/80 font-sans italic">
-                      "I can unlock the 12% tier discount for 500 seats today if we align on a 24-month commitment. Shall I send the agreement to your email and set a sync with our solutions architect?"
+                      "I can unlock the 12% tier discount for 250 seats today if we align on a 24-month commitment. Shall I send the agreement to your email and set a sync with our solutions architect?"
                     </p>
                   </div>
 
@@ -462,7 +375,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       {/* ---------------------------------------------------- */}
       {/* Core Platform Capabilities: 3 Architectural Pillars  */}
       {/* ---------------------------------------------------- */}
-      <section id="core-capabilities" className="py-20">
+      <section id="capabilities" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
@@ -472,19 +385,19 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
               Engineered to Protect Margin While Closing Faster
             </h2>
-            <p className="mt-4 text-base text-[#6B6966]">
+            <p className="mt-4 text-base text-[#5E5D59]">
               Unlike generic voice widgets or static web forms, Agora Sales Engine marries real-time cloud RTC with game-theoretic deal defense algorithms.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Pillar 1 */}
-            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-sm hover:shadow-md flex flex-col justify-between">
+            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-xs flex flex-col justify-between">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-6">
                   <Activity className="w-6 h-6" />
                 </div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#6B6966] mb-1">
+                <div className="text-xs font-mono uppercase tracking-wider text-[#8C8984] mb-1">
                   Pillar 01 · Voice RTC
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">
@@ -501,12 +414,12 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             </div>
 
             {/* Pillar 2 */}
-            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-sm hover:shadow-md flex flex-col justify-between">
+            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-xs flex flex-col justify-between">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-6">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#6B6966] mb-1">
+                <div className="text-xs font-mono uppercase tracking-wider text-[#8C8984] mb-1">
                   Pillar 02 · Deal Defense
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">
@@ -523,12 +436,12 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             </div>
 
             {/* Pillar 3 */}
-            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-sm hover:shadow-md flex flex-col justify-between">
+            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-xs flex flex-col justify-between">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-6">
                   <Workflow className="w-6 h-6" />
                 </div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#6B6966] mb-1">
+                <div className="text-xs font-mono uppercase tracking-wider text-[#8C8984] mb-1">
                   Pillar 03 · Autonomous Sync
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">
@@ -550,7 +463,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       {/* ---------------------------------------------------- */}
       {/* Interactive Margin & Concession Simulator Widget     */}
       {/* ---------------------------------------------------- */}
-      <section id="concession-simulator" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
+      <section id="simulator" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
@@ -560,12 +473,12 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
               Test the Agent's Concession Trading Engine
             </h2>
-            <p className="mt-3 text-sm text-[#6B6966]">
+            <p className="mt-3 text-sm text-[#5E5D59]">
               See how the agent balances enterprise volume against strict margin defense floors.
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-xl">
+          <div className="max-w-4xl mx-auto rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-lg">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
               {/* Controls (Left 6 cols) */}
               <div className="lg:col-span-6 space-y-8">
@@ -607,7 +520,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                         onClick={() => setTermYears(yr)}
                         className={`py-2.5 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                           termYears === yr
-                            ? 'bg-[#141413] text-white border-[#141413] shadow-sm'
+                            ? 'bg-[#141413] text-white border-[#141413] shadow-xs'
                             : 'bg-white text-[#4D4C47] border-[#E8E6DC] hover:border-[#D97757]/40'
                         }`}
                       >
@@ -701,7 +614,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       </section>
 
       {/* ---------------------------------------------------- */}
-      {/* Technical Architecture: Interactive Pipeline Walk    */}
+      {/* Technical Architecture: Pipeline Walk                */}
       {/* ---------------------------------------------------- */}
       <section id="architecture" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -713,7 +626,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
               Real-Time Voice Architecture at Global Scale
             </h2>
-            <p className="mt-4 text-base text-[#6B6966]">
+            <p className="mt-4 text-base text-[#5E5D59]">
               Every millisecond counts when handling sales objections. Here is the full cloud lifecycle of an Agora sales negotiation turn.
             </p>
           </div>
@@ -838,74 +751,13 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       </section>
 
       {/* ---------------------------------------------------- */}
-      {/* Comparison Matrix: Legacy SDR vs Agora Voice Agent   */}
-      {/* ---------------------------------------------------- */}
-      <section className="py-20 bg-[#F5F4ED] border-t border-[#E8E6DC]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
-              Why Real-Time Voice Beats Static Forms & Queues
-            </h2>
-            <p className="mt-3 text-sm text-[#6B6966]">
-              A comparative analysis of enterprise lead handling methods.
-            </p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full max-w-4xl mx-auto rounded-3xl overflow-hidden bg-[#FAF9F5] border border-[#E8E6DC] text-left text-xs sm:text-sm">
-              <thead className="bg-[#141413] text-white">
-                <tr>
-                  <th className="p-4 sm:p-5 font-mono uppercase text-xs">Metric / Capability</th>
-                  <th className="p-4 sm:p-5 font-mono uppercase text-xs text-white/60">Legacy Web Form</th>
-                  <th className="p-4 sm:p-5 font-mono uppercase text-xs text-white/60">Human SDR Queue</th>
-                  <th className="p-4 sm:p-5 font-mono uppercase text-xs text-[#D97757]">Agora Voice Agent</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#E8E6DC]">
-                <tr>
-                  <td className="p-4 sm:p-5 font-semibold text-[#141413]">Response Speed</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">24 - 48 Hours</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">4 - 8 Hours</td>
-                  <td className="p-4 sm:p-5 font-semibold text-[#D97757]">Instant (0 Seconds)</td>
-                </tr>
-                <tr>
-                  <td className="p-4 sm:p-5 font-semibold text-[#141413]">Margin Floor Discipline</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">N/A (No conversation)</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">Frequent over-discounting</td>
-                  <td className="p-4 sm:p-5 font-semibold text-emerald-700">100% Algorithmic (Max 18%)</td>
-                </tr>
-                <tr>
-                  <td className="p-4 sm:p-5 font-semibold text-[#141413]">HubSpot CRM Sync</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">Basic contact info only</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">Manual data entry (delayed)</td>
-                  <td className="p-4 sm:p-5 font-semibold text-emerald-700">Instant Deal + Transcript</td>
-                </tr>
-                <tr>
-                  <td className="p-4 sm:p-5 font-semibold text-[#141413]">Calendar Meeting Booking</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">Static Calendly link</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">Back-and-forth email tag</td>
-                  <td className="p-4 sm:p-5 font-semibold text-emerald-700">Direct In-Voice Calendar Booking</td>
-                </tr>
-                <tr>
-                  <td className="p-4 sm:p-5 font-semibold text-[#141413]">Concurrency Scale</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">Unlimited (No qualification)</td>
-                  <td className="p-4 sm:p-5 text-[#6B6966]">1 call per rep</td>
-                  <td className="p-4 sm:p-5 font-semibold text-[#D97757]">Thousands simultaneous</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------- */}
       {/* Big Closing Banner & Editorial CTA                   */}
       {/* ---------------------------------------------------- */}
       <section className="py-20 bg-[#141413] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#D97757] text-xs font-mono mb-6">
             <PhoneCall className="w-3.5 h-3.5" />
-            <span>READY TO EXPERIENCE THE FUTURE OF VOICE SALES?</span>
+            <span>REAL-TIME VOICE SALES ENGINE</span>
           </div>
 
           <h2 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight mb-6">
@@ -919,7 +771,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onLaunchDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-[#D97757] hover:bg-[#C96442] text-white font-semibold text-base shadow-xl transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#D97757] hover:bg-[#C96442] text-white font-semibold text-base shadow-xl transition-all cursor-pointer"
             >
               <span>View Customer Demo (Claude Enterprise)</span>
               <ArrowRight className="w-4 h-4" />
@@ -927,7 +779,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
 
             <button
               onClick={onStartDirectCall}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold text-base transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold text-base transition-all cursor-pointer"
             >
               <PhoneCall className="w-4 h-4 text-[#D97757]" />
               <span>Talk Directly with Emily</span>
@@ -942,8 +794,8 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       <footer className="py-12 bg-[#FAF9F5] border-t border-[#E8E6DC] text-xs text-[#6B6966]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <AgentMascotMini size={28} pulse={false} />
-            <span className="font-serif font-bold text-[#141413]">Agora Sales Engine</span>
+            <span className="text-[#D97757] font-bold">✻</span>
+            <span className="font-serif font-bold text-[#141413]">Agora Voice Agent</span>
             <span>·</span>
             <span>Built on Agora Conversational AI SDK</span>
           </div>
