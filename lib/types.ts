@@ -141,3 +141,22 @@ export interface InterruptionEvent {
   turnId: number;
   timestamp: number;
 }
+
+/**
+ * A live "ring" for a human specialist: the buyer asked for a person, or the
+ * agent hit a negotiation deadlock. Backed by GET /api/escalations (queue
+ * hydration on load) and the HUMAN_HANDOFF_REQUESTED WebSocket broadcast
+ * (live updates), shown on the Sales Team Console (/team).
+ */
+export interface EscalationRequest {
+  conversation_id: string;
+  customer_name: string;
+  company: string;
+  seat_count: number | null;
+  tier_name: string;
+  reason: string;
+  urgency: 'low' | 'medium' | 'high';
+  handoff_url: string;
+  timestamp: number;
+  resolved: boolean;
+}

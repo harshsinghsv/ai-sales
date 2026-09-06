@@ -116,6 +116,12 @@ export function useAgoraVoice() {
   const wsRef = useRef<WebSocket | null>(null);
   const volumeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const interruptTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Holds the latest endCall so RTC event handlers registered inside startCall
+  // can invoke it without capturing a stale closure.
+  const endCallRef = useRef<() => Promise<void>>(async () => {});
+  // Guards against ending the same call twice (e.g. the agent leaving at the
+  // same moment the user clicks End Call).
+  const endingRef = useRef<boolean>(false);
 
   const currentChannelRef = useRef<string>('');
   const agentIdRef = useRef<string | null>(null);
@@ -257,6 +263,7 @@ export function useAgoraVoice() {
     setMetrics([]);
     setToolCalls([]);
     setInterruptions([]);
+    endingRef.current = false;
 
     try {
       // 3a. RTC + RTM token and channel from our own API route.
@@ -375,6 +382,15 @@ export function useAgoraVoice() {
         if (user.uid.toString() === AGENT_UID) {
           agentConnectedRef.current = false;
           recomputeVoiceState();
+
+          // The agent left the channel — it hit its idle timeout (60s of
+          // silence), was stopped server-side, or errored out. Nothing further
+          // can happen on this call, so wrap it up and produce the deal memo
+          // instead of leaving the cockpit sitting in a dead "listening" state.
+          if (!endingRef.current) {
+            endingRef.current = true;
+            void endCallRef.current();
+          }
         }
       });
 
@@ -588,7 +604,13 @@ export function useAgoraVoice() {
     setVolumeLevel(0);
     setPartialText('');
     setIsMuted(false);
+    endingRef.current = false;
   }, []);
+
+  // Keep the ref pointing at the current endCall for use inside RTC handlers.
+  useEffect(() => {
+    endCallRef.current = endCall;
+  }, [endCall]);
 
   // -----------------------------------------------------------------
   // 5. Controls

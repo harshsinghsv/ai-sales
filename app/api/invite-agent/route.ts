@@ -127,19 +127,36 @@ function buildTts(config: AgentPipelineConfig): BaseTTS {
 
 /**
  * MCP servers the agent may call tools from. Agora's engine performs the tool
- * calls server-side, so the browser is never in the loop — the transport
- * defaults to streamable_http.
+ * calls server-side, so the browser is never in the loop.
+ *
+ * Per https://docs.agora.io/en/api-reference/api-ref/conversational-ai/join:
+ * `name` and `endpoint` are required; `name` accepts only English letters and
+ * numbers (max 48 chars) — no hyphens or underscores. `transport` is set
+ * explicitly to match Agora's own documented example, even though the SDK
+ * would default it to the same value.
  */
 function buildMcpServers(
   config: AgentPipelineConfig,
 ): McpServersItem[] | undefined {
-  const urls = [
-    // Our deal engine first: pricing, discounting, CRM, calendar, escalation.
-    ...(config.deal_engine_mcp_url ? [config.deal_engine_mcp_url] : []),
-    ...(config.mcp_server_urls ?? []),
-  ];
-  if (!urls.length) return undefined;
-  return urls.map((url) => ({ url }));
+  const servers: McpServersItem[] = [];
+
+  if (config.deal_engine_mcp_url) {
+    servers.push({
+      name: 'teamsyncDealEngine',
+      transport: 'streamable_http',
+      endpoint: config.deal_engine_mcp_url,
+    });
+  }
+
+  (config.mcp_server_urls ?? []).forEach((url, i) => {
+    servers.push({
+      name: `mcpServer${i + 1}`,
+      transport: 'streamable_http',
+      endpoint: url,
+    });
+  });
+
+  return servers.length ? servers : undefined;
 }
 
 function requireCredentials(): { appId: string; appCertificate: string } {
