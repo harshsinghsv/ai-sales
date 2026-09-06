@@ -58,8 +58,7 @@ export const GradientBars: React.FC<GradientBarsProps> = ({
                 opacity: [0.65, 0.92, 0.65],
               }}
               transition={{
-                duration: 2.2 + (i % 4) * 0.25,
-                delay: i * 0.08,
+                duration: 2.8,
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
