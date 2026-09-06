@@ -91,44 +91,45 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             Trained on enterprise margin policies, objection trees, and compliance gates. Emily defends pricing floors, syncs HubSpot deals, and books Google Calendar slots in sub-500ms voice turns.
           </p>
 
-          {/* 21st.dev Interactive Launcher Pill Bar */}
+          {/* 21st.dev Interactive Launcher Form (Matching @waleedkibhen/gradient-bar-hero-section) */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               onLaunchDemo();
             }}
-            className="w-full max-w-xl mx-auto p-1.5 sm:p-2 rounded-full bg-[#100D15]/95 backdrop-blur-3xl border border-white/20 shadow-[0_16px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)] flex items-center justify-between gap-2 mb-6 transition-all focus-within:border-[#D97757]/60 focus-within:shadow-[0_16px_50px_rgba(217,119,87,0.25)]"
+            className="w-full max-w-xl mx-auto flex flex-col sm:flex-row gap-3 mb-6 px-4"
           >
-            <div className="flex items-center gap-3 pl-4 flex-1">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
+            <div className="relative flex-1">
               <input
                 type="text"
                 value={domainInput}
                 onChange={(e) => setDomainInput(e.target.value)}
                 placeholder="Enter enterprise domain (e.g. razorpay.com)..."
-                className="w-full bg-transparent border-0 text-xs sm:text-sm text-white placeholder-white/40 focus:outline-none font-mono"
+                className="w-full px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-white/5 border border-white/20 focus:border-white outline-none text-white text-sm sm:text-base shadow-[0_0_20px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-300 font-mono placeholder-white/40"
               />
+              <span className="absolute right-5 top-1/2 -translate-y-1/2 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
             </div>
+
             <button
               type="submit"
-              className="px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold text-[#100D15] bg-white hover:bg-[#F3F1ED] shadow-[0_4px_20px_rgba(255,255,255,0.3)] transition-all duration-200 cursor-pointer whitespace-nowrap active:scale-95 flex items-center gap-1.5"
+              className="px-8 py-3.5 sm:py-4 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 whitespace-nowrap text-sm sm:text-base font-semibold bg-white hover:bg-gray-100 text-[#0A070D] shadow-[0_0_30px_rgba(255,255,255,0.35)] cursor-pointer flex items-center justify-center gap-2"
             >
               <span>Launch Live Demo</span>
-              <ArrowRight className="w-4 h-4 text-[#100D15]" />
+              <ArrowRight className="w-4 h-4 text-[#0A070D]" />
             </button>
           </form>
 
           {/* Symmetrical Quick Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3.5 mb-16">
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
             <button
               type="button"
               onClick={onStartDirectCall}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-white bg-[#14101A]/95 hover:bg-[#1C1724] border border-white/15 hover:border-[#D97757]/60 backdrop-blur-2xl transition-all duration-200 hover:shadow-[0_0_20px_rgba(217,119,87,0.25)] active:scale-95 shadow-lg cursor-pointer"
+              className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 backdrop-blur-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_25px_rgba(217,119,87,0.3)] flex items-center gap-2.5 cursor-pointer"
             >
-              <PhoneCall className="w-3.5 h-3.5 text-[#D97757]" />
+              <PhoneCall className="w-4 h-4 text-[#D97757]" />
               <span>Start Voice Call with Emily</span>
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -138,9 +139,9 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
 
             <a
               href="#demo-showcase"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-white/80 hover:text-white bg-[#14101A]/95 hover:bg-[#1C1724] border border-white/15 hover:border-white/30 backdrop-blur-2xl transition-all duration-200 active:scale-95 shadow-lg no-underline cursor-pointer"
+              className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-medium text-white/85 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/25 backdrop-blur-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer no-underline"
             >
-              <Zap className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <Zap className="w-4 h-4 text-[#F59E0B]" />
               <span>Inspect Deal Architecture ↓</span>
             </a>
           </div>
