@@ -37,6 +37,8 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   onLaunchDemo,
   onStartDirectCall,
 }) => {
+  const [domainInput, setDomainInput] = React.useState('anthropic.com');
+
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] selection:bg-[#D97757]/20 selection:text-[#141413] antialiased">
       {/* ─────────────────────────────────────────────────────────────
@@ -90,43 +92,55 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           {/* 21st.dev Interactive Launcher Pill Bar */}
-          <div className="w-full max-w-xl mx-auto p-1.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-2xl border border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex items-center justify-between gap-2 mb-8">
-            <div className="flex items-center gap-2.5 pl-4 flex-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onLaunchDemo();
+            }}
+            className="w-full max-w-xl mx-auto p-1.5 sm:p-2 rounded-full bg-[#100D15]/95 backdrop-blur-3xl border border-white/20 shadow-[0_16px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)] flex items-center justify-between gap-2 mb-6 transition-all focus-within:border-[#D97757]/60 focus-within:shadow-[0_16px_50px_rgba(217,119,87,0.25)]"
+          >
+            <div className="flex items-center gap-3 pl-4 flex-1">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
               <input
                 type="text"
-                placeholder="Enter enterprise domain (e.g. acme.com)..."
+                value={domainInput}
+                onChange={(e) => setDomainInput(e.target.value)}
+                placeholder="Enter enterprise domain (e.g. razorpay.com)..."
                 className="w-full bg-transparent border-0 text-xs sm:text-sm text-white placeholder-white/40 focus:outline-none font-mono"
-                defaultValue="anthropic.com · 250 seats"
-                readOnly
               />
             </div>
             <button
-              onClick={onLaunchDemo}
-              className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold text-white bg-[#D97757] hover:bg-[#c66547] shadow-[0_0_25px_rgba(217,119,87,0.45)] transition-all cursor-pointer whitespace-nowrap active:scale-95"
+              type="submit"
+              className="px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold text-[#100D15] bg-white hover:bg-[#F3F1ED] shadow-[0_4px_20px_rgba(255,255,255,0.3)] transition-all duration-200 cursor-pointer whitespace-nowrap active:scale-95 flex items-center gap-1.5"
             >
-              Launch Live Demo →
+              <span>Launch Live Demo</span>
+              <ArrowRight className="w-4 h-4 text-[#100D15]" />
             </button>
-          </div>
+          </form>
 
           {/* Symmetrical Quick Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <div className="flex flex-wrap items-center justify-center gap-3.5 mb-16">
             <button
+              type="button"
               onClick={onStartDirectCall}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-medium text-white/95 bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-xl transition-all hover:border-white/20 active:scale-95 shadow-lg cursor-pointer"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-white bg-[#14101A]/95 hover:bg-[#1C1724] border border-white/15 hover:border-[#D97757]/60 backdrop-blur-2xl transition-all duration-200 hover:shadow-[0_0_20px_rgba(217,119,87,0.25)] active:scale-95 shadow-lg cursor-pointer"
             >
-              <PhoneCall className="w-4 h-4 text-[#D97757]" />
+              <PhoneCall className="w-3.5 h-3.5 text-[#D97757]" />
               <span>Start Voice Call with Emily</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-semibold">
-                LIVE
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
             </button>
 
             <a
               href="#demo-showcase"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-medium text-white/80 bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-xl transition-all hover:border-white/20 active:scale-95 no-underline cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-white/80 hover:text-white bg-[#14101A]/95 hover:bg-[#1C1724] border border-white/15 hover:border-white/30 backdrop-blur-2xl transition-all duration-200 active:scale-95 shadow-lg no-underline cursor-pointer"
             >
-              <Zap className="w-4 h-4 text-[#F59E0B]" />
+              <Zap className="w-3.5 h-3.5 text-[#F59E0B]" />
               <span>Inspect Deal Architecture ↓</span>
             </a>
           </div>
