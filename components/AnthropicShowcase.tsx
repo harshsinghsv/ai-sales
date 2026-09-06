@@ -7,12 +7,10 @@ import {
   Sliders,
   CheckCircle2,
   ArrowRight,
-  Database,
-  Lock,
-  Calendar,
-  Sparkles,
   LucideIcon
 } from 'lucide-react';
+import { Card, CardHeader, CardContent, CardToolbar } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge-2';
 import { StatisticCard10 } from '@/components/ui/demo';
 
 interface StageNode {
@@ -69,9 +67,67 @@ const STAGES: StageNode[] = [
   },
 ];
 
+const STAGE_STATS: Record<string, {
+  title: string;
+  amount: string;
+  currency: string;
+  trend: string;
+  trendLabel: string;
+  metric1Label: string;
+  metric1Value: string;
+  metric2Label: string;
+  metric2Value: string;
+}> = {
+  qualification: {
+    title: 'Seat Sizing Pipeline',
+    amount: '$ 225,000',
+    currency: 'ARR',
+    trend: '+100%',
+    trendLabel: 'full list ARR initialized',
+    metric1Label: 'Target Sizing:',
+    metric1Value: '250 Seats @ $75/mo',
+    metric2Label: 'Enterprise Feature:',
+    metric2Value: 'SCIM & SAML SSO',
+  },
+  compliance: {
+    title: 'Compliance Assurance',
+    amount: '100%',
+    currency: 'VERIFIED',
+    trend: 'SOC 2',
+    trendLabel: 'zero model data retention',
+    metric1Label: 'Security Protocol:',
+    metric1Value: 'ZDR Architecture',
+    metric2Label: 'Procurement Gate:',
+    metric2Value: 'Custom HIPAA BAA',
+  },
+  margin: {
+    title: 'Protected Deal Economics',
+    amount: '$ 198,000',
+    currency: 'ARR',
+    trend: '-12.0%',
+    trendLabel: 'discount with reciprocal lock',
+    metric1Label: 'Hard Floor Defended:',
+    metric1Value: '82.0% Margin',
+    metric2Label: 'Reciprocal Trade-Off:',
+    metric2Value: '24-Mo Term Locked',
+  },
+  closing: {
+    title: 'Closed-Won Execution',
+    amount: '$ 198,000',
+    currency: 'ARR',
+    trend: '420ms',
+    trendLabel: 'autonomous close turnaround',
+    metric1Label: 'HubSpot Deal Stage:',
+    metric1Value: '#AG-9428 Closed-Won',
+    metric2Label: 'Exec Architecture Slot:',
+    metric2Value: 'Tuesday 10:00 AM',
+  },
+};
+
 export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLaunchDemo }) => {
   const [activeStageId, setActiveStageId] = useState<string>('margin');
   const activeStage = STAGES.find((s) => s.id === activeStageId) || STAGES[2];
+  const activeStats = STAGE_STATS[activeStageId] || STAGE_STATS.margin;
 
   return (
     <section id="demo-showcase" className="py-20 bg-white border-b border-[#E8E6DC] relative overflow-hidden">
@@ -90,62 +146,68 @@ export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLa
           </p>
         </div>
 
-        {/* Minimal Spatial Board (Matching IntegrationBeams container structure) */}
+        {/* Minimal Spatial Board */}
         <div className="w-full max-w-4xl mx-auto rounded-2xl bg-[#FAF9F5] border border-[#E8E6DC] shadow-sm p-6 sm:p-10 space-y-8">
-          {/* 4 Connected Nodes Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 relative">
+          {/* 4 Connected Stage Cards (Using clean 21st.dev Card layout) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 relative">
             {STAGES.map((stage) => {
               const isSelected = stage.id === activeStageId;
               const IconComp = stage.icon;
 
               return (
-                <button
+                <div
                   key={stage.id}
-                  type="button"
                   onClick={() => setActiveStageId(stage.id)}
-                  className={`p-4 sm:p-5 rounded-xl border text-center transition-all duration-200 cursor-pointer flex flex-col items-center justify-between gap-3 relative ${
-                    isSelected
-                      ? 'bg-white border-[#D97757] shadow-md ring-1 ring-[#D97757]/30 scale-[1.02]'
-                      : 'bg-white/80 border-[#E8E6DC] hover:border-[#D97757]/40 hover:bg-white'
-                  }`}
+                  className="cursor-pointer"
                 >
-                  {/* Step Number & Icon */}
-                  <div className="w-full flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-[#8C8984]">
-                      {stage.step}
-                    </span>
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        isSelected ? 'bg-[#D97757] animate-pulse' : 'bg-transparent'
-                      }`}
-                    />
-                  </div>
-
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${
+                  <Card
+                    className={`h-full transition-all duration-200 ${
                       isSelected
-                        ? 'bg-[#141413] text-white shadow-md'
-                        : 'bg-[#FAF0EC] text-[#D97757]'
+                        ? 'bg-white border-[#D97757] shadow-md ring-2 ring-[#D97757]/20 scale-[1.02]'
+                        : 'bg-white/80 border-[#E8E6DC] hover:border-[#D97757]/40 hover:bg-white shadow-xs'
                     }`}
                   >
-                    <IconComp className="w-5 h-5" />
-                  </div>
+                    <CardHeader className="border-0 px-4 py-4 min-h-auto flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                            isSelected
+                              ? 'bg-[#141413] text-white'
+                              : 'bg-[#FAF0EC] text-[#D97757]'
+                          }`}
+                        >
+                          <IconComp className="w-4 h-4" />
+                        </div>
+                        <span className="text-xs font-bold text-[#141413]">
+                          {stage.title}
+                        </span>
+                      </div>
+                      <CardToolbar>
+                        <Badge
+                          variant={isSelected ? 'primary' : 'outline'}
+                          size="xs"
+                          appearance={isSelected ? 'default' : 'light'}
+                          className="font-mono text-[10px]"
+                        >
+                          {stage.step}
+                        </Badge>
+                      </CardToolbar>
+                    </CardHeader>
 
-                  <div>
-                    <div className="text-xs font-bold text-[#141413] mb-0.5">
-                      {stage.title}
-                    </div>
-                    <div className="text-[11px] text-[#5E5D59] font-medium leading-snug">
-                      {stage.spec}
-                    </div>
-                  </div>
+                    <CardContent className="px-4 pb-4 pt-0 space-y-2.5">
+                      <div className="text-xs text-[#5E5D59] font-medium leading-snug">
+                        {stage.spec}
+                      </div>
 
-                  <div className="pt-2 border-t border-[#E8E6DC] w-full">
-                    <span className={`text-[10px] font-mono font-semibold ${stage.metricColor}`}>
-                      {stage.metric}
-                    </span>
-                  </div>
-                </button>
+                      <div className="p-2 bg-muted/60 flex items-center justify-between rounded-lg">
+                        <span className="text-[11px] text-muted-foreground font-mono">KPI:</span>
+                        <span className={`text-[11px] font-mono font-semibold ${stage.metricColor}`}>
+                          {stage.metric}
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               );
             })}
           </div>
@@ -162,23 +224,23 @@ export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLa
               <p className="text-sm text-[#5E5D59] leading-relaxed">
                 {activeStage.log}
               </p>
-              <div className="p-3.5 rounded-xl bg-white border border-[#E8E6DC] flex items-center justify-between text-xs font-mono">
-                <span className="text-[#8C8984]">Current Stage Metric</span>
+              <div className="p-3 rounded-xl bg-white border border-[#E8E6DC] flex items-center justify-between text-xs font-mono">
+                <span className="text-[#8C8984]">Target KPI</span>
                 <span className={`font-semibold ${activeStage.metricColor}`}>{activeStage.metric}</span>
               </div>
             </div>
 
             <div className="flex justify-center w-full">
               <StatisticCard10
-                title="Enterprise Revenue"
-                amount="$ 1,120,500"
-                currency="ARR"
-                trend="+34.8%"
-                trendLabel="pipeline growth this quarter"
-                metric1Label="Avg. Enterprise Contract:"
-                metric1Value="$198,000"
-                metric2Label="Floor Protected Deals:"
-                metric2Value="42 Won"
+                title={activeStats.title}
+                amount={activeStats.amount}
+                currency={activeStats.currency}
+                trend={activeStats.trend}
+                trendLabel={activeStats.trendLabel}
+                metric1Label={activeStats.metric1Label}
+                metric1Value={activeStats.metric1Value}
+                metric2Label={activeStats.metric2Label}
+                metric2Value={activeStats.metric2Value}
                 className="w-full shadow-xs"
               />
             </div>

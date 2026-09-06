@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sliders, ShieldCheck, ArrowRight, CheckCircle2, Lock } from 'lucide-react';
-import { BorderBeam } from '@/components/ui/border-beam';
+import { Sliders, ArrowRight, Lock } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardToolbar, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge-2';
 
 interface ConcessionSimulatorProps {
   onLaunchDemo: () => void;
@@ -48,8 +49,8 @@ export const ConcessionSimulator: React.FC<ConcessionSimulatorProps> = ({ onLaun
           </p>
         </div>
 
-        {/* Minimal Unified Simulator Card (Aesthetic sibling of IntegrationBeams) */}
-        <div className="max-w-4xl mx-auto rounded-2xl bg-white border border-[#E8E6DC] shadow-sm p-6 sm:p-10 space-y-8 relative overflow-hidden">
+        {/* Unified Simulator Board */}
+        <Card className="max-w-4xl mx-auto bg-white border border-[#E8E6DC] shadow-sm p-6 sm:p-10 space-y-8 relative overflow-hidden">
           {/* Top Controls Grid */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pb-8 border-b border-[#E8E6DC]">
             {/* Seat Volume Control (7 cols) */}
@@ -123,47 +124,79 @@ export const ConcessionSimulator: React.FC<ConcessionSimulatorProps> = ({ onLaun
             </div>
           </div>
 
-          {/* Bottom Readout: 3 Minimal Metric Pillars */}
+          {/* Bottom Readout: 3 Clean Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {/* Pillar 1: Base ARR */}
-            <div className="p-4 rounded-xl bg-[#FAF9F5] border border-[#E8E6DC] space-y-1">
-              <div className="text-[11px] font-mono text-[#8C8984] uppercase tracking-wider">
-                Full List Price
-              </div>
-              <div className="font-serif text-xl sm:text-2xl font-bold text-[#141413]">
-                ${rawAnnualList.toLocaleString()}
-              </div>
-              <div className="text-[11px] text-[#8C8984] font-mono">
-                $75 / seat / mo list
-              </div>
-            </div>
+            {/* Pillar 1: Full List Price */}
+            <Card className="bg-white border border-[#E8E6DC] shadow-xs">
+              <CardHeader className="border-0 px-4 py-3 min-h-auto">
+                <CardTitle className="text-xs font-semibold text-[#5E5D59]">
+                  Full List Price
+                </CardTitle>
+                <CardToolbar>
+                  <Badge variant="secondary" appearance="light" size="xs" className="font-mono text-[10px]">
+                    Catalog
+                  </Badge>
+                </CardToolbar>
+              </CardHeader>
+              <CardContent className="px-4 pb-4 pt-0 space-y-2">
+                <div className="font-serif text-2xl font-bold text-[#141413]">
+                  ${rawAnnualList.toLocaleString()}
+                </div>
+                <div className="p-2 bg-muted/60 flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-muted-foreground">Rate:</span>
+                  <span className="font-semibold text-foreground">$75/seat/mo</span>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Pillar 2: Negotiated Contract */}
-            <div className="p-4 rounded-xl bg-[#FAF0EC] border border-[#D97757]/30 space-y-1">
-              <div className="text-[11px] font-mono text-[#D97757] uppercase tracking-wider font-semibold">
-                Autonomous Counter-Offer
-              </div>
-              <div className="font-serif text-xl sm:text-2xl font-bold text-[#D97757]">
-                ${negotiatedAnnual.toLocaleString()}
-              </div>
-              <div className="text-[11px] text-[#D97757] font-mono font-medium">
-                -{maxConcessionPct}% concession ({termYears} yr term)
-              </div>
-            </div>
+            <Card className="bg-white border border-[#D97757]/30 shadow-xs">
+              <CardHeader className="border-0 px-4 py-3 min-h-auto">
+                <CardTitle className="text-xs font-semibold text-[#D97757]">
+                  Counter-Offer
+                </CardTitle>
+                <CardToolbar>
+                  <Badge variant="primary" appearance="light" size="xs" className="font-mono text-[10px]">
+                    -{maxConcessionPct}% Concession
+                  </Badge>
+                </CardToolbar>
+              </CardHeader>
+              <CardContent className="px-4 pb-4 pt-0 space-y-2">
+                <div className="font-serif text-2xl font-bold text-[#D97757]">
+                  ${negotiatedAnnual.toLocaleString()}
+                </div>
+                <div className="p-2 bg-[#FAF0EC] flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-[#D97757]">Lock Term:</span>
+                  <span className="font-semibold text-[#D97757]">{termYears} Yr Term</span>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Pillar 3: Margin Policy Status */}
-            <div className="p-4 rounded-xl bg-[#F0F7F4] border border-emerald-200 space-y-1">
-              <div className="text-[11px] font-mono text-emerald-800 uppercase tracking-wider font-semibold flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>18% Margin Policy</span>
-              </div>
-              <div className="font-serif text-xl sm:text-2xl font-bold text-emerald-700">
-                {marginPreservedPct.toFixed(0)}% Preserved
-              </div>
-              <div className="text-[11px] text-emerald-700 font-mono">
-                Hard floor defended
-              </div>
-            </div>
+            <Card className="bg-white border border-emerald-200 shadow-xs">
+              <CardHeader className="border-0 px-4 py-3 min-h-auto">
+                <CardTitle className="text-xs font-semibold text-emerald-800">
+                  18% Margin Floor
+                </CardTitle>
+                <CardToolbar>
+                  <Badge variant="success" appearance="light" size="xs" className="font-mono text-[10px]">
+                    Defended
+                  </Badge>
+                </CardToolbar>
+              </CardHeader>
+              <CardContent className="px-4 pb-4 pt-0 space-y-2">
+                <div className="font-serif text-2xl font-bold text-emerald-700">
+                  {marginPreservedPct.toFixed(0)}% Preserved
+                </div>
+                <div className="p-2 bg-[#F0F7F4] flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-emerald-700">Floor Status:</span>
+                  <span className="font-semibold text-emerald-800 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Enforced
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Action Row */}
@@ -181,7 +214,7 @@ export const ConcessionSimulator: React.FC<ConcessionSimulatorProps> = ({ onLaun
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-        </div>
+        </Card>
       </div>
     </section>
   );
