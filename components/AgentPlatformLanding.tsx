@@ -8,6 +8,7 @@ import { IntegrationBeams } from '@/components/IntegrationBeams';
 import { ConcessionSimulator } from '@/components/ConcessionSimulator';
 import { AgentVoiceConsole } from '@/components/AgentVoiceConsole';
 import { Footer } from '@/components/Footer';
+import { GradientBars } from '@/components/reactbits/GradientBars';
 import { DotField } from '@/components/reactbits/DotField';
 import { Squares } from '@/components/reactbits/Squares';
 import { BlurText } from '@/components/reactbits/BlurText';
@@ -47,134 +48,126 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       />
 
       {/* ─────────────────────────────────────────────────────────────
-          2. HERO SECTION (React Bits DotField + Clean Typography + Code Window)
+          2. 21ST.DEV GRADIENT BARS HERO SECTION (From 21st.dev)
          ───────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex flex-col justify-center bg-[#0d0b12] text-white pt-28 pb-20 overflow-hidden border-b border-white/10">
-        {/* React Bits Signature DotField interactive canvas background */}
-        <DotField
-          dotRadius={1.4}
-          dotSpacing={16}
-          cursorRadius={420}
-          cursorForce={0.16}
-          glowRadius={200}
-          gradientFrom="rgba(217, 119, 87, 0.35)"
-          gradientTo="rgba(245, 158, 11, 0.15)"
-        />
+      <section className="relative min-h-[95vh] flex flex-col justify-center items-center bg-[#0A070D] text-white pt-36 pb-24 overflow-hidden border-b border-white/10">
+        {/* 21st.dev Vertical Glowing Gradient Bars Background */}
+        <GradientBars barCount={32} />
 
-        {/* Ambient bottom vignette fade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0d0b12]/40 to-[#0d0b12] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Column: Value Prop */}
-            <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* React Bits Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl text-xs font-mono text-white/80 shadow-lg mb-6 hover:bg-white/10 transition-colors">
-                <span className="px-2.5 py-0.5 rounded-md bg-[#D97757] text-white font-semibold text-[10px] tracking-wide uppercase">
-                  Agora Voice RTC
-                </span>
-                <span>Sub-450ms Conversational AI Pipeline</span>
-                <ArrowRight className="w-3 h-3 text-[#D97757]" />
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-semibold tracking-tight text-white leading-[1.08] mb-6">
-                <span>Autonomous voice agents for </span>
-                <br className="hidden sm:inline" />
-                <span className="text-[#D97757] font-semibold drop-shadow-[0_0_35px_rgba(217,119,87,0.45)]">
-                  enterprise deal execution
-                </span>
-              </h1>
-
-              {/* Subtitle - Crisp, non-slop copy */}
-              <p className="text-base sm:text-lg text-white/70 leading-relaxed max-w-xl mb-8 font-normal">
-                Trained on enterprise pricing boundaries, objection trees, and compliance protocols. Emily conducts live sales calls, protects margins, and triggers real-time CRM updates with zero client-side latency.
-              </p>
-
-              {/* Hero Action Buttons - React Bits Style */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-10">
-                <button
-                  onClick={onLaunchDemo}
-                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-sm text-white bg-[#D97757] hover:bg-[#c66547] shadow-[0_10px_25px_rgba(217,119,87,0.35)] transition-all cursor-pointer active:scale-95"
-                >
-                  <span>Experience Claude Enterprise Demo</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
-                </button>
-
-                <button
-                  onClick={onStartDirectCall}
-                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-sm text-white bg-white/5 hover:bg-white/10 border border-white/10 shadow-lg backdrop-blur-xl transition-all cursor-pointer hover:border-white/20 active:scale-95"
-                >
-                  <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                  <span>Start Voice Call with Emily</span>
-                  <span className="ml-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-semibold">
-                    LIVE
-                  </span>
-                </button>
-              </div>
-
-              {/* Proof Strip - React Bits Proof Style */}
-              <ul className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs font-mono text-white/60 pt-6 border-t border-white/10 w-full">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-white font-medium">418ms</span> RTC Latency
-                </li>
-                <li className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                  <span className="text-white font-medium">18.0%</span> Margin Guard
-                </li>
-                <li className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                  <span className="text-white font-medium">100%</span> Cloud Pipeline
-                </li>
-              </ul>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center flex flex-col items-center">
+          {/* 21st.dev Avatar Social Proof Pill */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg mb-8 hover:bg-white/10 transition-colors">
+            {/* Avatar Stack */}
+            <div className="flex -space-x-2 overflow-hidden">
+              <span className="inline-block h-5 w-5 rounded-full ring-1 ring-black bg-[#D97757] text-[10px] font-bold text-white flex items-center justify-center">
+                S
+              </span>
+              <span className="inline-block h-5 w-5 rounded-full ring-1 ring-black bg-emerald-600 text-[10px] font-bold text-white flex items-center justify-center">
+                M
+              </span>
+              <span className="inline-block h-5 w-5 rounded-full ring-1 ring-black bg-indigo-600 text-[10px] font-bold text-white flex items-center justify-center">
+                E
+              </span>
             </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-mono text-white/90">
+              1,240+ Deals Negotiated · Agora SD-RTN 418ms
+            </span>
+          </div>
 
-            {/* Right Column: React Bits Code Window + Agent Voice Console */}
-            <div className="lg:col-span-6 w-full relative">
-              <TiltedCard maxRotate={5} scale={1.01}>
-                <div className="relative rounded-2xl border border-white/10 bg-[#120F17] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
-                  {/* React Bits macOS Titlebar */}
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/[0.03]">
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[#EF4444]/90" />
-                      <span className="w-3 h-3 rounded-full bg-[#F59E0B]/90" />
-                      <span className="w-3 h-3 rounded-full bg-[#10B981]/90" />
-                      <span className="ml-2 text-xs font-mono text-white/50">agora-voice-runtime.sh</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-[#D97757]/20 border border-[#D97757]/30 text-[#D97757] font-semibold flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#D97757] animate-pulse" />
-                        VOICE PIPELINE READY
-                      </span>
-                    </div>
+          {/* 21st.dev Headline: Bold Modern Sans + Editorial Italic Serif */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08] mb-6 max-w-4xl mx-auto">
+            <span>Redefining Autonomous Sales,</span>
+            <br />
+            <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#FFA87D] via-[#D97757] to-[#F59E0B] drop-shadow-[0_0_45px_rgba(217,119,87,0.55)]">
+              One Negotiation at a Time.
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base sm:text-lg text-white/75 leading-relaxed max-w-2xl mx-auto mb-10 font-normal">
+            Trained on enterprise margin policies, objection trees, and compliance gates. Emily defends pricing floors, syncs HubSpot deals, and books Google Calendar slots in sub-500ms voice turns.
+          </p>
+
+          {/* 21st.dev Interactive Launcher Pill Bar */}
+          <div className="w-full max-w-xl mx-auto p-1.5 sm:p-2 rounded-full bg-white/10 backdrop-blur-2xl border border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex items-center justify-between gap-2 mb-8">
+            <div className="flex items-center gap-2.5 pl-4 flex-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <input
+                type="text"
+                placeholder="Enter enterprise domain (e.g. acme.com)..."
+                className="w-full bg-transparent border-0 text-xs sm:text-sm text-white placeholder-white/40 focus:outline-none font-mono"
+                defaultValue="anthropic.com · 250 seats"
+                readOnly
+              />
+            </div>
+            <button
+              onClick={onLaunchDemo}
+              className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-semibold text-white bg-[#D97757] hover:bg-[#c66547] shadow-[0_0_25px_rgba(217,119,87,0.45)] transition-all cursor-pointer whitespace-nowrap active:scale-95"
+            >
+              Launch Live Demo →
+            </button>
+          </div>
+
+          {/* Secondary Quick Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-14">
+            <button
+              onClick={onStartDirectCall}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium text-white/95 bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-xl transition-all hover:border-white/20 active:scale-95 shadow-lg"
+            >
+              <PhoneCall className="w-3.5 h-3.5 text-[#D97757]" />
+              <span>Start Voice Call with Emily</span>
+              <span className="px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-semibold">
+                LIVE
+              </span>
+            </button>
+
+            <button
+              onClick={onLaunchDemo}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium text-white/80 bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-xl transition-all hover:border-white/20 active:scale-95"
+            >
+              <Zap className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <span>View Full Negotiation Flow</span>
+            </button>
+          </div>
+
+          {/* Centered Interactive Voice Console Drawer */}
+          <div className="w-full max-w-4xl mx-auto relative">
+            <TiltedCard maxRotate={4} scale={1.01}>
+              <div className="relative rounded-2xl border border-white/10 bg-[#120F17]/90 shadow-[0_25px_60px_rgba(0,0,0,0.75)] backdrop-blur-2xl overflow-hidden text-left">
+                {/* macOS Titlebar */}
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/[0.03]">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-[#EF4444]/90" />
+                    <span className="w-3 h-3 rounded-full bg-[#F59E0B]/90" />
+                    <span className="w-3 h-3 rounded-full bg-[#10B981]/90" />
+                    <span className="ml-2 text-xs font-mono text-white/50">agora-voice-runtime.sh</span>
                   </div>
-
-                  {/* Body: Agent Voice Console */}
-                  <div className="p-2">
-                    <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-[#D97757]/20 border border-[#D97757]/30 text-[#D97757] font-semibold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#D97757] animate-pulse" />
+                      AGORA SD-RTN 418MS
+                    </span>
                   </div>
-
-                  {/* Window Footer Bar */}
-                  <div className="px-4 py-2.5 border-t border-white/10 bg-white/[0.02] flex items-center justify-between text-[11px] font-mono text-white/50">
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                      <span>Deepgram Nova-3 Multi · MiniMax Speech-2.8</span>
-                    </div>
-                    <span className="text-white/40">Agora SD-RTN</span>
-                  </div>
-
-                  <BorderBeam
-                    size={300}
-                    duration={12}
-                    colorFrom="#D97757"
-                    colorTo="#F59E0B"
-                  />
                 </div>
-              </TiltedCard>
-            </div>
+
+                {/* Body: Agent Voice Console */}
+                <div className="p-3 sm:p-4">
+                  <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+                </div>
+
+                {/* Console Footer */}
+                <div className="px-4 py-2.5 border-t border-white/10 bg-white/[0.02] flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-mono text-white/50">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span>Deepgram Nova-3 Multi · MiniMax Speech-2.8 · HubSpot CRM</span>
+                  </div>
+                  <span className="text-white/40">Zero Browser Audio Recognition</span>
+                </div>
+
+                <BorderBeam size={360} duration={12} colorFrom="#D97757" colorTo="#F59E0B" />
+              </div>
+            </TiltedCard>
           </div>
         </div>
       </section>
