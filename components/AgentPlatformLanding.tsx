@@ -1,9 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import {
-  Sparkles,
   ArrowRight,
   PhoneCall,
   ShieldCheck,
@@ -17,31 +15,48 @@ import {
   Headphones,
   Lock,
   Workflow,
-  CheckCircle2,
+  Sparkles,
   TrendingUp,
-  Volume2
+  Radio,
+  FileCheck,
+  CheckCircle2,
+  Globe
 } from 'lucide-react';
-import { AgentVoiceConsole } from './AgentVoiceConsole';
+import { DotPattern } from '@/components/ui/dot-pattern';
+import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
+import { BorderBeam } from '@/components/ui/border-beam';
+import { Marquee } from '@/components/ui/marquee';
+import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
+import { IntegrationBeams } from '@/components/IntegrationBeams';
+import { AgentVoiceConsole } from '@/components/AgentVoiceConsole';
 
 interface AgentPlatformLandingProps {
   onLaunchDemo: () => void;
   onStartDirectCall: () => void;
 }
 
+const TICKER_ITEMS = [
+  { label: 'RTC Turn Latency', val: '418ms (Agora SD-RTN)', color: 'text-[#D97757]' },
+  { label: 'Margin Defense', val: '18.0% Floor Enforced', color: 'text-amber-700' },
+  { label: 'HubSpot Sync', val: 'Deal #AG-9428 Created ($198,000 ARR)', color: 'text-emerald-700' },
+  { label: 'Google Calendar', val: 'Exec Architecture Slot Booked', color: 'text-blue-700' },
+  { label: 'STT Pipeline', val: 'Deepgram Nova-3 Multi (Code-Switching)', color: 'text-purple-700' },
+  { label: 'Voice Synthesis', val: 'MiniMax Speech-2.8 Turbo', color: 'text-[#D97757]' },
+  { label: 'Compliance Gate', val: 'Zero Data Retention · HIPAA BAA', color: 'text-emerald-700' },
+];
+
 export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   onLaunchDemo,
   onStartDirectCall,
 }) => {
-  // State for Interactive Concession Simulator
+  // Concession Simulator State
   const [seatCount, setSeatCount] = useState<number>(250);
   const [termYears, setTermYears] = useState<number>(2);
-  const [selectedArchStep, setSelectedArchStep] = useState<number>(0);
 
-  // Concession calculation rules matching Deal Engine
-  const baseListPricePerSeat = 75; // $75/seat/month for Claude Enterprise
+  const baseListPricePerSeat = 75;
   const rawAnnualList = seatCount * baseListPricePerSeat * 12;
 
-  // Margin Defense & Concession Logic:
   let maxConcessionPct = 0;
   if (termYears === 1) {
     maxConcessionPct = seatCount >= 200 ? 5 : 0;
@@ -55,87 +70,41 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   const negotiatedAnnual = rawAnnualList - discountAmount;
   const marginPreserved = rawAnnualList * (1 - maxConcessionPct / 100);
 
-  const architectureSteps = [
-    {
-      id: 'rtc-in',
-      title: '1. Agora RTC Voice Ingest',
-      subtitle: 'Sub-50ms Transport',
-      desc: 'Buyer voice stream ingests over Agora RTC global network with jitter buffer and echo cancellation.',
-      tag: 'Agora WebRTC SDK',
-      icon: Headphones,
-    },
-    {
-      id: 'stt',
-      title: '2. Deepgram Nova-3 STT',
-      subtitle: 'Streaming Transcript',
-      desc: 'Real-time multi-lingual speech-to-text with interim partials and semantic end-of-thought detection.',
-      tag: 'Nova-3 Multi',
-      icon: Zap,
-    },
-    {
-      id: 'engine',
-      title: '3. Deal Engine & Persona',
-      subtitle: 'Margin Guard & Tools',
-      desc: 'Evaluates buyer objections against the 18% margin floor, selecting optimal concession tradeoffs.',
-      tag: 'Agora Orchestration',
-      icon: Cpu,
-    },
-    {
-      id: 'tools',
-      title: '4. Autonomous Execution',
-      subtitle: 'Tri-Stack Sync',
-      desc: 'Invokes real-time tool calls to create HubSpot deals, Google Calendar appointments, and Slack notifications.',
-      tag: 'HubSpot · GCal · Slack',
-      icon: Workflow,
-    },
-    {
-      id: 'tts-out',
-      title: '5. MiniMax Turbo Voice Out',
-      subtitle: 'Sub-500ms Total Loop',
-      desc: 'Low-latency natural conversational voice synthesizes back over Agora RTC to the buyer.',
-      tag: 'MiniMax Speech-2.8',
-      icon: Activity,
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] selection:bg-[#D97757]/20 selection:text-[#141413] antialiased">
-      {/* ---------------------------------------------------- */}
-      {/* Platform Navigation Bar (Single, High-Precision Nav) */}
-      {/* ---------------------------------------------------- */}
-      <header className="sticky top-0 z-50 bg-[#FAF9F5]/95 backdrop-blur-md border-b border-[#E8E6DC] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-17 flex items-center justify-between">
-          {/* Logo & Brand */}
+      {/* ─────────────────────────────────────────────────────────────
+          1. HEADER NAVIGATION (21st.dev Clean Bar)
+         ───────────────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 bg-[#FAF9F5]/90 backdrop-blur-md border-b border-[#E8E6DC] transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-[#D97757] text-2xl font-bold leading-none select-none">✻</span>
             <div className="flex items-baseline gap-2">
-              <span className="font-serif text-xl font-semibold tracking-tight text-[#141413]">
+              <span className="font-serif text-xl font-bold tracking-tight text-[#141413]">
                 Agora Voice Agent
               </span>
-              <span className="text-[11px] font-mono text-[#8C8984] hidden sm:inline">
-                Enterprise Edition
+              <span className="text-[10px] font-mono text-[#8C8984] px-1.5 py-0.5 rounded border border-[#E8E6DC] hidden sm:inline">
+                Enterprise
               </span>
             </div>
           </div>
 
-          {/* Clean Nav Links */}
           <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5E5D59] font-medium">
-            <a href="#showcase" className="hover:text-[#141413] transition-colors">
+            <a href="#demo-showcase" className="hover:text-[#141413] transition-colors">
               Customer Story
             </a>
             <a href="#capabilities" className="hover:text-[#141413] transition-colors">
               Capabilities
             </a>
-            <a href="#simulator" className="hover:text-[#141413] transition-colors">
-              Deal Simulator
+            <a href="#pipeline" className="hover:text-[#141413] transition-colors">
+              RTC Pipeline
             </a>
-            <a href="#architecture" className="hover:text-[#141413] transition-colors">
-              Architecture
+            <a href="#simulator" className="hover:text-[#141413] transition-colors">
+              ROI Simulator
             </a>
           </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <button
               onClick={onStartDirectCall}
               className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#141413] bg-[#F5F4ED] hover:bg-[#E8E6DC] border border-[#E8E6DC] transition-colors cursor-pointer"
@@ -146,62 +115,69 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
 
             <button
               onClick={onLaunchDemo}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] shadow-sm hover:shadow transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] shadow-xs hover:shadow transition-all cursor-pointer"
             >
-              <span>Customer Demo (Claude Enterprise)</span>
+              <span>Customer Demo</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#D97757]" />
             </button>
           </div>
         </div>
       </header>
 
-      {/* ---------------------------------------------------- */}
-      {/* Hero Section: Editorial Typography + Live Console    */}
-      {/* ---------------------------------------------------- */}
-      <section className="relative pt-12 pb-20 sm:pt-16 sm:pb-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ─────────────────────────────────────────────────────────────
+          2. HERO SECTION (21st.dev DotPattern + Shimmer + BorderBeam)
+         ───────────────────────────────────────────────────────────── */}
+      <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-24 overflow-hidden border-b border-[#E8E6DC]">
+        {/* 21st.dev Background DotPattern with radial fade */}
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] opacity-35" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Column: Editorial Value Proposition */}
+            {/* Left Column: Value Prop */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* Refined Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] border border-[#D97757]/25 text-[#D97757] text-xs font-mono font-medium mb-6">
+              {/* 21st.dev Animated Shiny Text Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-xs font-mono mb-6 cursor-pointer hover:border-[#D97757]/60 transition-colors">
                 <span className="w-2 h-2 rounded-full bg-[#D97757] animate-pulse" />
-                <span>AGORA CONVERSATIONAL AI · SUB-500MS VOICE RTC</span>
+                <AnimatedShinyText className="font-semibold text-xs text-[#D97757]">
+                  Agora Conversational AI · Sub-500ms Voice RTC
+                </AnimatedShinyText>
               </div>
 
-              {/* Main Editorial Headline */}
+              {/* Main Headline */}
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-[#141413] leading-[1.08] mb-6">
-                The Autonomous Enterprise Sales Agent that{' '}
+                The Autonomous Sales Agent that{' '}
                 <span className="italic font-normal text-[#D97757]">Negotiates</span> in Real-Time Voice.
               </h1>
 
               {/* Editorial Subtitle */}
               <p className="text-base sm:text-lg text-[#5E5D59] leading-relaxed max-w-xl mb-8 font-sans">
-                Trained on company margin policies, objection trees, and multi-tier procurement strategies.
-                Listens, defends pricing floors, and closes high-ticket deals over voice — syncing directly
-                with HubSpot, Google Calendar, and Slack.
+                Trained on enterprise margin policies, objection handling trees, and multi-tier procurement strategies. Listens, defends pricing floors, and closes high-ticket deals over voice — syncing directly with HubSpot, Google Calendar, and Slack.
               </p>
 
-              {/* Primary CTAs */}
+              {/* Primary Call to Action Buttons */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto mb-10">
-                <button
+                {/* 21st.dev Shimmer Button */}
+                <ShimmerButton
                   onClick={onLaunchDemo}
-                  className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#141413] text-white hover:bg-[#262624] font-semibold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  shimmerColor="#D97757"
+                  className="shadow-xl"
                 >
-                  <span>Experience Claude Enterprise Demo</span>
-                  <ArrowRight className="w-4 h-4 text-[#D97757] group-hover:translate-x-0.5 transition-transform" />
-                </button>
+                  <span className="flex items-center gap-2 font-semibold text-sm">
+                    <span>Experience Claude Enterprise Demo</span>
+                    <ArrowRight className="w-4 h-4 text-[#D97757]" />
+                  </span>
+                </ShimmerButton>
 
                 <button
                   onClick={onStartDirectCall}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] font-semibold text-sm transition-all cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] font-semibold text-sm transition-all cursor-pointer shadow-xs"
                 >
                   <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                  <span>Start Instant Call with Emily</span>
+                  <span>Start Instant Voice Call</span>
                 </button>
               </div>
 
-              {/* Real-time Telemetry Strip */}
+              {/* Telemetry Strip */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full pt-6 border-t border-[#E8E6DC]">
                 <div>
                   <div className="text-2xl font-serif font-bold text-[#141413]">420ms</div>
@@ -213,7 +189,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 </div>
                 <div>
                   <div className="text-2xl font-serif font-bold text-[#141413]">100%</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Cloud Voice (No Dups)</div>
+                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Cloud Pipeline (No Dups)</div>
                 </div>
                 <div>
                   <div className="text-2xl font-serif font-bold text-emerald-700">Tri-Stack</div>
@@ -222,18 +198,43 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               </div>
             </div>
 
-            {/* Right Column: Live Interactive Agent Voice Console (NO AI SLOP) */}
-            <div className="lg:col-span-6 w-full">
-              <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+            {/* Right Column: 21st.dev BorderBeam Container + Agent Voice Console */}
+            <div className="lg:col-span-6 w-full relative">
+              <div className="relative rounded-2xl border border-[#E8E6DC] bg-[#141413] p-1 shadow-2xl overflow-hidden">
+                <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+                <BorderBeam
+                  size={280}
+                  duration={12}
+                  colorFrom="#D97757"
+                  colorTo="#F59E0B"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------------------------------------------------- */}
-      {/* Customer Showcase: How Anthropic Deploys Emily       */}
-      {/* ---------------------------------------------------- */}
-      <section id="showcase" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
+      {/* ─────────────────────────────────────────────────────────────
+          3. 21ST.DEV MARQUEE TICKER (Live Platform Signals)
+         ───────────────────────────────────────────────────────────── */}
+      <div className="py-4 bg-[#F5F4ED] border-b border-[#E8E6DC] overflow-hidden">
+        <Marquee pauseOnHover repeat={4} className="[--gap:2rem]">
+          {TICKER_ITEMS.map((item, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E8E6DC] text-xs font-mono shadow-2xs"
+            >
+              <span className="text-[#8C8984]">{item.label}:</span>
+              <span className={`font-semibold ${item.color}`}>{item.val}</span>
+            </div>
+          ))}
+        </Marquee>
+      </div>
+
+      {/* ─────────────────────────────────────────────────────────────
+          4. CUSTOMER SHOWCASE SPOTLIGHT (Anthropic Story)
+         ───────────────────────────────────────────────────────────── */}
+      <section id="demo-showcase" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
@@ -242,11 +243,11 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 <span>CUSTOMER SHOWCASE SPOTLIGHT</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
-                How Anthropic Deploys Our Voice Agent for Claude Enterprise
+                How Anthropic Deploys Emily for Claude Enterprise
               </h2>
             </div>
             <p className="text-sm text-[#5E5D59] max-w-md">
-              A real demonstration of how an enterprise client configures seat tiers, compliance gates, and automated deal booking.
+              Experience the live customer demo showcasing how Anthropic equips Emily to negotiate enterprise seat tiers, enforce compliance gates, and auto-book calendar invites.
             </p>
           </div>
 
@@ -262,7 +263,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                       Claude Enterprise Solutions · Agent Emily
                     </h3>
                     <p className="text-xs text-[#8C8984] font-mono">
-                      Target Audience: Heads of AI, Engineering Directors, Procurement VPs
+                      Configured with seat pricing ($75/seat), HIPAA BAA requirements, and deal automation
                     </p>
                   </div>
                 </div>
@@ -372,10 +373,10 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
         </div>
       </section>
 
-      {/* ---------------------------------------------------- */}
-      {/* Core Platform Capabilities: 3 Architectural Pillars  */}
-      {/* ---------------------------------------------------- */}
-      <section id="capabilities" className="py-20">
+      {/* ─────────────────────────────────────────────────────────────
+          5. 21ST.DEV BENTO GRID (Core Architectural Moats)
+         ───────────────────────────────────────────────────────────── */}
+      <section id="capabilities" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
@@ -386,84 +387,72 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               Engineered to Protect Margin While Closing Faster
             </h2>
             <p className="mt-4 text-base text-[#5E5D59]">
-              Unlike generic voice widgets or static web forms, Agora Sales Engine marries real-time cloud RTC with game-theoretic deal defense algorithms.
+              Built with 21st-century voice and negotiation primitives.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Pillar 1 */}
-            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-6">
-                  <Activity className="w-6 h-6" />
-                </div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#8C8984] mb-1">
-                  Pillar 01 · Voice RTC
-                </div>
-                <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">
-                  Sub-500ms Conversational Cloud Pipeline
-                </h3>
-                <p className="text-sm text-[#4D4C47] leading-relaxed mb-6">
-                  Zero browser SpeechRecognition quirks. All voice streams traverse Agora's Software Defined Real-time Network (SD-RTN), transcribed via Deepgram Nova-3 Multi, and synthesized via MiniMax Turbo with sub-half-second turn latency.
-                </p>
-              </div>
+          <BentoGrid>
+            <BentoCard
+              name="Sub-500ms Voice RTC Pipeline"
+              className="col-span-1 md:col-span-2"
+              Icon={Activity}
+              description="Zero browser SpeechRecognition quirks. Traverses Agora SD-RTN with Deepgram Nova-3 Multi STT and MiniMax Speech-2.8 Turbo synthesis, delivering sub-half-second turnaround latency."
+              cta="Explore Pipeline Spec"
+            />
 
-              <div className="p-3 rounded-xl bg-white border border-[#E8E6DC] text-xs font-mono text-[#6B6966]">
-                <span className="text-[#D97757] font-semibold">Latency:</span> 420ms · Deepgram Nova-3 · MiniMax Turbo
-              </div>
-            </div>
+            <BentoCard
+              name="18% Margin Floor Guard"
+              className="col-span-1 md:col-span-1"
+              Icon={ShieldCheck}
+              description="Algorithmic concession boundary. Human reps frequently cave to 30% discounts; our engine strictly bounds concessions while demanding multi-year commitments in reciprocity."
+              cta="Test Concession Engine"
+            />
 
-            {/* Pillar 2 */}
-            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-6">
-                  <ShieldCheck className="w-6 h-6" />
-                </div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#8C8984] mb-1">
-                  Pillar 02 · Deal Defense
-                </div>
-                <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">
-                  Algorithmic Concession & Margin Floor
-                </h3>
-                <p className="text-sm text-[#4D4C47] leading-relaxed mb-6">
-                  Human sales reps frequently cave and give 30% discounts without reciprocity. Our deal engine calculates concession trade-offs in real-time, enforcing strict margin floors (max 18%) while requiring multi-year commitments in exchange.
-                </p>
-              </div>
+            <BentoCard
+              name="Tri-Channel Autonomous Stack"
+              className="col-span-1 md:col-span-1"
+              Icon={Workflow}
+              description="Autonomous execution across HubSpot CRM deals, Google Calendar appointments, and Slack notification webhooks with real-time sentiment analytics."
+              cta="View CRM Sync Flow"
+            />
 
-              <div className="p-3 rounded-xl bg-white border border-[#E8E6DC] text-xs font-mono text-[#6B6966]">
-                <span className="text-amber-700 font-semibold">Floor:</span> Max 18% · Reciprocal Tradeoff Enforced
-              </div>
-            </div>
-
-            {/* Pillar 3 */}
-            <div className="p-8 rounded-3xl bg-[#F5F4ED] border border-[#E8E6DC] hover:border-[#D97757]/40 transition-all shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] mb-6">
-                  <Workflow className="w-6 h-6" />
-                </div>
-                <div className="text-xs font-mono uppercase tracking-wider text-[#8C8984] mb-1">
-                  Pillar 03 · Autonomous Sync
-                </div>
-                <h3 className="font-serif text-2xl font-bold text-[#141413] mb-3">
-                  Tri-Channel Autonomous Stack Execution
-                </h3>
-                <p className="text-sm text-[#4D4C47] leading-relaxed mb-6">
-                  When agreement is reached, the agent autonomously executes native API tool-calls: updates HubSpot deal stages, creates Google Calendar invites for the VP, and fires Slack room webhooks with conversation summaries and sentiment scores.
-                </p>
-              </div>
-
-              <div className="p-3 rounded-xl bg-white border border-[#E8E6DC] text-xs font-mono text-[#6B6966]">
-                <span className="text-emerald-700 font-semibold">Integrations:</span> HubSpot API · GCal API · Slack Webhooks
-              </div>
-            </div>
-          </div>
+            <BentoCard
+              name="Multi-Language Code Switching"
+              className="col-span-1 md:col-span-2"
+              Icon={Globe}
+              description="Fluent code-switching across English and Hindi (Hinglish) using Deepgram's multi-language acoustic model, perfectly suited for global procurement teams."
+              cta="Inspect Acoustic Models"
+            />
+          </BentoGrid>
         </div>
       </section>
 
-      {/* ---------------------------------------------------- */}
-      {/* Interactive Margin & Concession Simulator Widget     */}
-      {/* ---------------------------------------------------- */}
-      <section id="simulator" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
+      {/* ─────────────────────────────────────────────────────────────
+          6. 21ST.DEV ANIMATED BEAM (Pipeline & Integrations Flow)
+         ───────────────────────────────────────────────────────────── */}
+      <section id="pipeline" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
+              <Radio className="w-3.5 h-3.5" />
+              <span>LIVE BEAM FLOW VISUALIZER</span>
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
+              Real-Time Conversational Data Path
+            </h2>
+            <p className="mt-3 text-base text-[#5E5D59]">
+              How voice packets travel from the prospect's microphone into Agora's edge, through the Deal Engine, and into enterprise CRM tools.
+            </p>
+          </div>
+
+          <IntegrationBeams />
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          7. INTERACTIVE ROI & CONCESSION SIMULATOR
+         ───────────────────────────────────────────────────────────── */}
+      <section id="simulator" className="py-20 bg-[#F5F4ED] border-t border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
@@ -480,9 +469,8 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
 
           <div className="max-w-4xl mx-auto rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-lg">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-              {/* Controls (Left 6 cols) */}
+              {/* Controls */}
               <div className="lg:col-span-6 space-y-8">
-                {/* Seat Count Slider */}
                 <div>
                   <div className="flex justify-between items-center mb-3">
                     <label className="text-xs font-mono uppercase tracking-wider text-[#6B6966]">
@@ -508,7 +496,6 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                   </div>
                 </div>
 
-                {/* Commitment Length Buttons */}
                 <div>
                   <label className="text-xs font-mono uppercase tracking-wider text-[#6B6966] block mb-3">
                     Contract Commitment Term
@@ -528,14 +515,8 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                       </button>
                     ))}
                   </div>
-                  <p className="text-[11px] text-[#8C8984] font-mono mt-2">
-                    {termYears === 1 && '1-Year: Standard annual commitment. Low concession elasticity.'}
-                    {termYears === 2 && '2-Year: High-value tradeoff. Unlocks up to 12% discount.'}
-                    {termYears === 3 && '3-Year: Enterprise lock-in. Maximum 18% floor unlocked for 500+ seats.'}
-                  </p>
                 </div>
 
-                {/* Agent Policy Status Banner */}
                 <div className="p-4 rounded-2xl bg-[#FAF0EC] border border-[#D97757]/20 flex items-start gap-3">
                   <Lock className="w-5 h-5 text-[#D97757] shrink-0 mt-0.5" />
                   <div>
@@ -549,7 +530,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                 </div>
               </div>
 
-              {/* Dynamic Financial Readout (Right 6 cols) */}
+              {/* Readout */}
               <div className="lg:col-span-6 rounded-2xl bg-[#141413] p-6 text-white flex flex-col justify-between shadow-lg">
                 <div>
                   <div className="flex items-center justify-between pb-4 border-b border-white/10">
@@ -613,146 +594,9 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
         </div>
       </section>
 
-      {/* ---------------------------------------------------- */}
-      {/* Technical Architecture: Pipeline Walk                */}
-      {/* ---------------------------------------------------- */}
-      <section id="architecture" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
-              <Cpu className="w-3.5 h-3.5" />
-              <span>END-TO-END PIPELINE ARCHITECTURE</span>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
-              Real-Time Voice Architecture at Global Scale
-            </h2>
-            <p className="mt-4 text-base text-[#5E5D59]">
-              Every millisecond counts when handling sales objections. Here is the full cloud lifecycle of an Agora sales negotiation turn.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Step Selection Buttons (Left 5 cols) */}
-            <div className="lg:col-span-5 space-y-3">
-              {architectureSteps.map((step, idx) => {
-                const isSelected = selectedArchStep === idx;
-                const Icon = step.icon;
-                return (
-                  <button
-                    key={step.id}
-                    onClick={() => setSelectedArchStep(idx)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                      isSelected
-                        ? 'bg-[#141413] text-white border-[#141413] shadow-md'
-                        : 'bg-[#F5F4ED] text-[#4D4C47] border-[#E8E6DC] hover:border-[#D97757]/30 hover:bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3.5">
-                      <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                          isSelected ? 'bg-white/10 text-[#D97757]' : 'bg-white text-[#6B6966]'
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold leading-tight">{step.title}</div>
-                        <div
-                          className={`text-[11px] font-mono mt-0.5 ${
-                            isSelected ? 'text-white/60' : 'text-[#8C8984]'
-                          }`}
-                        >
-                          {step.subtitle}
-                        </div>
-                      </div>
-                    </div>
-
-                    <span
-                      className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded ${
-                        isSelected ? 'bg-white/15 text-white' : 'bg-white text-[#6B6966] border border-[#E8E6DC]'
-                      }`}
-                    >
-                      {step.tag}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Detailed Visual Explainer (Right 7 cols) */}
-            <div className="lg:col-span-7 rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-8 shadow-xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757]">
-                  {React.createElement(architectureSteps[selectedArchStep].icon, { className: 'w-6 h-6' })}
-                </div>
-                <div>
-                  <h3 className="font-serif text-2xl font-bold text-[#141413]">
-                    {architectureSteps[selectedArchStep].title}
-                  </h3>
-                  <p className="text-xs font-mono text-[#D97757] font-semibold">
-                    {architectureSteps[selectedArchStep].subtitle} · {architectureSteps[selectedArchStep].tag}
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-base text-[#4D4C47] leading-relaxed mb-6">
-                {architectureSteps[selectedArchStep].desc}
-              </p>
-
-              {/* Technical Code / Spec Box */}
-              <div className="rounded-2xl bg-[#141413] p-5 text-white font-mono text-xs overflow-x-auto space-y-2">
-                <div className="text-white/40 text-[10px] pb-2 border-b border-white/10 uppercase tracking-widest">
-                  Pipeline Telemetry & Parameters
-                </div>
-                {selectedArchStep === 0 && (
-                  <>
-                    <div className="text-emerald-400">// Agora RTC Channel Configuration</div>
-                    <div className="text-white/80">channel: "sales-call-anthropic"</div>
-                    <div className="text-white/80">audioProfile: "speech_standard_16khz"</div>
-                    <div className="text-white/80">latencyPolicy: "LOW_LATENCY_INTERACTIVE"</div>
-                  </>
-                )}
-                {selectedArchStep === 1 && (
-                  <>
-                    <div className="text-emerald-400">// Deepgram Nova-3 Multi-Language STT</div>
-                    <div className="text-white/80">model: "nova-3", language: "en-US / multi"</div>
-                    <div className="text-white/80">interim_results: true, smart_format: true</div>
-                    <div className="text-white/80">endpointing_ms: 320ms</div>
-                  </>
-                )}
-                {selectedArchStep === 2 && (
-                  <>
-                    <div className="text-emerald-400">// Deal Engine Margins & Persona Guard</div>
-                    <div className="text-white/80">max_concession_floor: 0.18 // 18% floor</div>
-                    <div className="text-white/80">objection_pivots: ["security", "price", "pilot"]</div>
-                    <div className="text-white/80">tool_choice: "auto" (HubSpot, GCal, Slack)</div>
-                  </>
-                )}
-                {selectedArchStep === 3 && (
-                  <>
-                    <div className="text-emerald-400">// Autonomous CRM & Scheduling Tools</div>
-                    <div className="text-white/80">hubspot.create_deal(deal_name, stage, amount)</div>
-                    <div className="text-white/80">calendar.create_event(start_time, attendees)</div>
-                    <div className="text-white/80">slack.post_alert(channel="#deals", transcript)</div>
-                  </>
-                )}
-                {selectedArchStep === 4 && (
-                  <>
-                    <div className="text-emerald-400">// MiniMax Speech-2.8 Turbo TTS</div>
-                    <div className="text-white/80">voice_id: "emily_enterprise_consultant"</div>
-                    <div className="text-white/80">streaming_chunk_size: 20ms</div>
-                    <div className="text-white/80">roundtrip_latency: ~420ms</div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------- */}
-      {/* Big Closing Banner & Editorial CTA                   */}
-      {/* ---------------------------------------------------- */}
+      {/* ─────────────────────────────────────────────────────────────
+          8. CLOSING CTA BANNER
+         ───────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#141413] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#D97757] text-xs font-mono mb-6">
@@ -769,13 +613,16 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
+            <ShimmerButton
               onClick={onLaunchDemo}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#D97757] hover:bg-[#C96442] text-white font-semibold text-base shadow-xl transition-all cursor-pointer"
+              shimmerColor="#D97757"
+              className="w-full sm:w-auto"
             >
-              <span>View Customer Demo (Claude Enterprise)</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+              <span className="flex items-center gap-2 font-semibold text-base">
+                <span>View Customer Demo (Claude Enterprise)</span>
+                <ArrowRight className="w-4 h-4" />
+              </span>
+            </ShimmerButton>
 
             <button
               onClick={onStartDirectCall}
@@ -788,13 +635,13 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
         </div>
       </section>
 
-      {/* ---------------------------------------------------- */}
-      {/* Footer                                               */}
-      {/* ---------------------------------------------------- */}
+      {/* ─────────────────────────────────────────────────────────────
+          9. FOOTER
+         ───────────────────────────────────────────────────────────── */}
       <footer className="py-12 bg-[#FAF9F5] border-t border-[#E8E6DC] text-xs text-[#6B6966]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-[#D97757] font-bold">✻</span>
+            <span className="text-[#D97757] font-bold text-base">✻</span>
             <span className="font-serif font-bold text-[#141413]">Agora Voice Agent</span>
             <span>·</span>
             <span>Built on Agora Conversational AI SDK</span>
