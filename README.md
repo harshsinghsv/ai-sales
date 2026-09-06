@@ -1,13 +1,11 @@
 <p align="center">
-  <strong>Generic real-time voice AI sales & negotiation agent · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
+  <strong>Real-time voice AI sales & negotiation agent · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/FastAPI-Python-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
   <img src="https://img.shields.io/badge/Agora-Conversational%20AI-3B82F6?style=flat-square" alt="Agora Conversational AI" />
-  <img src="https://img.shields.io/badge/MCP-Model%20Context%20Protocol-8B5CF6?style=flat-square" alt="MCP" />
-  <img src="https://img.shields.io/badge/tests-27%20passing-2f7a1d?style=flat-square" alt="tests passing" />
 </p>
 
 <p align="center">
@@ -20,7 +18,7 @@
 
 ---
 
-This is a **generic, product-agnostic voice AI sales & negotiation agent** — a real-time voice rep that runs a complete sales negotiation over a live, phone-quality call for *any* product with tiered seat pricing. It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real pricing from a data-driven tier config, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked. None of that logic — the negotiation engine, the MCP tool layer, the RTC handoff — is specific to any one product.
+This is a **adaptive voice AI sales & negotiation agent** a real-time voice rep that runs a complete sales negotiation over a live, phone-quality call for *any* product with tiered seat pricing. It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real pricing from a data-driven tier config, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked. None of that logic — the negotiation engine, the MCP tool layer, the RTC handoff — is specific to any one product.
 
 **For this hackathon we're demoing it selling Claude Enterprise** — the persona ("Emily"), pricing tiers, and objection playbook in `backend/middleware/sales_persona.py` and `backend/deal_engine/engine.py` are simply the configuration loaded for this demo. Point the same engine at a different tier config and system prompt and it sells something else entirely — the pricing/concession functions in `deal_engine/engine.py` operate generically over a `TIERS` dict, they don't hardcode Claude-specific logic anywhere.
 
