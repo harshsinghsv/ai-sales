@@ -8,6 +8,7 @@ import { IntegrationBeams } from '@/components/IntegrationBeams';
 import { ConcessionSimulator } from '@/components/ConcessionSimulator';
 import { AgentVoiceConsole } from '@/components/AgentVoiceConsole';
 import { Footer } from '@/components/Footer';
+import { DotField } from '@/components/reactbits/DotField';
 import { Squares } from '@/components/reactbits/Squares';
 import { BlurText } from '@/components/reactbits/BlurText';
 import { StarBorder } from '@/components/reactbits/StarBorder';
@@ -46,97 +47,127 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       />
 
       {/* ─────────────────────────────────────────────────────────────
-          2. HERO SECTION (React Bits Squares + BlurText + StarBorder)
+          2. HERO SECTION (React Bits DotField + Clean Typography + Code Window)
          ───────────────────────────────────────────────────────────── */}
-      <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-24 overflow-hidden border-b border-[#E8E6DC]">
-        {/* React Bits Squares interactive canvas background */}
-        <Squares
-          speed={0.35}
-          squareSize={48}
-          borderColor="#E8E6DC80"
-          hoverFillColor="#D9775715"
+      <section className="relative min-h-[90vh] flex flex-col justify-center bg-[#0d0b12] text-white pt-28 pb-20 overflow-hidden border-b border-white/10">
+        {/* React Bits Signature DotField interactive canvas background */}
+        <DotField
+          dotRadius={1.4}
+          dotSpacing={16}
+          cursorRadius={420}
+          cursorForce={0.16}
+          glowRadius={200}
+          gradientFrom="rgba(217, 119, 87, 0.35)"
+          gradientTo="rgba(245, 158, 11, 0.15)"
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Ambient bottom vignette fade */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0d0b12]/40 to-[#0d0b12] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Value Prop */}
             <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-xs font-mono mb-6 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-[#D97757] animate-pulse" />
-                <span className="font-semibold text-xs text-[#D97757]">
-                  Agora Conversational AI · Sub-500ms Voice RTC
+              {/* React Bits Eyebrow Pill */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl text-xs font-mono text-white/80 shadow-lg mb-6 hover:bg-white/10 transition-colors">
+                <span className="px-2.5 py-0.5 rounded-md bg-[#D97757] text-white font-semibold text-[10px] tracking-wide uppercase">
+                  Agora Voice RTC
                 </span>
+                <span>Sub-450ms Conversational AI Pipeline</span>
+                <ArrowRight className="w-3 h-3 text-[#D97757]" />
               </div>
 
-              {/* Main Headline with React Bits BlurText */}
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-[#141413] leading-[1.08] mb-6">
-                <BlurText
-                  text="The Autonomous Sales Agent that Negotiates in Real-Time Voice."
-                  delay={45}
-                  highlightWord="Negotiates"
-                  highlightClass="text-[#D97757] italic font-normal"
-                />
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-5xl lg:text-[58px] font-semibold tracking-tight text-white leading-[1.08] mb-6">
+                <span>Autonomous voice agents for </span>
+                <br className="hidden sm:inline" />
+                <span className="text-[#D97757] font-semibold drop-shadow-[0_0_35px_rgba(217,119,87,0.45)]">
+                  enterprise deal execution
+                </span>
               </h1>
 
-              {/* Editorial Subtitle */}
-              <p className="text-base sm:text-lg text-[#5E5D59] leading-relaxed max-w-xl mb-8 font-sans">
-                Trained on enterprise margin policies, objection handling trees, and multi-tier procurement strategies. Listens, defends pricing floors, and closes high-ticket deals over voice — syncing directly with HubSpot, Google Calendar, and Slack.
+              {/* Subtitle - Crisp, non-slop copy */}
+              <p className="text-base sm:text-lg text-white/70 leading-relaxed max-w-xl mb-8 font-normal">
+                Trained on enterprise pricing boundaries, objection trees, and compliance protocols. Emily conducts live sales calls, protects margins, and triggers real-time CRM updates with zero client-side latency.
               </p>
 
-              {/* Primary Action Buttons with React Bits StarBorder */}
+              {/* Hero Action Buttons - React Bits Style */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-10">
-                <StarBorder
+                <button
                   onClick={onLaunchDemo}
-                  color="#D97757"
-                  className="w-full sm:w-auto"
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-sm text-white bg-[#D97757] hover:bg-[#c66547] shadow-[0_10px_25px_rgba(217,119,87,0.35)] transition-all cursor-pointer active:scale-95"
                 >
-                  <span className="flex items-center gap-2">
-                    <span>Experience Claude Enterprise Demo</span>
-                    <ArrowRight className="w-4 h-4 text-[#D97757]" />
-                  </span>
-                </StarBorder>
+                  <span>Experience Claude Enterprise Demo</span>
+                  <ArrowRight className="w-4 h-4 text-white" />
+                </button>
 
-                <StarBorder
+                <button
                   onClick={onStartDirectCall}
-                  color="#D97757"
-                  className="w-full sm:w-auto"
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-sm text-white bg-white/5 hover:bg-white/10 border border-white/10 shadow-lg backdrop-blur-xl transition-all cursor-pointer hover:border-white/20 active:scale-95"
                 >
-                  <span className="flex items-center gap-2">
-                    <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                    <span>Start Voice Call with Emily</span>
+                  <PhoneCall className="w-4 h-4 text-[#D97757]" />
+                  <span>Start Voice Call with Emily</span>
+                  <span className="ml-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-semibold">
+                    LIVE
                   </span>
-                </StarBorder>
+                </button>
               </div>
 
-              {/* Telemetry Strip */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full pt-6 border-t border-[#E8E6DC]">
-                <div>
-                  <div className="text-2xl font-serif font-bold text-[#141413]">420ms</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">RTC Turn Latency</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-serif font-bold text-[#D97757]">18.0%</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Margin Floor Guard</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-serif font-bold text-[#141413]">100%</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Cloud Pipeline (No Dups)</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-serif font-bold text-emerald-700">Tri-Stack</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">HubSpot · GCal · Slack</div>
-                </div>
-              </div>
+              {/* Proof Strip - React Bits Proof Style */}
+              <ul className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs font-mono text-white/60 pt-6 border-t border-white/10 w-full">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-white font-medium">418ms</span> RTC Latency
+                </li>
+                <li className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <span className="text-white font-medium">18.0%</span> Margin Guard
+                </li>
+                <li className="w-1 h-1 rounded-full bg-white/20 hidden sm:block" />
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                  <span className="text-white font-medium">100%</span> Cloud Pipeline
+                </li>
+              </ul>
             </div>
 
-            {/* Right Column: React Bits TiltedCard + Agent Voice Console */}
+            {/* Right Column: React Bits Code Window + Agent Voice Console */}
             <div className="lg:col-span-6 w-full relative">
-              <TiltedCard maxRotate={6} scale={1.02}>
-                <div className="relative rounded-2xl border border-[#E8E6DC] bg-[#141413] p-1 shadow-2xl overflow-hidden">
-                  <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+              <TiltedCard maxRotate={5} scale={1.01}>
+                <div className="relative rounded-2xl border border-white/10 bg-[#120F17] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+                  {/* React Bits macOS Titlebar */}
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/[0.03]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#EF4444]/90" />
+                      <span className="w-3 h-3 rounded-full bg-[#F59E0B]/90" />
+                      <span className="w-3 h-3 rounded-full bg-[#10B981]/90" />
+                      <span className="ml-2 text-xs font-mono text-white/50">agora-voice-runtime.sh</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-[#D97757]/20 border border-[#D97757]/30 text-[#D97757] font-semibold flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#D97757] animate-pulse" />
+                        VOICE PIPELINE READY
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Body: Agent Voice Console */}
+                  <div className="p-2">
+                    <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
+                  </div>
+
+                  {/* Window Footer Bar */}
+                  <div className="px-4 py-2.5 border-t border-white/10 bg-white/[0.02] flex items-center justify-between text-[11px] font-mono text-white/50">
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      <span>Deepgram Nova-3 Multi · MiniMax Speech-2.8</span>
+                    </div>
+                    <span className="text-white/40">Agora SD-RTN</span>
+                  </div>
+
                   <BorderBeam
-                    size={280}
+                    size={300}
                     duration={12}
                     colorFrom="#D97757"
                     colorTo="#F59E0B"
@@ -151,14 +182,14 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       {/* ─────────────────────────────────────────────────────────────
           3. MARQUEE TICKER (Live Platform Signals)
          ───────────────────────────────────────────────────────────── */}
-      <div className="py-4 bg-[#F5F4ED] border-b border-[#E8E6DC] overflow-hidden">
+      <div className="py-3.5 bg-[#120F17] border-b border-white/10 overflow-hidden">
         <Marquee pauseOnHover repeat={4} className="[--gap:2rem]">
           {TICKER_ITEMS.map((item, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E8E6DC] text-xs font-mono shadow-2xs"
+              className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono shadow-2xs text-white"
             >
-              <span className="text-[#8C8984]">{item.label}:</span>
+              <span className="text-white/50">{item.label}:</span>
               <span className={`font-semibold ${item.color}`}>{item.val}</span>
             </div>
           ))}
