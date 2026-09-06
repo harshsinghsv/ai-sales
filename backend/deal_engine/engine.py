@@ -5,46 +5,48 @@ Core Principle: "Never gives a discount without asking for something back, and n
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 
-# Pricing Tiers for TeamSync SaaS
+# Pricing Tiers for Claude Enterprise
 TIERS: Dict[str, Dict[str, Any]] = {
     "starter": {
-        "name": "Starter",
+        "name": "Claude Pro & Team",
         "price_per_seat_monthly": 15.0,
         "min_seats": 5,
         "max_seats": 20,
         "margin_floor_pct": 5.0,  # Max allowable discount is 5%
         "features": [
-            "Core task & project tracking",
-            "Unlimited boards & lists",
-            "5GB storage per user",
+            "Claude Sonnet 5 access",
+            "Standard context window & Artifacts",
+            "Shared team project workspaces",
             "Standard email support"
         ]
     },
     "pro": {
-        "name": "Pro",
+        "name": "Claude Enterprise Team",
         "price_per_seat_monthly": 35.0,
         "min_seats": 15,
         "max_seats": 100,
         "margin_floor_pct": 15.0,  # Max allowable discount is 15%
         "features": [
-            "Advanced sprint planning & Gantt charts",
-            "Automated workflows & SLA tracking",
-            "Native Jira/GitHub/Slack 2-way sync",
-            "Priority 24/7 support & 99.9% uptime SLA"
+            "Claude Opus 5 access (standard quota)",
+            "1M+ token context window",
+            "Native GitHub repository sync & PR review",
+            "Enterprise Projects with custom instructions",
+            "Priority latency & 99.9% uptime SLA"
         ]
     },
     "enterprise": {
-        "name": "Enterprise",
+        "name": "Claude Enterprise",
         "price_per_seat_monthly": 65.0,
         "min_seats": 50,
         "max_seats": 10000,
         "margin_floor_pct": 25.0,  # Max allowable discount is 25%
         "features": [
-            "Custom role-based permissions & audit logs",
-            "Enterprise SSO (SAML/Okta/Azure AD) & SCIM",
-            "Dedicated Customer Success Manager",
-            "Data residency in India / EU / US & 99.99% SLA",
-            "Custom integrations & on-premise runner options"
+            "Flagship Claude Opus 5 with native deep reasoning",
+            "Expanded 1,000,000-token (1M) context window",
+            "Zero data retention & no model training guarantee",
+            "Enterprise SSO (SAML/Okta/Azure AD) & SCIM sync",
+            "SOC-2 Type II, HIPAA compliance & audit logging",
+            "Dedicated Anthropic Solutions Architect & 99.99% SLA"
         ]
     }
 }
@@ -83,22 +85,22 @@ ALTERNATIVE_LEVERS = [
     {
         "name": "Complimentary White-Glove Onboarding",
         "value": "$2,500 value waived",
-        "pitch": "Free assisted data migration and team training across all engineering squads."
+        "pitch": "Free assisted codebase ingestion, prompt architecture workshops, and team rollout."
     },
     {
         "name": "Phased Seat Ramp",
         "value": "Pay for active users first",
-        "pitch": "Start billing at 30 seats for month 1 and ramp up to full headcount as adoption expands."
+        "pitch": "Start billing at initial pilot headcount for month 1 and ramp up to full enterprise seats."
     },
     {
         "name": "Extended Payment Terms",
         "value": "Net 45 / Net 60",
-        "pitch": "Flexible payment cycles to align with your internal quarterly budget clearance."
+        "pitch": "Flexible payment cycles to align with your corporate fiscal calendar."
     },
     {
-        "name": "Dedicated Customer Success Manager",
+        "name": "Dedicated Anthropic Solutions Architect",
         "value": "Enterprise Tier Perk",
-        "pitch": "Direct Slack/WhatsApp connect with a senior technical account manager for zero-lag escalation."
+        "pitch": "Direct weekly access to Anthropic technical staff for complex model integrations."
     }
 ]
 

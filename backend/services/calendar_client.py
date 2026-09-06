@@ -274,10 +274,10 @@ class GoogleCalendarClient:
             )
 
         body = {
-            "summary": f"TeamSync: {meeting_type}",
+            "summary": f"Claude Enterprise: {meeting_type}",
             "description": (
-                "Booked automatically by the TeamSync AI sales agent.\n"
-                f"Notes: {notes or 'Inbound customer negotiation'}"
+                "Booked automatically by the Claude Enterprise AI solutions agent.\n"
+                f"Notes: {notes or 'Inbound enterprise customer consultation'}"
             ),
             "start": {
                 "dateTime": start_dt.isoformat(),

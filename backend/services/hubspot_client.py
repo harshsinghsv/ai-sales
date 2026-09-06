@@ -51,7 +51,7 @@ class HubSpotClient:
                 "is_sandbox": True,
                 "contact_id": "sandbox_ct_8921",
                 "deal_id": "sandbox_deal_4091",
-                "deal_name": f"{company_name} — {tier.title() if tier else 'TeamSync'} ({seat_count or 20} seats)",
+                "deal_name": f"{company_name} — {tier.title() if tier else 'Claude Enterprise'} ({seat_count or 20} seats)",
                 "amount": deal_value or 8400.0,
                 "message": f"Lead created in sandbox for {contact_email} ({company_name})"
             }

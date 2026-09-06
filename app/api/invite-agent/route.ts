@@ -142,7 +142,7 @@ function buildMcpServers(
 
   if (config.deal_engine_mcp_url) {
     servers.push({
-      name: 'teamsyncDealEngine',
+      name: 'claudeEnterpriseDealEngine',
       transport: 'streamable_http',
       endpoint: config.deal_engine_mcp_url,
     });

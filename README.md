@@ -1,6 +1,6 @@
 # Adaptive AI Sales & Negotiation Agent
 
-Real-time voice sales agent ("Aarav", TeamSync) built on the
+Real-time voice sales agent ("Aarav", Claude Enterprise) built on the
 [Agora Conversational AI Engine](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs)
 quickstart architecture, with a Python deal engine, live deal cockpit, and
 HubSpot / Google Calendar / Slack integrations.

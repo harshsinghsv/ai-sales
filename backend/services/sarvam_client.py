@@ -12,19 +12,19 @@ logger = logging.getLogger("sarvam_client")
 
 
 SYSTEM_SALES_PERSONA = """
-You are Aarav, a senior enterprise sales executive at TeamSync (a high-performance collaborative project & workstream management platform, competing against Jira and Asana).
-Your goal is to qualify inbound leads, understand their team workflows, present the right pricing tier, handle objections with confidence, and negotiate deals using our concession ladder.
+You are Aarav, Enterprise Solutions Lead at Anthropic for Claude Enterprise (the frontier AI workspace platform empowering engineering, research, and enterprise teams).
+Your goal is to qualify inbound enterprise leads, understand their engineering and AI workflows, present the right pricing tier, handle objections with confidence, and negotiate deals using our concession ladder.
 
 Key Guidelines:
 1. Tone: Warm, executive, natural Indian code-switching (Hinglish/English). Use conversational fillers naturally (e.g., "Bilkul", "Definitely", "Sunie", "Fair enough").
 2. Memory: Remember previously mentioned team sizes, names, and requirements. Never ask the customer twice for information they already shared. You are given the full conversation so far — read it before replying. Never repeat a pitch, quote, or explanation you already gave earlier in this same conversation; move the conversation forward instead (ask a new question, address a new point, or advance to next steps).
 3. Objections:
-   - Competitor (Jira/Asana): "Jira is great for legacy issue tracking, but engineering teams spend 4 hours a week just updating tickets. TeamSync automates sprint syncs directly from GitHub PRs with zero manual updates."
-   - Pricing: Hold our value. Never grant a discount without demanding a concession in return (e.g., annual commitment, multi-year, or case study).
-   - Trust/Security: "We have SOC-2 Type II, ISO 27001, and our data centers are hosted locally in Mumbai (AWS ap-south-1) with 99.99% SLA."
+   - Competitor (ChatGPT Enterprise / Microsoft Copilot): "ChatGPT Enterprise is limited to 128k context and Copilot lacks full codebase comprehension. Claude Enterprise provides a massive 1,000,000-token (1M) context window to ingest entire multi-repo codebases, paired with frontier reasoning on Claude Opus 5 and interactive Artifacts."
+   - Pricing: Hold our value. Never grant a discount without demanding a concession in return (e.g., annual commitment, multi-year, or reference case study).
+   - Trust/Security: "Anthropic strictly guarantees zero customer data retention for model training — your prompts and proprietary code are never used to train Anthropic models. We provide SOC-2 Type II, HIPAA BAA, SAML SSO via Okta/Azure AD, and SCIM directory sync."
 4. Tool Discipline:
    - When asked about pricing or changing seat counts, call `get_pricing`.
-   - When customer asks for a discount, call `apply_discount`. If the discount is above the margin floor, politely state the floor, offer our counter-offer with the required trade, and offer complimentary onboarding as an alternative lever.
+   - When customer asks for a discount, call `apply_discount`. If the discount is above the margin floor, politely state the floor, offer our counter-offer with the required trade, and offer complimentary onboarding and prompt architecture workshops as an alternative lever.
    - When customer wants a demo or meeting with enterprise sales, call `book_meeting` and `create_crm_lead`.
    - If customer asks to talk to a human or requested terms cannot be resolved, call `escalate_to_human`.
 """
@@ -160,12 +160,12 @@ class SarvamClient:
                     last_user_msg = m.get("content", "").lower()
 
         # 1. Competitor objection
-        if any(w in last_user_msg for w in ["jira", "asana", "linear", "clickup", "competitor", "difference", "compare"]):
+        if any(w in last_user_msg for w in ["chatgpt", "openai", "copilot", "competitor", "difference", "compare", "jira", "asana"]):
             reply = (
-                "Bilkul valid sawaal hai! Jira is widely used, lekin most engineering squads complain that developers "
-                "spend hours manually updating statuses. TeamSync automatically syncs from GitHub commits and PRs, "
-                "aur hamara real-time sprint dashboard eliminates status meetings completely. "
-                "Aapki current team size kitni hai so I can share relevant engineering case studies?"
+                "Bilkul valid sawaal hai! ChatGPT Enterprise is widely known, lekin it has a 128k context limit and lacks deep codebase integration. "
+                "Claude Enterprise offers a full 1,000,000-token (1M) context window, allowing your engineering squad to ingest entire GitHub repositories, "
+                "along with frontier reasoning on Claude Opus 5 and zero model training on your data. "
+                "Aapki current team size kitni hai so I can share relevant enterprise benchmarks?"
             )
         # 2. Exploring pricing / plans / costs
         elif any(w in last_user_msg for w in ["pricing", "price", "explor", "cost", "tier", "plan", "how much", "rate", "charge"]):
@@ -192,11 +192,11 @@ class SarvamClient:
                 "What contract duration works best for your finance cycle?"
             )
         # 5. Features / Security / Integrations
-        elif any(w in last_user_msg for w in ["feature", "security", "sso", "soc", "github", "gitlab", "integration", "compliance"]):
+        elif any(w in last_user_msg for w in ["feature", "security", "sso", "soc", "github", "gitlab", "integration", "compliance", "privacy", "training"]):
             reply = (
-                "TeamSync offers enterprise-grade SOC-2 Type II compliance, SAML/Okta SSO, and automated GitHub/GitLab bi-directional sync. "
-                "Hamare automated sprint triggers ensure zero manual data entry for developers. "
-                "Are there specific compliance requirements your security team needs?"
+                "Claude Enterprise offers complete enterprise-grade protection: zero data retention for model training, SOC-2 Type II & HIPAA compliance, "
+                "SAML SSO via Okta or Azure AD, SCIM directory sync, and native GitHub integration with Artifacts. "
+                "Are there specific security or infosec requirements your compliance team needs?"
             )
         # 6. Meeting / demo booking
         elif any(w in last_user_msg for w in ["demo", "meeting", "call", "schedule", "book", "connect", "calendar"]):
@@ -213,14 +213,14 @@ class SarvamClient:
         # 8. Greetings / Chit-chat
         elif any(w in last_user_msg for w in ["hi", "hello", "hey", "namaste", "morning", "afternoon", "evening"]):
             reply = (
-                "Namaste! Glad to connect with you. How can I assist you with TeamSync today — "
-                "would you like to review our automated sprint workflows, or explore pricing tiers for your team?"
+                "Namaste! Glad to connect with you. How can I assist you with Claude Enterprise today — "
+                "would you like to explore our 1M context window and GitHub integration, or review pricing tiers for your team?"
             )
         # 9. Conversational fallback (Never repeats the introductory greeting)
         else:
             reply = (
-                "Understood! TeamSync helps high-velocity engineering squads eliminate status meetings and automate sprint execution from Git commits. "
-                "Are you evaluating this for an immediate sprint rollout, or comparing against your current tools?"
+                "Understood! Claude Enterprise empowers engineering and research teams with a 1,000,000-token (1M) context window powered by Claude Opus 5, native GitHub repository sync, and zero model training on customer data. "
+                "Are you evaluating this for an immediate team rollout, or comparing against other AI platforms?"
             )
 
         return {

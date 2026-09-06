@@ -1,5 +1,5 @@
 /* ============================================================
-   TeamSync Sales Cockpit — Global Stylesheet
+   Claude Enterprise Sales Cockpit — Global Stylesheet
    Light "Awake" design language · Tailwind v4 · design tokens below
    ============================================================ */
 
@@ -8,16 +8,19 @@
 
 @theme {
   /* Ink system */
-  --color-ink: #1b1d1e;
-  --color-secondary: rgba(27, 29, 30, 0.62);
-  --color-muted: rgba(27, 29, 30, 0.42);
-  --color-soft: rgba(27, 29, 30, 0.045);
-  --color-softhover: rgba(27, 29, 30, 0.08);
-  --color-bordersubtle: rgba(27, 29, 30, 0.06);
-  --color-border: rgba(27, 29, 30, 0.11);
-  --color-borderstrong: rgba(27, 29, 30, 0.18);
+  --color-ink: #141413;
+  --color-secondary: rgba(20, 20, 19, 0.62);
+  --color-muted: rgba(20, 20, 19, 0.42);
+  --color-soft: rgba(20, 20, 19, 0.045);
+  --color-softhover: rgba(20, 20, 19, 0.08);
+  --color-bordersubtle: rgba(20, 20, 19, 0.06);
+  --color-border: rgba(20, 20, 19, 0.11);
+  --color-borderstrong: rgba(20, 20, 19, 0.18);
 
   /* Brand */
+  --color-claude: #D97757;
+  --color-claudehover: #C66443;
+  --color-claudebg: #FAF0EC;
   --color-violet: #4928fd;
   --color-violethover: #3b1ee6;
   --color-violetbg: #eeeafe;

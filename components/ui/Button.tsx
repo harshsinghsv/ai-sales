@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-type ButtonVariant = 'primary' | 'violet' | 'outline' | 'white' | 'ghost';
+type ButtonVariant = 'primary' | 'violet' | 'outline' | 'white' | 'ghost' | 'claude';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
@@ -23,6 +23,10 @@ const VARIANT_CLASSES: Record<ButtonVariant, { base: string; icon: string }> = {
   primary: {
     base: 'bg-ink text-white border-ink hover:bg-black hover:border-black',
     icon: 'bg-white text-ink',
+  },
+  claude: {
+    base: 'bg-[#D97757] text-white border-[#D97757] hover:bg-[#C66443] hover:border-[#C66443]',
+    icon: 'bg-white text-[#D97757]',
   },
   violet: {
     base: 'bg-violet text-white border-violet hover:bg-violethover hover:border-violethover',

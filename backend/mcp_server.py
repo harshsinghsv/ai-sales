@@ -1,5 +1,5 @@
 """
-TeamSync Deal Engine — MCP Server.
+Claude Enterprise Deal Engine — MCP Server.
 
 Exposes the sales agent's actions as Model Context Protocol tools over
 streamable HTTP, so Agora's Conversational AI Engine calls them itself
@@ -32,10 +32,10 @@ from backend.middleware.custom_llm import (
 logger = logging.getLogger("deal_engine_mcp")
 
 mcp = MCPServer(
-    name="TeamSync Deal Engine",
+    name="Claude Enterprise Deal Engine",
     instructions=(
         "Pricing, discounting, CRM, scheduling and escalation tools for the "
-        "TeamSync enterprise sales agent. Call get_pricing whenever seats or "
+        "Claude Enterprise sales agent. Call get_pricing whenever seats or "
         "tier change, apply_discount for any discount request, "
         "update_session_state whenever the buyer reveals a new fact, and "
         "create_crm_lead + book_meeting together once a demo is agreed."
@@ -106,7 +106,7 @@ async def get_pricing(
     requested_tier: Optional[str] = None,
     conversation_id: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Calculate tiered seat pricing and monthly/annual cost for TeamSync.
+    """Calculate tiered seat pricing and monthly/annual cost for Claude Enterprise.
 
     Args:
         seat_count: Number of employee seats required.
@@ -220,7 +220,7 @@ async def update_session_state(
 
     Args:
         seat_count: Number of employee seats required.
-        use_case: What the buyer wants to use TeamSync for.
+        use_case: What the buyer wants to use Claude Enterprise for.
         must_haves: Required features or integrations.
         buyer_name: Buyer's name.
         company: Buyer organization.
