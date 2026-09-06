@@ -195,9 +195,11 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
             {/* Agent Header Tag */}
             <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-[#E8E6DC]">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="size-7 rounded-full bg-[#D97757] flex items-center justify-center text-white text-xs font-bold leading-none shrink-0 shadow-sm">
-                  ✻
-                </div>
+                <img
+                  src="/agora-avatar.gif"
+                  alt="Emily"
+                  className="size-7 rounded-full object-cover shrink-0 border border-[#D97757]/30 shadow-xs"
+                />
                 <div className="flex flex-col min-w-0">
                   <span className="font-serif-anthropic text-sm font-medium text-[#141413] leading-tight truncate">
                     Emily
