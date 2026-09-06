@@ -12,7 +12,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   onLaunchDemo,
   onStartDirectCall,
-  ctaText = 'DEMO',
+  ctaText = 'Live Demo',
   className = '',
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
