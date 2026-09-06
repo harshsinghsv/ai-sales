@@ -193,15 +193,22 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
         <div className="lg:col-span-5 flex flex-col min-h-0">
           <div className="rounded-2xl bg-white border border-[#E8E6DC] p-5 sm:p-6 flex flex-col shadow-sm h-full">
             {/* Agent Header Tag */}
-            <div className="flex items-center justify-between gap-2 pb-3.5 border-b border-[#E8E6DC]">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-[#D97757] text-sm leading-none font-serif-anthropic">✻</span>
-                <span className="text-xs font-medium text-[#141413] truncate">
-                  Emily · Solutions Lead
-                </span>
+            <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-[#E8E6DC]">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="size-7 rounded-full bg-[#D97757] flex items-center justify-center text-white text-xs font-bold leading-none shrink-0 shadow-sm">
+                  ✻
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="font-serif-anthropic text-sm font-medium text-[#141413] leading-tight truncate">
+                    Emily
+                  </span>
+                  <span className="text-[11px] text-[#5E5D59] font-normal leading-tight truncate">
+                    Enterprise AI Specialist · Solutions Lead
+                  </span>
+                </div>
               </div>
-              <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/20 shrink-0">
-                Opus 5 Engine
+              <span className="text-[10px] font-medium tracking-wide px-2.5 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/25 shrink-0">
+                Claude Opus 5
               </span>
             </div>
 
@@ -209,7 +216,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
             <div className="py-6 sm:py-7 flex flex-col items-center justify-center my-auto gap-3">
               {connecting ? (
                 <div className="flex flex-col items-center gap-4 py-4" aria-label="Connecting to call">
-                  <div className="size-44 sm:size-52 rounded-full skeleton" />
+                  <div className="size-48 sm:size-56 rounded-full skeleton" />
                   <div className="space-y-2 w-44">
                     <div className="skeleton h-3 w-full rounded-full" />
                     <div className="skeleton h-3 w-2/3 mx-auto rounded-full" />
@@ -225,31 +232,34 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     volume={volumeLevel}
                     interrupted={interrupted}
                   />
-                  <div className="flex items-center gap-2 flex-wrap justify-center pt-2">
-                    <span
+                  <div className="flex items-center justify-center gap-2 pt-2">
+                    <div
                       aria-live="polite"
                       className={cn(
-                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border',
-                        pill.classes
+                        'inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all shadow-sm',
+                        isRecordingSTT
+                          ? 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/40'
+                          : pill.classes
                       )}
                     >
-                      <span aria-hidden className={cn('size-1.5 rounded-full', pill.dot)} />
-                      {pill.label}
-                    </span>
+                      <span aria-hidden className={cn('size-1.5 rounded-full', isRecordingSTT ? 'bg-[#D97757] animate-ping' : pill.dot)} />
+                      <span>{isRecordingSTT ? 'Capturing speech…' : pill.label}</span>
+                    </div>
+
                     <button
                       type="button"
                       onClick={toggleRecordingSTT}
                       aria-pressed={isRecordingSTT}
-                      title={isRecordingSTT ? 'Stop voice capture' : 'Push to talk'}
+                      title={isRecordingSTT ? 'Release to send speech' : 'Click to speak'}
                       className={cn(
-                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border transition-colors cursor-pointer',
+                        'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer shadow-sm',
                         isRecordingSTT
-                          ? 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/40'
+                          ? 'bg-[#D97757] text-white border-[#D97757]'
                           : 'bg-white text-[#5E5D59] border-[#E8E6DC] hover:border-[#D5D3CA] hover:text-[#141413]'
                       )}
                     >
                       <Radio className="size-3" aria-hidden />
-                      {isRecordingSTT ? 'Capturing…' : 'Push to talk'}
+                      <span>{isRecordingSTT ? 'Release' : 'Push to talk'}</span>
                     </button>
                     {hasQueuedTurn && (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/30">
@@ -262,36 +272,32 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
               )}
             </div>
 
-            {/* Bottom: Demo controls + Input */}
-            <div className="space-y-3 pt-4 border-t border-[#E8E6DC]">
-              <details className="group rounded-lg border border-[#E8E6DC] bg-[#FAF9F5] open:bg-white transition-colors">
-                <summary className="flex items-center justify-between gap-2 px-3.5 py-2 cursor-pointer list-none">
-                  <span className="text-[11px] tracking-wide text-[#5E5D59] font-medium flex items-center gap-1.5">
+            {/* Bottom: Prompt Inquiries + Input */}
+            <div className="space-y-3 pt-3.5 border-t border-[#E8E6DC]">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between px-0.5">
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-[#87867F] flex items-center gap-1.5">
                     <Command className="size-3 text-[#87867F]" aria-hidden />
-                    Evaluation scenarios
-                    <span className="px-1.5 py-px rounded-full bg-[#FAF0EC] text-[#D97757] font-mono text-[10px] tabular-nums">
-                      {demoScenarios.length}
-                    </span>
+                    Suggested Inquiries
                   </span>
-                  <ChevronDown
-                    className="size-3.5 text-[#87867F] transition-transform group-open:rotate-180"
-                    aria-hidden
-                  />
-                </summary>
-                <div className="px-3.5 pb-3 flex flex-wrap gap-1.5">
-                  {demoScenarios.map((scen, idx) => (
+                  <span className="text-[10px] text-[#87867F]">
+                    Click to ask Emily
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {demoScenarios.slice(0, 4).map((scen, idx) => (
                     <button
                       key={idx}
                       onClick={() => sendManualMessage(scen.text)}
                       disabled={busy}
                       title={scen.text}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-white border border-[#E8E6DC] hover:bg-[#FAF0EC] text-[#5E5D59] hover:text-[#D97757] hover:border-[#D97757]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                      className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#FAF9F5] border border-[#E8E6DC] hover:bg-[#FAF0EC] text-[#5E5D59] hover:text-[#D97757] hover:border-[#D97757]/40 disabled:opacity-40 transition-all cursor-pointer"
                     >
                       {scen.label}
                     </button>
                   ))}
                 </div>
-              </details>
+              </div>
 
               {/* Message Input Bar */}
               <form onSubmit={handleSendCustom} className="flex items-center gap-2 pt-0.5">
@@ -302,10 +308,10 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     onChange={(e) => setCustomInput(e.target.value)}
                     placeholder="Ask Emily or negotiate deal terms…"
                     aria-label="Message Emily"
-                    className="w-full pl-3.5 pr-8 py-2 rounded-lg bg-[#FAF9F5] border border-[#D5D3CA] text-xs sm:text-sm text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:bg-white focus:border-[#141413] focus:ring-1 focus:ring-[#141413] font-sans transition-all"
+                    className="w-full pl-3.5 pr-8 py-2.5 rounded-xl bg-[#FAF9F5] border border-[#D5D3CA] text-xs sm:text-sm text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:bg-white focus:border-[#141413] focus:ring-1 focus:ring-[#141413] font-sans transition-all"
                   />
                   <CornerDownLeft
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 size-3.5 text-[#87867F] pointer-events-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 size-3.5 text-[#87867F] pointer-events-none"
                     aria-hidden
                   />
                 </div>
@@ -313,7 +319,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                   type="submit"
                   disabled={!customInput.trim()}
                   aria-label="Send message"
-                  className="size-8 rounded-lg bg-[#141413] hover:bg-[#30302E] disabled:opacity-30 disabled:hover:bg-[#141413] disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  className="size-9 rounded-xl bg-[#141413] hover:bg-[#30302E] disabled:opacity-30 disabled:hover:bg-[#141413] disabled:cursor-not-allowed text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm"
                 >
                   <Send className="size-3.5" aria-hidden />
                 </button>
@@ -333,6 +339,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
               partialSpeaker={partialSpeaker}
               buyerName={buyerName}
               thinking={voiceState === 'thinking'}
+              onSelectPrompt={(text) => sendManualMessage(text)}
             />
           </div>
         </div>

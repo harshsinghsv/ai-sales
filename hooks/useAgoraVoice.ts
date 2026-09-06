@@ -310,6 +310,26 @@ export function useAgoraVoice() {
         seat_count: initialInfo?.seats || 50,
       };
 
+      setSessionState((prev) => ({
+        ...prev,
+        customer: {
+          name: seed.customer_name ?? null,
+          company: seed.company ?? null,
+          email: seed.email ?? null,
+        },
+        requirements: {
+          ...prev.requirements,
+          seat_count: seed.seat_count ?? null,
+        },
+        deal_state: {
+          ...prev.deal_state,
+          tier_name: 'Claude Enterprise Tier',
+          list_price_per_seat: 35.0,
+          effective_price_per_seat: 35.0,
+          margin_remaining_pct: 100,
+        },
+      }));
+
       // 3b. Invite the agent and bring RTM up in parallel — both only need the
       // token response. RTM must be ready before the toolkit subscribes.
       const [agentData, rtm] = await Promise.all([

@@ -39,7 +39,7 @@ export const DealCockpitPanel: React.FC<DealCockpitPanelProps> = ({ session }) =
     <section
       aria-label="Live deal cockpit"
       className={cn(
-        'rounded-2xl border p-5 sm:p-6 flex flex-col gap-5 shadow-sm transition-colors duration-300',
+        'rounded-2xl border p-5 sm:p-6 flex flex-col gap-4 shadow-sm transition-colors duration-300',
         escalated
           ? 'bg-[#FAF0EC] border-[#D97757]/30'
           : 'bg-white border-[#E8E6DC]'
@@ -55,20 +55,20 @@ export const DealCockpitPanel: React.FC<DealCockpitPanelProps> = ({ session }) =
               escalated ? 'bg-[#D97757]' : 'bg-[#788C5D] animate-pulse'
             )}
           />
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#141413]">
+          <h2 className="font-serif-anthropic text-base font-normal text-[#141413]">
             Deal Cockpit
           </h2>
-          <span className="text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-md bg-[#FAF9F5] text-[#5E5D59] border border-[#E8E6DC]">
-            Live Telemetry
+          <span className="text-[11px] text-[#5E5D59] font-normal hidden sm:inline">
+            · Live commercial telemetry
           </span>
         </div>
         {escalated ? (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-white text-[#D97757] border border-[#D97757]/30">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-white text-[#D97757] border border-[#D97757]/30">
             <ShieldAlert className="size-3" aria-hidden />
-            Escalated to specialist
+            Escalated to human lead
           </span>
         ) : outcome ? (
-          <span className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-[#FAF9F5] text-[#5E5D59] border border-[#E8E6DC] capitalize">
+          <span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#FAF9F5] text-[#5E5D59] border border-[#E8E6DC] capitalize">
             {outcome.replace(/_/g, ' ')}
           </span>
         ) : null}
@@ -76,157 +76,128 @@ export const DealCockpitPanel: React.FC<DealCockpitPanelProps> = ({ session }) =
 
       {/* Hero row: account + effective rate */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-        <div className="min-w-0 rounded-xl bg-[#FAF9F5] border border-[#E8E6DC] p-4">
-          <span className="text-[10px] font-medium uppercase tracking-wider text-[#87867F]">
-            Account
-          </span>
-          <div
-            className="mt-1.5 text-base sm:text-lg font-serif-anthropic font-medium text-[#141413] leading-snug tracking-tight truncate"
-            title={displayCompany ?? undefined}
-          >
-            {displayCompany ?? <span className="text-[#87867F] font-sans font-normal text-sm">Awaiting details…</span>}
-          </div>
-          <div
-            className="text-xs font-normal text-[#5E5D59] mt-0.5 truncate"
-            title={displayName ?? undefined}
-          >
-            {displayName ?? <span className="text-[#87867F]">Unknown buyer</span>}
-          </div>
-          <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-[#141413]">
-            <Users className="size-3 text-[#D97757]" aria-hidden />
-            <span className="tabular-nums">
-              {requirements.seat_count != null ? requirements.seat_count : '—'} seats
+        <div className="min-w-0 rounded-xl bg-[#FAF9F5] border border-[#E8E6DC] p-4 flex flex-col justify-between">
+          <div>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#87867F]">
+              Account Profile
             </span>
-            <span aria-hidden className="text-[#D5D3CA]">·</span>
-            <span className="truncate text-[#5E5D59]">{deal_state.tier_name}</span>
+            <div
+              className="mt-1 text-base sm:text-lg font-serif-anthropic font-medium text-[#141413] tracking-tight truncate"
+              title={displayCompany ?? undefined}
+            >
+              {displayCompany || 'Razorpay Technologies'}
+            </div>
+            <div
+              className="text-xs text-[#5E5D59] mt-0.5 truncate"
+              title={displayName ?? undefined}
+            >
+              {displayName || 'Tina'} {customer.email ? `· ${customer.email}` : '· Enterprise Lead'}
+            </div>
+          </div>
+          <div className="mt-3 pt-2.5 border-t border-[#E8E6DC]/60 flex items-center justify-between text-xs">
+            <span className="inline-flex items-center gap-1.5 font-medium text-[#141413]">
+              <Users className="size-3 text-[#D97757]" aria-hidden />
+              <span className="tabular-nums">{requirements.seat_count ?? 50} Enterprise Seats</span>
+            </span>
+            <span className="text-[11px] text-[#5E5D59] font-mono">
+              Opus 5 SLA
+            </span>
           </div>
         </div>
 
-        <div className="min-w-0 rounded-xl bg-[#FAF0EC]/60 border border-[#D97757]/20 p-4">
-          <span className="text-[10px] font-medium uppercase tracking-wider text-[#D97757]">
-            Effective rate
-          </span>
-          <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-3xl leading-none font-normal text-[#141413] tracking-tight tabular-nums font-serif-anthropic">
-              ${deal_state.effective_price_per_seat.toFixed(2)}
-            </span>
-            <span className="text-xs text-[#5E5D59]">/seat/mo</span>
+        <div className="min-w-0 rounded-xl bg-[#FAF0EC]/50 border border-[#D97757]/20 p-4 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-medium uppercase tracking-wider text-[#D97757]">
+                Effective Seat Rate
+              </span>
+              <span className="text-[10px] font-mono text-[#87867F]">
+                List $35/mo
+              </span>
+            </div>
+            <div className="mt-1 flex items-baseline gap-1.5">
+              <span className="text-3xl leading-none font-normal text-[#141413] tracking-tight tabular-nums font-serif-anthropic">
+                ${deal_state.effective_price_per_seat.toFixed(2)}
+              </span>
+              <span className="text-xs text-[#5E5D59]">/seat/mo</span>
+            </div>
           </div>
 
-          <div
-            className="mt-3.5 h-1.5 w-full rounded-full bg-[#E8E6DC] overflow-hidden"
-            role="progressbar"
-            aria-label="Margin buffer remaining"
-            aria-valuenow={Math.round(marginRemaining)}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            title={`Discount floor: ${deal_state.margin_floor_pct}% max. ${marginRemaining.toFixed(0)}% of margin buffer remains.`}
-          >
+          <div className="mt-3 pt-2.5 border-t border-[#D97757]/15">
             <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{ width: `${marginRemaining}%`, backgroundColor: barColor }}
-            />
-          </div>
-          <div className="flex justify-between gap-2 text-[11px] mt-2">
-            <span className="text-[#5E5D59] tabular-nums">{marginRemaining.toFixed(0)}% margin left</span>
-            <span
-              className={cn(
-                'tabular-nums font-medium',
-                deal_state.current_offer_pct_off > 0
-                  ? 'text-[#D97757]'
-                  : 'text-[#87867F]'
-              )}
+              className="h-1.5 w-full rounded-full bg-[#E8E6DC] overflow-hidden"
+              role="progressbar"
+              aria-label="Margin buffer remaining"
+              aria-valuenow={Math.round(marginRemaining)}
+              aria-valuemin={0}
+              aria-valuemax={100}
             >
-              {deal_state.current_offer_pct_off > 0
-                ? `−${deal_state.current_offer_pct_off}% granted`
-                : 'List price defended'}
-            </span>
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{ width: `${marginRemaining}%`, backgroundColor: barColor }}
+              />
+            </div>
+            <div className="flex justify-between items-center text-[11px] mt-1.5">
+              <span className="text-[#5E5D59] tabular-nums">{marginRemaining.toFixed(0)}% concession headroom</span>
+              <span
+                className={cn(
+                  'tabular-nums font-medium',
+                  deal_state.current_offer_pct_off > 0
+                    ? 'text-[#D97757]'
+                    : 'text-[#788C5D]'
+                )}
+              >
+                {deal_state.current_offer_pct_off > 0
+                  ? `−${deal_state.current_offer_pct_off}% concession`
+                  : '100% margin defended'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Compact status strip */}
-      <div className="pt-3.5 border-t border-[#E8E6DC] flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-0 sm:divide-x sm:divide-[#E8E6DC]">
-        <div className="sm:pr-6 min-w-0">
+      <div className="pt-3 border-t border-[#E8E6DC] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+        <div className="flex items-center gap-2 flex-wrap min-w-0">
+          <span className="text-[10px] font-medium uppercase tracking-wider text-[#87867F]">Terms:</span>
           {hasConcession ? (
-            <div className="flex items-center gap-2 text-xs min-w-0">
-              <span className="text-[#5E5D59] shrink-0 font-medium">Concession</span>
-              <span
-                className="font-medium text-[#D97757] truncate"
-                title={allConcessionsTitle}
-              >
-                {deal_state.concessions_given[0]}
-              </span>
-              {extraConcessions > 0 && (
-                <span
-                  className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/20"
-                  title={allConcessionsTitle}
-                >
-                  +{extraConcessions} more
-                </span>
-              )}
-              {deal_state.trades_requested.length > 0 && (
-                <span className="flex items-center gap-1.5 min-w-0">
-                  <span aria-hidden className="text-[#87867F]">→</span>
-                  <span
-                    className="font-medium text-[#788C5D] truncate"
-                    title={deal_state.trades_requested.join(' · ')}
-                  >
-                    {deal_state.trades_requested[0]}
-                  </span>
-                </span>
-              )}
-            </div>
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/20 truncate">
+              {deal_state.concessions_given.join(' · ')}
+            </span>
           ) : (
-            <span className="text-xs text-[#87867F]">
-              List price defended · no concessions yet
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#FAF9F5] text-[#5E5D59] border border-[#E8E6DC]">
+              List price defended · Standard Net 30
             </span>
           )}
         </div>
 
-        <div className="sm:pl-6 min-w-0 flex-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-[10px] font-medium uppercase tracking-wider text-[#87867F]">Objections:</span>
           {objections_raised.length > 0 ? (
-            <div className="space-y-2">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                {objections_raised.map((obj) => (
-                  <span
-                    key={obj.id}
-                    title={obj.context || obj.label}
-                    className={cn(
-                      'inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium border',
-                      obj.resolved
-                        ? 'bg-[#FAF9F5] text-[#788C5D] border-[#788C5D]/30'
-                        : 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/30'
-                    )}
-                  >
-                    {obj.resolved ? (
-                      <CheckCircle2 className="size-3 text-[#788C5D]" aria-hidden />
-                    ) : (
-                      <Clock className="size-3 text-[#D97757]" aria-hidden />
-                    )}
-                    {obj.label}
-                  </span>
-                ))}
-                <span className="text-[11px] font-medium text-[#87867F] ml-1 tabular-nums">
-                  {resolvedCount}/{objections_raised.length} resolved
+            <div className="flex items-center gap-1.5">
+              {objections_raised.map((obj) => (
+                <span
+                  key={obj.id}
+                  className={cn(
+                    'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium border',
+                    obj.resolved
+                      ? 'bg-[#FAF9F5] text-[#788C5D] border-[#788C5D]/30'
+                      : 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/30'
+                  )}
+                >
+                  {obj.resolved ? (
+                    <CheckCircle2 className="size-3 text-[#788C5D]" aria-hidden />
+                  ) : (
+                    <Clock className="size-3 text-[#D97757]" aria-hidden />
+                  )}
+                  {obj.label}
                 </span>
-              </div>
-              <div
-                className="h-1 w-full max-w-56 rounded-full bg-[#E8E6DC] overflow-hidden"
-                role="progressbar"
-                aria-label="Objections resolved"
-                aria-valuenow={resolvedCount}
-                aria-valuemin={0}
-                aria-valuemax={objections_raised.length}
-              >
-                <div
-                  className="h-full rounded-full bg-[#788C5D] transition-all duration-500"
-                  style={{ width: `${objectionProgress}%` }}
-                />
-              </div>
+              ))}
             </div>
           ) : (
-            <span className="text-xs text-[#87867F]">No objections raised yet</span>
+            <span className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#FAF9F5] text-[#5E5D59] border border-[#E8E6DC]">
+              0 open objections
+            </span>
           )}
         </div>
       </div>
