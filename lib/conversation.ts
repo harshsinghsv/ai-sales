@@ -38,7 +38,7 @@ export function normalizeTimestampMs(timestamp: number): number {
 
 /**
  * uid="0" is the toolkit's sentinel for local-user speech. Without remapping it
- * to the actual RTC UID, the transcript renders the buyer's speech on Aarav's
+ * to the actual RTC UID, the transcript renders the buyer's speech on Emily's
  * side. Also normalises punctuation spacing so all turns display consistently.
  */
 export function normalizeTranscript(
@@ -57,7 +57,7 @@ export function normalizeTranscript(
 
 /**
  * Converts a toolkit transcript item into the cockpit's TranscriptTurn.
- * Anything published by the agent's RTC UID is Aarav; everything else is the
+ * Anything published by the agent's RTC UID is Emily; everything else is the
  * buyer.
  */
 export function toTranscriptTurn(
@@ -77,7 +77,7 @@ export function toTranscriptTurn(
 
 /**
  * Completed history for LiveTranscript. INTERRUPTED turns must be included:
- * if Aarav's first turn is cut off and omitted, the transcript stays empty and
+ * if Emily's first turn is cut off and omitted, the transcript stays empty and
  * that turn is never shown.
  */
 export function getCompletedTurns(

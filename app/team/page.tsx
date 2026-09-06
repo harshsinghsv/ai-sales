@@ -272,7 +272,7 @@ export default function SalesTeamConsolePage() {
             <div>
               <h2 className="text-sm font-semibold">No calls waiting</h2>
               <p className="text-xs text-[rgba(27,29,30,0.55)] mt-1 max-w-sm">
-                When a buyer on a live Aarav call asks for a human, or a
+                When a buyer on a live Emily call asks for a human, or a
                 negotiation deadlocks, it rings here — with full deal context
                 — and one click drops you into their live Agora RTC channel.
               </p>

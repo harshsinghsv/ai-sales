@@ -184,7 +184,7 @@ async def agent_pipeline_config(
     Serves the ASR/LLM/TTS pipeline configuration for a session so the Next.js
     /api/invite-agent route can build the Agora agent without duplicating any
     business logic. Python remains the single source of truth for the adaptive
-    Aarav persona and stage detection; this endpoint only transports it.
+    Emily persona and stage detection; this endpoint only transports it.
 
     Seeds the session with buyer context first so the returned system prompt
     already reflects the correct negotiation stage on the agent's first turn.
@@ -313,7 +313,7 @@ async def start_call_session(req: StartCallRequest):
         session,
         toast_service="deal",
         toast_title="Sales Session Started",
-        toast_detail=f"Channel: {channel} | Agent: Aarav"
+        toast_detail=f"Channel: {channel} | Agent: Emily"
     )
 
     return {

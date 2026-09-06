@@ -417,7 +417,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                 </div>
               </div>
               <Button variant="violet" size="sm" className="mt-8 w-full justify-center" onClick={() => { setSeats(50); setShowConfigModal(true); }}>
-                Negotiate with Aarav
+                Negotiate with Emily
               </Button>
             </div>
 
@@ -448,8 +448,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             <div className="size-2 rounded-full bg-[#4928fd] animate-softpulse flex-shrink-0 mt-1" />
             <p className="text-[11px] text-[rgba(27,29,30,0.62)] leading-relaxed">
               <span className="text-[#4928fd] font-semibold">Demo note (EchoSphere Hackathon):</span>{' '}
-              The &quot;Talk to Sales&quot; / &quot;Negotiate with Aarav&quot; buttons connect to a live AI voice agent powered by{' '}
-              <span className="text-[#1b1d1e]/70">Agora Conversational AI Engine + MCP tool calling</span>. Aarav acts as TeamSync&apos;s enterprise sales rep — handling pricing, Jira objections, negotiation, and HubSpot CRM logging in real-time Hinglish.
+              The &quot;Talk to Sales&quot; / &quot;Negotiate with Emily&quot; buttons connect to a live AI voice agent powered by{' '}
+              <span className="text-[#1b1d1e]/70">Agora Conversational AI Engine + MCP tool calling</span>. Emily acts as TeamSync&apos;s enterprise sales rep — handling pricing, Jira objections, negotiation, and HubSpot CRM logging in real-time Hinglish.
             </p>
           </div>
         </div>
@@ -474,13 +474,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             Ready to eliminate Jira admin forever?
           </h2>
           <p className="mt-4 text-sm text-[rgba(27,29,30,0.62)]">
-            Talk to Aarav — our AI sales agent — and get a custom quote for your team in under 5 minutes.
+            Talk to Emily — our AI sales agent — and get a custom quote for your team in under 5 minutes.
           </p>
           <div className="mt-8 flex justify-center">
             <Button variant="violet" size="lg" onClick={() => setShowConfigModal(true)} disabled={isConnecting}>
               <span className="inline-flex items-center gap-2">
                 <Headphones className="size-4" />
-                Talk to Aarav — Get Your Quote
+                Talk to Emily — Get Your Quote
               </span>
             </Button>
           </div>
@@ -500,7 +500,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                   <Headphones className="size-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-[#1b1d1e]">Talk to Aarav — TeamSync Sales</h3>
+                  <h3 className="text-sm font-bold text-[#1b1d1e]">Talk to Emily — TeamSync Sales</h3>
                   <p className="text-[11px] text-[rgba(27,29,30,0.5)]">AI voice agent · Agora Convo AI · Hinglish</p>
                 </div>
               </div>
@@ -508,7 +508,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             </div>
 
             <p className="mt-4 text-xs text-[rgba(27,29,30,0.62)] leading-relaxed">
-              You&apos;ll be connected to <strong className="text-[#1b1d1e]">Aarav</strong>, TeamSync&apos;s AI Enterprise Sales Lead.
+              You&apos;ll be connected to <strong className="text-[#1b1d1e]">Emily</strong>, TeamSync&apos;s AI Enterprise Sales Lead.
               He&apos;ll understand your team size, explain how TeamSync compares to Jira, quote your pricing, and negotiate terms — all in natural Hinglish.
             </p>
 
@@ -564,7 +564,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
               <Button variant="violet" size="sm" onClick={handleLaunch} disabled={isConnecting}>
                 <span className="inline-flex items-center gap-2">
                   <Headphones className="size-3.5" />
-                  {isConnecting ? 'Connecting to Aarav...' : 'Start Voice Call with Aarav'}
+                  {isConnecting ? 'Connecting to Emily...' : 'Start Voice Call with Emily'}
                 </span>
               </Button>
             </div>

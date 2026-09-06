@@ -21,7 +21,7 @@ logger = logging.getLogger("agora_convo_client")
 # language. If the TTS voice is switched to an English/bilingual voice, these
 # should switch back to English or Hinglish accordingly.
 MANAGED_GREETING = (
-    "नमस्ते! TeamSync में आपका स्वागत है। मैं आरव हूँ। बताइए, मैं आपकी किस तरह मदद कर सकता हूँ?"
+    "नमस्ते! TeamSync में आपका स्वागत है। मैं एमिली हूँ। बताइए, मैं आपकी किस तरह मदद कर सकती हूँ?"
 )
 MANAGED_FAILURE_MESSAGE = "माफ़ कीजिए, क्या आप दोबारा बता सकते हैं?"
 
@@ -31,7 +31,7 @@ def build_llm_config(session_id: Optional[str] = None) -> Dict[str, Any]:
     Builds the `llm` block for the Agora join payload.
 
     managed_openai (default): Agora-hosted OpenAI credentials — no API key
-    needed. Streams a frontier model with a stage-aware Aarav persona.
+    needed. Streams a frontier model with a stage-aware Emily persona.
     custom: points Agora at our FastAPI /v1/chat/completions middleware
     (previous behavior, kept for sandbox/offline use).
     """

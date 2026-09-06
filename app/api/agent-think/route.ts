@@ -3,7 +3,7 @@ import { getAgentSession } from '@/lib/agent-registry';
 
 /**
  * Injects a typed message from the cockpit's text box into the live agent
- * pipeline, so Aarav responds out loud exactly as if the buyer had spoken it.
+ * pipeline, so Emily responds out loud exactly as if the buyer had spoken it.
  *
  * This preserves the manual-input feature after the migration to the Agora
  * cloud pipeline: previously the hook called the LLM directly and played the

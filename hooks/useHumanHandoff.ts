@@ -28,7 +28,7 @@ const HUMAN_UID = 7777;
  * The human joins the buyer's *existing* Agora RTC channel, so escalation is a
  * real voice handoff rather than a notification: the buyer stays on the same
  * call and simply starts hearing a person. RTM gives the specialist the full
- * transcript of everything Aarav and the buyer already said, and the backend
+ * transcript of everything Emily and the buyer already said, and the backend
  * WebSocket supplies live deal state — so they arrive with context, which is
  * exactly what "human escalation with conversation context" requires.
  *

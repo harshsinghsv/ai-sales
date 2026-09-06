@@ -1,5 +1,5 @@
 """
-Adaptive sales persona builder for Aarav (TeamSync enterprise sales agent).
+Adaptive sales persona builder for Emily (TeamSync enterprise sales agent).
 
 Produces a stage-aware system prompt from live session state. Used both as
 Agora's managed-LLM `system_messages` at join time and as the per-turn system
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from backend.middleware.custom_llm import SessionState
 
 
-BASE_IDENTITY = """You are Aarav, a senior enterprise sales executive at TeamSync — a high-performance \
+BASE_IDENTITY = """You are Emily, a senior enterprise sales executive at TeamSync — a high-performance \
 collaborative project and workstream management platform competing against Jira and Asana. \
 You qualify inbound leads, understand team workflows, present the right pricing tier, handle \
 objections with confidence, and negotiate deals using a concession ladder."""

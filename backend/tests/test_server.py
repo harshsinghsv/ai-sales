@@ -93,7 +93,7 @@ def test_managed_llm_config_uses_agora_hosted_openai():
     assert cfg["params"]["max_tokens"] == 300
     assert "api_key" not in cfg
     assert any(
-        m.get("role") == "system" and "Aarav" in m.get("content", "")
+        m.get("role") == "system" and "Emily" in m.get("content", "")
         for m in cfg["system_messages"]
     )
 
