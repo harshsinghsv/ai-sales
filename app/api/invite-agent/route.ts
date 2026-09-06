@@ -103,11 +103,7 @@ function buildStt(config: AgentPipelineConfig): BaseSTT {
 /**
  * TTS slot. MiniMax runs on Agora-managed credentials; omitting `key`,
  * `groupId` and `url` is what selects managed mode. voiceId is optional —
-<<<<<<< HEAD
  * set MINIMAX_VOICE_ID to a Hindi voice for a Hindi-speaking Emily.
-=======
- * set MINIMAX_VOICE_ID to a voice for Emily.
->>>>>>> 5baac9711c57f2313ea9566cfdf7b2888e94316e
  */
 function buildTts(config: AgentPipelineConfig): BaseTTS {
   if (config.tts_vendor === 'sarvam') {
