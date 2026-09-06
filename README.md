@@ -1,5 +1,5 @@
 <p align="center">
-  <strong>Real-time voice AI sales agent ("Emily") for Claude Enterprise · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
+  <strong>Generic real-time voice AI sales & negotiation agent · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
 </p>
 
 <p align="center">
@@ -20,7 +20,9 @@
 
 ---
 
-**Claude Enterprise Voice Sales Agent** is a real-time voice AI sales rep — **Emily**, an AI Enterprise Solutions Lead — that runs a complete enterprise sales negotiation over a live, phone-quality call for Claude Enterprise (Opus 5, 1M-token context, GitHub integration). It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real seat pricing, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked.
+This is a **generic, product-agnostic voice AI sales & negotiation agent** — a real-time voice rep that runs a complete sales negotiation over a live, phone-quality call for *any* product with tiered seat pricing. It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real pricing from a data-driven tier config, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked. None of that logic — the negotiation engine, the MCP tool layer, the RTC handoff — is specific to any one product.
+
+**For this hackathon we're demoing it selling Claude Enterprise** — the persona ("Emily"), pricing tiers, and objection playbook in `backend/middleware/sales_persona.py` and `backend/deal_engine/engine.py` are simply the configuration loaded for this demo. Point the same engine at a different tier config and system prompt and it sells something else entirely — the pricing/concession functions in `deal_engine/engine.py` operate generically over a `TIERS` dict, they don't hardcode Claude-specific logic anywhere.
 
 > **Status:** actively developed for the EchoSphere Agora Conversational AI Hackathon, track: *Adaptive AI Sales & Negotiation Agent*.
 
@@ -185,7 +187,7 @@ Every tool delegates to the same `execute_tool_call()` function the custom-LLM m
 
 | Tool | What it actually does |
 | --- | --- |
-| `get_pricing` | Computes tiered seat pricing (Claude Pro & Team / Claude Enterprise Team / Claude Enterprise) and monthly/annual totals |
+| `get_pricing` | Computes tiered seat pricing from the configured `TIERS` dict (this demo: Claude Pro & Team / Claude Enterprise Team / Claude Enterprise) and monthly/annual totals |
 | `apply_discount` | Checks a requested discount against a hard per-tier margin floor and pairs any approval with a mandatory trade |
 | `create_crm_lead` | Creates/updates a Contact + Deal in HubSpot CRM |
 | `book_meeting` | Parses the buyer's own words ("tomorrow at 3pm") into a real time slot and creates a genuine Google Calendar event with a Meet link and emailed invite |
