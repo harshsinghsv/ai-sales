@@ -1,8 +1,7 @@
 <p align="center">
-  <strong>Real-time voice AI sales negotiation agent · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
+  <strong>Real-time voice AI sales agent ("Emily") for Claude Enterprise · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
 </p>
 
-<<<<<<< HEAD
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/FastAPI-Python-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
@@ -10,12 +9,6 @@
   <img src="https://img.shields.io/badge/MCP-Model%20Context%20Protocol-8B5CF6?style=flat-square" alt="MCP" />
   <img src="https://img.shields.io/badge/tests-27%20passing-2f7a1d?style=flat-square" alt="tests passing" />
 </p>
-=======
-Real-time voice sales agent ("Emily", Claude Enterprise) built on the
-[Agora Conversational AI Engine](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs)
-quickstart architecture, with a Python deal engine, live deal cockpit, and
-HubSpot / Google Calendar / Slack integrations.
->>>>>>> 5baac9711c57f2313ea9566cfdf7b2888e94316e
 
 <p align="center">
   <a href="https://ai-sales-venom.vercel.app/">Live Demo</a> ·
@@ -27,7 +20,7 @@ HubSpot / Google Calendar / Slack integrations.
 
 ---
 
-**TeamSync AI Sales & Negotiation Agent** is a real-time voice AI sales rep — **Emily** — that runs a complete enterprise sales negotiation over a live, phone-quality call. It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real pricing, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked.
+**Claude Enterprise Voice Sales Agent** is a real-time voice AI sales rep — **Emily**, an AI Enterprise Solutions Lead — that runs a complete enterprise sales negotiation over a live, phone-quality call for Claude Enterprise (Opus 5, 1M-token context, GitHub integration). It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real seat pricing, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked.
 
 > **Status:** actively developed for the EchoSphere Agora Conversational AI Hackathon, track: *Adaptive AI Sales & Negotiation Agent*.
 
@@ -55,7 +48,7 @@ HubSpot / Google Calendar / Slack integrations.
 
 ## Why this project
 
-Cold outbound and inbound sales calls are repetitive, expensive, and inconsistent — reps repeat the same pitch, handle the same three objections, and lose context between calls. We wanted to prove that a voice-native AI agent, built on Agora's real-time infrastructure, can carry a conversation that genuinely **negotiates** rather than just answers FAQs:
+Cold outbound and inbound sales calls are repetitive, expensive, and inconsistent — reps repeat the same pitch, handle the same three objections, and lose context between calls. We wanted to prove that a voice-native AI agent, built on Agora's real-time infrastructure, can carry an enterprise AI-platform sales conversation that genuinely **negotiates** rather than just answers FAQs:
 
 - Understands what the buyer needs through natural spoken conversation
 - Quotes real, tiered pricing and enforces a hard margin floor
@@ -125,7 +118,7 @@ flowchart LR
     HandoffPage <-->|"joins same<br/>RTC channel"| RTC1
 ```
 
-**Key architectural decision:** the Aarav/Emily persona, pricing logic, and negotiation memory live entirely in **Python** (`backend/`) — never duplicated in TypeScript. The Next.js API routes fetch the persona and pipeline config from FastAPI (`GET /api/agent/pipeline-config`) and hand it to Agora when starting the agent, so there is exactly one source of truth for how the agent thinks.
+**Key architectural decision:** the Emily persona, pricing logic, and negotiation memory live entirely in **Python** (`backend/`) — never duplicated in TypeScript. The Next.js API routes fetch the persona and pipeline config from FastAPI (`GET /api/agent/pipeline-config`) and hand it to Agora when starting the agent, so there is exactly one source of truth for how the agent thinks.
 
 ## The voice pipeline
 
@@ -168,18 +161,11 @@ sequenceDiagram
     F-->>B: post-call deal memo
 ```
 
-<<<<<<< HEAD
 ## Agora MCP — the deal engine
-=======
-- `managed_openai` (default) — Agora-hosted OpenAI credentials, driven by the
-  stage-aware Emily persona built in `backend/middleware/sales_persona.py`.
-- `custom` — Agora calls the FastAPI `/v1/chat/completions` middleware, which
-  runs the deal engine, tool calls, CRM sync, and cockpit broadcasts.
->>>>>>> 5baac9711c57f2313ea9566cfdf7b2888e94316e
 
 This is the project's core answer to *"how does the agent actually **do** things, not just talk?"*
 
-On Agora's managed-LLM path, the model running inside Agora's cloud has **no access to our Python code** — so without MCP, Emily could describe pricing but never compute or enforce it. We solved this by standing up our own **MCP server** (`backend/mcp_server.py`) and registering it directly on the agent via `llm.mcp_servers`, so Agora's engine calls our tools itself, mid-conversation, over `streamable_http`.
+On Agora's managed-LLM path, the model running inside Agora's cloud has **no access to our Python code** — so without MCP, Emily could describe seat pricing but never compute or enforce it. We solved this by standing up our own **MCP server** (`backend/mcp_server.py`) and registering it directly on the agent via `llm.mcp_servers`, so Agora's engine calls our tools itself, mid-conversation, over `streamable_http`.
 
 ```mermaid
 flowchart TD
@@ -199,7 +185,7 @@ Every tool delegates to the same `execute_tool_call()` function the custom-LLM m
 
 | Tool | What it actually does |
 | --- | --- |
-| `get_pricing` | Computes tiered seat pricing (Starter / Pro / Enterprise) and monthly/annual totals |
+| `get_pricing` | Computes tiered seat pricing (Claude Pro & Team / Claude Enterprise Team / Claude Enterprise) and monthly/annual totals |
 | `apply_discount` | Checks a requested discount against a hard per-tier margin floor and pairs any approval with a mandatory trade |
 | `create_crm_lead` | Creates/updates a Contact + Deal in HubSpot CRM |
 | `book_meeting` | Parses the buyer's own words ("tomorrow at 3pm") into a real time slot and creates a genuine Google Calendar event with a Meet link and emailed invite |
