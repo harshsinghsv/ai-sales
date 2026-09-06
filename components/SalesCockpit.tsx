@@ -6,7 +6,6 @@ import { VoiceOrb } from '@/components/VoiceOrb';
 import { DealCockpitPanel } from '@/components/DealCockpitPanel';
 import { LiveTranscript } from '@/components/LiveTranscript';
 import { IntegrationToasts } from '@/components/IntegrationToasts';
-import { AgoraPipelinePanel } from '@/components/AgoraPipelinePanel';
 import { VoiceState } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import {
@@ -65,9 +64,6 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
     partialText,
     partialSpeaker,
     toasts,
-    metrics,
-    toolCalls,
-    interruptions,
     endCall,
     toggleMute,
     dismissToast,
@@ -110,34 +106,38 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
   const buyerName = sessionState.customer.name;
 
   const demoScenarios = [
-    { label: "80 Seats Expansion", text: "Actually, our engineering org is growing rapidly. We need it for 80 developers, not 20." },
-    { label: "Jira Difference?", text: "Wait, how are you different from Jira? Our team has been using Jira for 4 years." },
-    { label: "25% Discount Request", text: "Your pricing is a bit high. Can you give us a 25% discount on the 80 seats?" },
-    { label: "Book Architecture Demo", text: "That sounds reasonable. Can we book an enterprise solution architecture demo for tomorrow?" },
-    { label: "Request Human Lead", text: "I would like to speak directly with an enterprise sales executive or manager." }
+    { label: "100 Seats Inquiry", text: "We have an engineering and product org of 100 people looking to deploy Claude Enterprise with Opus 5. How does pricing scale?" },
+    { label: "1M Context & GitHub", text: "How does the 1,000,000-token context window in Claude Opus 5 and native GitHub integration work across our private repositories?" },
+    { label: "Security & Zero-Training", text: "What are your enterprise security and privacy guarantees? Can you assure us our proprietary code is never used for training?" },
+    { label: "Opus 5 vs Copilot", text: "We are evaluating Claude Opus 5 versus Microsoft Copilot and ChatGPT Enterprise. Why should our engineering team standardize on Claude?" },
+    { label: "20% Discount Request", text: "We want to roll out Claude Opus 5 enterprise-wide. If we sign a 2-year annual commitment, can we get a 20% discount?" },
+    { label: "Book Solutions Demo", text: "That sounds very compelling. Can we book a deep-dive architecture demo with an Anthropic solutions architect tomorrow?" },
+    { label: "Request Human Lead", text: "I would like to speak directly with an enterprise sales director or account lead." }
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#1b1d1e] flex flex-col font-sans selection:bg-[#4928fd] selection:text-white relative overflow-hidden">
+    <div className="min-h-screen bg-white text-[#1b1d1e] flex flex-col font-sans selection:bg-[#D97757] selection:text-white relative overflow-hidden">
       {/* Ambient background */}
       <div aria-hidden className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-140px] left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-gradient-to-b from-[#eeeafe] via-[#e2f0ff]/60 to-transparent blur-3xl opacity-80" />
+        <div className="absolute top-[-140px] left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-gradient-to-b from-[#F5D0C5]/40 via-[#FAF9F5] to-transparent blur-3xl opacity-80" />
         <div className="absolute inset-0 bg-grid-pattern opacity-30" />
       </div>
 
       {/* Top Bar Navigation */}
       <header className="border-b border-[rgba(27,29,30,0.08)] bg-white/85 backdrop-blur-xl sticky top-0 z-40 px-4 sm:px-6 h-14 flex items-center justify-between shadow-sm relative">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="size-7 rounded-lg bg-[#4928fd] flex items-center justify-center shadow-sm shrink-0">
-            <span className="text-white font-black text-xs tracking-tighter">TS</span>
+          <div className="size-7 rounded-lg bg-[#D97757] flex items-center justify-center shadow-sm shrink-0">
+            <svg viewBox="0 0 24 24" className="size-4 text-white fill-current" aria-hidden="true">
+              <path d="M12 2L14.2 8.3L20.5 6L16.5 11.2L22 14.5L15.8 15.8L17.5 22L12 18L6.5 22L8.2 15.8L2 14.5L7.5 11.2L3.5 6L9.8 8.3L12 2Z" />
+            </svg>
           </div>
           <div className="flex items-center gap-2 min-w-0">
             <span className="font-semibold text-xs tracking-tight text-[#1b1d1e] truncate">
-              TeamSync
+              Claude Enterprise
             </span>
             <span className="text-[rgba(27,29,30,0.25)] shrink-0">/</span>
             <span className="text-xs text-[rgba(27,29,30,0.55)] font-medium truncate hidden min-[400px]:block">
-              Sales Negotiation Agent
+              Solutions Executive (Emily)
             </span>
           </div>
           <div
@@ -149,7 +149,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
               {formatTime(callDuration)}
             </span>
             <span className="text-[11px] text-[rgba(27,29,30,0.4)] hidden md:inline">
-              · {connecting ? 'Connecting…' : pill.label} · Agora RTC Live
+              · {connecting ? 'Connecting…' : pill.label} · Live Executive Session
             </span>
           </div>
         </div>
@@ -200,11 +200,11 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
               <div className="flex items-center gap-2 min-w-0">
                 <span aria-hidden className={cn('size-2 rounded-full shrink-0', pill.dot)} />
                 <span className="text-xs font-semibold text-[#1b1d1e] truncate">
-                  Emily · Enterprise Sales Lead
+                  Emily · Solutions Lead (Anthropic)
                 </span>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#eeeafe] border border-[#4928fd]/20 text-[#4928fd] shrink-0">
-                Agora Convo AI · MiniMax
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-[#D97757] shrink-0">
+                Claude Enterprise · Opus 5
               </span>
             </div>
 
@@ -249,7 +249,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                         'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border transition-colors cursor-pointer',
                         isRecordingSTT
                           ? 'bg-[#e4f6df] text-[#2f7a1d] border-[#79d45e]/40'
-                          : 'bg-white text-[rgba(27,29,30,0.6)] border-[rgba(27,29,30,0.12)] hover:border-[#4928fd]/40 hover:text-[#4928fd]'
+                          : 'bg-white text-[rgba(27,29,30,0.6)] border-[rgba(27,29,30,0.12)] hover:border-[#D97757]/40 hover:text-[#D97757]'
                       )}
                     >
                       <Radio className="size-3" aria-hidden />
@@ -289,7 +289,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                       onClick={() => sendManualMessage(scen.text)}
                       disabled={busy}
                       title={scen.text}
-                      className="px-3 py-1.5 rounded-full text-[11px] font-medium bg-[rgba(27,29,30,0.04)] hover:bg-[#eeeafe] text-[#1b1d1e]/75 hover:text-[#4928fd] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                      className="px-3 py-1.5 rounded-full text-[11px] font-medium bg-[rgba(27,29,30,0.04)] hover:bg-[#FAF0EC] text-[#1b1d1e]/75 hover:text-[#D97757] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                     >
                       {scen.label}
                     </button>
@@ -306,7 +306,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     onChange={(e) => setCustomInput(e.target.value)}
                     placeholder="Ask Emily or negotiate deal terms…"
                     aria-label="Message Emily"
-                    className="w-full pl-4 pr-9 py-2.5 rounded-full bg-[rgba(27,29,30,0.04)] border border-transparent text-xs text-[#1b1d1e] placeholder:text-[rgba(27,29,30,0.4)] focus:outline-none focus:bg-white focus:border-[#4928fd]/40 font-sans transition-all"
+                    className="w-full pl-4 pr-9 py-2.5 rounded-full bg-[rgba(27,29,30,0.04)] border border-transparent text-xs text-[#1b1d1e] placeholder:text-[rgba(27,29,30,0.4)] focus:outline-none focus:bg-white focus:border-[#D97757]/40 font-sans transition-all"
                   />
                   <CornerDownLeft
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[rgba(27,29,30,0.3)] pointer-events-none"
@@ -317,7 +317,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                   type="submit"
                   disabled={!customInput.trim()}
                   aria-label="Send message"
-                  className="size-9 rounded-full bg-[#4928fd] hover:bg-[#3b1ee6] disabled:opacity-30 disabled:hover:bg-[#4928fd] disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  className="size-9 rounded-full bg-[#D97757] hover:bg-[#C66443] disabled:opacity-30 disabled:hover:bg-[#D97757] disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
                 >
                   <Send className="size-3.5" aria-hidden />
                 </button>
@@ -330,14 +330,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
         <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-5 min-h-0">
           <DealCockpitPanel session={sessionState} />
 
-          <AgoraPipelinePanel
-            metrics={metrics}
-            toolCalls={toolCalls}
-            interruptions={interruptions}
-            inCall={inCall}
-          />
-
-          <div className="flex-1 min-h-[340px] flex flex-col">
+          <div className="flex-1 min-h-[440px] flex flex-col">
             <LiveTranscript
               turns={transcripts}
               partialText={partialText}

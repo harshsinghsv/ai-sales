@@ -2,6 +2,7 @@
   <strong>Real-time voice AI sales negotiation agent · Agora Conversational AI · Agora MCP · Live human RTC handoff</strong>
 </p>
 
+<<<<<<< HEAD
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js&logoColor=white" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/FastAPI-Python-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
@@ -9,6 +10,12 @@
   <img src="https://img.shields.io/badge/MCP-Model%20Context%20Protocol-8B5CF6?style=flat-square" alt="MCP" />
   <img src="https://img.shields.io/badge/tests-27%20passing-2f7a1d?style=flat-square" alt="tests passing" />
 </p>
+=======
+Real-time voice sales agent ("Emily", Claude Enterprise) built on the
+[Agora Conversational AI Engine](https://github.com/AgoraIO-Conversational-AI/agent-quickstart-nextjs)
+quickstart architecture, with a Python deal engine, live deal cockpit, and
+HubSpot / Google Calendar / Slack integrations.
+>>>>>>> 5baac9711c57f2313ea9566cfdf7b2888e94316e
 
 <p align="center">
   <a href="https://ai-sales-venom.vercel.app/">Live Demo</a> ·
@@ -161,7 +168,14 @@ sequenceDiagram
     F-->>B: post-call deal memo
 ```
 
+<<<<<<< HEAD
 ## Agora MCP — the deal engine
+=======
+- `managed_openai` (default) — Agora-hosted OpenAI credentials, driven by the
+  stage-aware Emily persona built in `backend/middleware/sales_persona.py`.
+- `custom` — Agora calls the FastAPI `/v1/chat/completions` middleware, which
+  runs the deal engine, tool calls, CRM sync, and cockpit broadcasts.
+>>>>>>> 5baac9711c57f2313ea9566cfdf7b2888e94316e
 
 This is the project's core answer to *"how does the agent actually **do** things, not just talk?"*
 

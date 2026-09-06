@@ -252,7 +252,7 @@ async def agent_pipeline_config(
 
     if mode == "custom":
         config["custom_llm_url"] = f"{settings.PUBLIC_BASE_URL}/v1/chat/completions"
-        config["custom_llm_api_key"] = "teamsync_negotiation_token"
+        config["custom_llm_api_key"] = "claude_negotiation_token"
         config["llm_model"] = settings.SARVAM_CHAT_MODEL
 
     return config

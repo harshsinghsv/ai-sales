@@ -47,8 +47,7 @@ class Settings(BaseSettings):
     # Sarvam vendor settings for Agora's native ASR/TTS slots. The Agora
     # `sarvam` TTS vendor takes a bulbul:v3 speaker id + BCP-47 target language,
     # which is a different namespace from SARVAM_TTS_VOICE above (used by our
-    # own /v1/audio/speech shim). "anushka" is a female v3 voice, matching the
-    # MiniMax hindi_female_2_v1 voice used by default (Emily is female).
+    # own /v1/audio/speech shim).
     # Only used when AGORA_STT_VENDOR / AGORA_TTS_VENDOR are set to "sarvam"
     # (BYOK); the default pipeline uses Agora-managed models instead.
     SARVAM_STT_LANGUAGE: str = os.getenv("SARVAM_STT_LANGUAGE", "hi-IN")
@@ -70,7 +69,7 @@ class Settings(BaseSettings):
 
     # MiniMax TTS. Managed mode accepts speech-2.6-turbo / speech-2.8-turbo.
     # MINIMAX_VOICE_ID selects the voice; leave blank to use Agora's default.
-    # Set it to a Hindi voice id from the MiniMax voice list for a Hindi Emily.
+    # Set it to a voice id from the MiniMax voice list for Emily.
     MINIMAX_MODEL: str = os.getenv("MINIMAX_MODEL", "speech-2.8-turbo")
     MINIMAX_VOICE_ID: str = os.getenv("MINIMAX_VOICE_ID", "")
 

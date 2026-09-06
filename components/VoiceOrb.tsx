@@ -34,23 +34,23 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
   interrupted,
   isRecordingSTT,
 }) => {
-  // Violet-family ramps tuned for the light TeamSync theme
+  // Warm terracotta & amber ramps tuned for Claude Enterprise theme
   let agentState: AgentState = null;
-  let colors: [string, string] = ['#C4B5FD', '#8B7CF6'];
-  let glow = 'rgba(73,40,253,0.22)';
+  let colors: [string, string] = ['#F5D0C5', '#D97757'];
+  let glow = 'rgba(217,119,87,0.24)';
 
   if (state === 'listening') {
     agentState = 'listening';
-    colors = ['#7DD3FC', '#4F46E5'];
-    glow = 'rgba(79,70,229,0.28)';
+    colors = ['#93C5FD', '#2563EB'];
+    glow = 'rgba(37,99,235,0.28)';
   } else if (state === 'thinking') {
     agentState = 'thinking';
-    colors = ['#FCD34D', '#F59E0B'];
-    glow = 'rgba(245,158,11,0.30)';
+    colors = ['#FDE68A', '#D97706'];
+    glow = 'rgba(217,119,6,0.30)';
   } else if (state === 'speaking') {
     agentState = 'talking';
-    colors = ['#A78BFA', '#6D28D9'];
-    glow = 'rgba(109,40,217,0.30)';
+    colors = ['#F97316', '#D97757'];
+    glow = 'rgba(217,119,87,0.36)';
   }
 
   const manualInput = state === 'listening' ? Math.min(1, Math.max(0, volume * 1.6)) : 0;

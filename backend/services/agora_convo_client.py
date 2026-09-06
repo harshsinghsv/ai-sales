@@ -17,11 +17,11 @@ logger = logging.getLogger("agora_convo_client")
 # Pure Hindi (Devanagari) so a single-language TTS voice (e.g. MiniMax's
 # hindi_female_2_v1) pronounces these cleanly — these are fixed strings spoken
 # verbatim before the buyer has said anything, so language-mirroring doesn't
-# apply yet. TeamSync stays as-is: a proper noun, spoken the same in either
+# apply yet. Claude Enterprise stays as-is: a proper noun, spoken the same in either
 # language. If the TTS voice is switched to an English/bilingual voice, these
 # should switch back to English or Hinglish accordingly.
 MANAGED_GREETING = (
-    "नमस्ते! TeamSync में आपका स्वागत है। मैं एमिली हूँ। बताइए, मैं आपकी किस तरह मदद कर सकती हूँ?"
+    "नमस्ते! Claude Enterprise में आपका स्वागत है। मैं एमिली हूँ, Anthropic से। बताइए, आपके संगठन के लिए मैं किस तरह मदद कर सकती हूँ?"
 )
 MANAGED_FAILURE_MESSAGE = "माफ़ कीजिए, क्या आप दोबारा बता सकते हैं?"
 
@@ -43,7 +43,7 @@ def build_llm_config(session_id: Optional[str] = None) -> Dict[str, Any]:
     if mode == "custom":
         return {
             "url": f"{settings.PUBLIC_BASE_URL}/v1/chat/completions",
-            "api_key": "teamsync_negotiation_token",
+            "api_key": "claude_negotiation_token",
             "greeting_message": MANAGED_GREETING,
             "failure_message": MANAGED_FAILURE_MESSAGE,
             "params": {

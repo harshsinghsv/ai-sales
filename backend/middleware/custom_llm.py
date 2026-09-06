@@ -143,7 +143,7 @@ SALES_TOOLS: List[Dict[str, Any]] = [
         "type": "function",
         "function": {
             "name": "get_pricing",
-            "description": "Calculates tiered seat pricing and monthly/annual commitment costs for TeamSync.",
+            "description": "Calculates tiered seat pricing and monthly/annual commitment costs for Claude Enterprise.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -211,7 +211,7 @@ SALES_TOOLS: List[Dict[str, Any]] = [
                 "type": "object",
                 "properties": {
                     "seat_count": {"type": "integer", "description": "Number of employee seats required."},
-                    "use_case": {"type": "string", "description": "What the buyer wants to use TeamSync for."},
+                    "use_case": {"type": "string", "description": "What the buyer wants to use Claude Enterprise for."},
                     "must_haves": {"type": "array", "items": {"type": "string"}, "description": "Required features or integrations."},
                     "buyer_name": {"type": "string", "description": "Buyer's first name."},
                     "company": {"type": "string", "description": "Buyer organization."},
@@ -465,7 +465,7 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
             session,
             toast_service="hubspot",
             toast_title="HubSpot CRM Deal Logged",
-            toast_detail=f"Contact: {email_val} | Deal: {res.get('deal_name', 'TeamSync Deal')}"
+            toast_detail=f"Contact: {email_val} | Deal: {res.get('deal_name', 'Claude Enterprise Deal')}"
         )
         return res
 
@@ -622,9 +622,9 @@ async def handle_chat_completion(request_data: Dict[str, Any]) -> Dict[str, Any]
             content = (message_obj.get("content") or "").strip()
             if not content:
                 content = (
-                    "Bilkul! TeamSync helps engineering squads eliminate status meetings "
-                    "and automate sprint execution from GitHub. Kya aap pricing dekhna "
-                    "chahenge, ya pehle ek quick demo?"
+                    "Bilkul! Claude Enterprise empowers engineering and product teams "
+                    "with a 1,000,000-token (1M) context window powered by Claude Opus 5 and native GitHub sync. Kya aap pricing dekhna "
+                    "chahenge, ya pehle ek quick architecture demo?"
                 )
             history.append({"role": "assistant", "content": content})
             return _format_completion_response(content)
