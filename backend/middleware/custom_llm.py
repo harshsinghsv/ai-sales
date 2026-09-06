@@ -249,8 +249,19 @@ SALES_TOOLS: List[Dict[str, Any]] = [
 ]
 
 
-async def broadcast_session_update(session: SessionState, toast_service: Optional[str] = None, toast_title: Optional[str] = None, toast_detail: Optional[str] = None):
-    """Pushes real-time updates to connected Deal Cockpit frontends."""
+async def broadcast_session_update(
+    session: SessionState,
+    toast_service: Optional[str] = None,
+    toast_title: Optional[str] = None,
+    toast_detail: Optional[str] = None,
+    toast_url: Optional[str] = None,
+):
+    """Pushes real-time updates to connected Deal Cockpit frontends.
+
+    toast_url is currently only set for a real (non-sandbox) calendar booking
+    — the frontend uses it to open the actual Google Calendar event in a new
+    tab the moment the toast arrives.
+    """
     payload = {
         "type": "SESSION_STATE_UPDATE",
         "session": session.model_dump(),
@@ -260,7 +271,8 @@ async def broadcast_session_update(session: SessionState, toast_service: Optiona
             "id": uuid.uuid4().hex[:6],
             "service": toast_service or "deal",
             "title": toast_title,
-            "detail": toast_detail or ""
+            "detail": toast_detail or "",
+            "url": toast_url,
         }
     await ws_manager.broadcast(payload)
 
@@ -473,11 +485,15 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
 
         # Never claim an invite was sent when it was only simulated.
         is_real = not res.get("is_sandbox", True)
+        toast_url = None
         if is_real:
             toast_title = "Meeting Booked - Invite Sent"
             toast_detail = (
                 f"{res.get('start_time')} - Google Calendar invite emailed to {email_val}"
             )
+            # Opened automatically in a new tab by the frontend the instant
+            # this toast arrives, so the booking is visibly real, not just claimed.
+            toast_url = res.get("calendar_url") or res.get("google_meet_url")
         else:
             toast_title = "Meeting Booked (Simulated)"
             toast_detail = (
@@ -489,7 +505,8 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
             session,
             toast_service="calendar",
             toast_title=toast_title,
-            toast_detail=toast_detail
+            toast_detail=toast_detail,
+            toast_url=toast_url,
         )
         return res
 

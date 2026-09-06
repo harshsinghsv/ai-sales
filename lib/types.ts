@@ -63,6 +63,15 @@ export interface IntegrationToast {
   title: string;
   detail: string;
   timestamp: number;
+  /**
+   * Set only for a real (non-sandbox) calendar booking. The hook attempts to
+   * open this in a new tab the instant the toast arrives; the toast itself
+   * always renders it as a clickable link too, since browsers block a
+   * window.open() that isn't triggered by a direct user click (which this
+   * isn't — it arrives async over a WebSocket), so the auto-open can silently
+   * fail and the link is the reliable path.
+   */
+  url?: string;
 }
 
 export interface PostCallDealMemo {

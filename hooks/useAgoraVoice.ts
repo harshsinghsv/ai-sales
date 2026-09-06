@@ -186,6 +186,7 @@ export function useAgoraVoice() {
                 data.toast.service,
                 data.toast.title,
                 data.toast.detail,
+                data.toast.url || undefined,
               );
             }
           }
@@ -211,6 +212,7 @@ export function useAgoraVoice() {
     service: 'hubspot' | 'calendar' | 'slack' | 'deal',
     title: string,
     detail: string,
+    url?: string,
   ) => {
     const newToast: IntegrationToast = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -218,11 +220,33 @@ export function useAgoraVoice() {
       title,
       detail,
       timestamp: Date.now(),
+      url,
     };
     setToasts((prev) => [...prev, newToast]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== newToast.id));
-    }, 6000);
+
+    if (url) {
+      // A real booking just happened — open it immediately. Browsers block
+      // window.open() unless it's a direct result of a user click, and this
+      // fires from an async WebSocket message, so this attempt can be
+      // silently blocked. That's why the toast itself always shows the link
+      // too (see IntegrationToasts) — the one reliable path if the popup
+      // blocker wins.
+      try {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      } catch {
+        // ignore — the toast's own link is the fallback
+      }
+    }
+
+    // A booking confirmation is worth more than a glance — give it longer
+    // on screen than a routine toast so there's time to notice and click the
+    // link if the auto-open above got blocked.
+    setTimeout(
+      () => {
+        setToasts((prev) => prev.filter((t) => t.id !== newToast.id));
+      },
+      url ? 15000 : 6000,
+    );
   };
 
   const dismissToast = (id: string) => {

@@ -147,8 +147,8 @@ async def apply_discount(
 
 @mcp.tool()
 async def create_crm_lead(
-    email: str,
     ctx: Context,
+    email: Optional[str] = None,
     name: Optional[str] = None,
     company: Optional[str] = None,
     seat_count: Optional[int] = None,
@@ -157,7 +157,8 @@ async def create_crm_lead(
     """Create or update the Lead, Contact and Deal records in HubSpot CRM.
 
     Args:
-        email: Buyer work email address.
+        email: Buyer work email address. Omit if not stated this call — the
+            buyer's email already on file for this session is used instead.
         name: Buyer name.
         company: Buyer organization.
         seat_count: Seat volume for the deal record.
@@ -177,17 +178,23 @@ async def create_crm_lead(
 
 @mcp.tool()
 async def book_meeting(
-    attendee_email: str,
     ctx: Context,
+    attendee_email: Optional[str] = None,
     datetime_str: Optional[str] = None,
     meeting_type: Optional[str] = None,
     conversation_id: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Book a discovery session or enterprise demo on Google Calendar.
+    """Book a discovery session or enterprise demo on Google Calendar RIGHT NOW.
+    This actually creates the calendar event — call it as soon as the buyer
+    agrees to a specific day/time, do not just say a meeting is booked without
+    calling this.
 
     Args:
-        attendee_email: Buyer email to invite.
-        datetime_str: Requested date or time, in the buyer's own words.
+        attendee_email: Buyer email to invite. Omit if not stated this call —
+            the buyer's email already on file for this session is used instead.
+        datetime_str: The day/time the buyer actually agreed to, in their own
+            words (e.g. "tomorrow at 3pm", "next Tuesday morning"). Required —
+            never omit this once a time has been discussed.
         meeting_type: For example 'Enterprise Solution Architecture Demo'.
     """
     return await _run(

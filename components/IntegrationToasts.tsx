@@ -38,6 +38,16 @@ export const IntegrationToasts: React.FC<IntegrationToastsProps> = ({ toasts, on
               <p className="text-[11px] text-[rgba(27,29,30,0.55)] mt-0.5 leading-snug">
                 {toast.detail}
               </p>
+              {toast.url && (
+                <a
+                  href={toast.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-semibold text-[#4928fd] hover:underline"
+                >
+                  Open in Calendar ↗
+                </a>
+              )}
             </div>
             <button
               onClick={() => onDismiss(toast.id)}

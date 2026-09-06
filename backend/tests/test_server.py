@@ -417,3 +417,100 @@ def test_resolving_an_escalation_removes_it_from_the_pending_queue(client):
     # Resolving something already resolved (or nonexistent) is reported, not an error.
     res2 = client.post("/api/escalations/test_escalation_02/resolve")
     assert res2.json()["resolved"] is False
+
+
+def test_book_meeting_mcp_tool_works_without_explicit_email():
+    """A voice LLM may not have the buyer's email memorized mid-sentence.
+    The tool must not require it — the session's own email is used instead —
+    otherwise the agent silently skips booking rather than asking again."""
+    import asyncio
+    from backend.mcp_server import book_meeting
+    from backend.middleware.custom_llm import get_or_create_session
+
+    async def run():
+        session = get_or_create_session("test_book_no_email_01")
+        session.customer.email = "buyer@example.com"
+        return await book_meeting(
+            ctx=None,
+            datetime_str="tomorrow at 3pm",
+            conversation_id="test_book_no_email_01",
+        )
+
+    result = asyncio.run(run())
+    assert result["attendee_email"] == "buyer@example.com"
+
+
+def test_real_booking_broadcasts_a_toast_with_the_calendar_url(client, monkeypatch):
+    """A real (non-sandbox) booking must carry a URL on its toast, since the
+    frontend opens it in a new tab the instant the toast arrives — without
+    this field the notification has nothing to open."""
+    import asyncio
+    from backend.middleware import custom_llm
+    from backend.middleware.custom_llm import get_or_create_session, execute_tool_call
+
+    captured = {}
+
+    async def fake_broadcast(session, toast_service=None, toast_title=None, toast_detail=None, toast_url=None):
+        captured["service"] = toast_service
+        captured["title"] = toast_title
+        captured["url"] = toast_url
+
+    async def fake_book_meeting(**kwargs):
+        return {
+            "status": "booked",
+            "is_sandbox": False,
+            "start_time": "Monday, Sep 08 at 03:00 PM",
+            "calendar_url": "https://calendar.google.com/event?eid=fake123",
+            "google_meet_url": "https://meet.google.com/abc-defg-hij",
+        }
+
+    monkeypatch.setattr(custom_llm, "broadcast_session_update", fake_broadcast)
+    monkeypatch.setattr(custom_llm.calendar_client, "book_meeting", fake_book_meeting)
+
+    async def run():
+        session = get_or_create_session("test_toast_url_01")
+        await execute_tool_call(
+            "book_meeting",
+            {"attendee_email": "buyer@example.com", "datetime_str": "monday at 3pm"},
+            session,
+        )
+
+    asyncio.run(run())
+    assert captured["service"] == "calendar"
+    assert captured["title"] == "Meeting Booked - Invite Sent"
+    assert captured["url"] == "https://calendar.google.com/event?eid=fake123"
+
+
+def test_simulated_booking_has_no_toast_url(monkeypatch):
+    """A sandbox booking must never carry a URL — there is nothing real to
+    open, and opening one would misrepresent a simulation as a real event."""
+    import asyncio
+    from backend.middleware import custom_llm
+    from backend.middleware.custom_llm import get_or_create_session, execute_tool_call
+
+    captured = {}
+
+    async def fake_broadcast(session, toast_service=None, toast_title=None, toast_detail=None, toast_url=None):
+        captured["title"] = toast_title
+        captured["url"] = toast_url
+
+    async def fake_book_meeting(**kwargs):
+        return {
+            "status": "sandbox_booked",
+            "is_sandbox": True,
+            "start_time": "Monday, Sep 08 at 03:00 PM",
+            "google_meet_url": "https://meet.google.com/fake",
+        }
+
+    monkeypatch.setattr(custom_llm, "broadcast_session_update", fake_broadcast)
+    monkeypatch.setattr(custom_llm.calendar_client, "book_meeting", fake_book_meeting)
+
+    async def run():
+        session = get_or_create_session("test_toast_url_02")
+        await execute_tool_call(
+            "book_meeting", {"attendee_email": "buyer@example.com"}, session
+        )
+
+    asyncio.run(run())
+    assert captured["title"] == "Meeting Booked (Simulated)"
+    assert captured["url"] is None

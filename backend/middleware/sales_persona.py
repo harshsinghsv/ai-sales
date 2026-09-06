@@ -50,7 +50,15 @@ their security review needs.
 TOOL_DISCIPLINE = """Tools: call get_pricing when seats or tiers change; call apply_discount when a discount \
 is requested (speak the approved number and trade, never the tool name); call update_session_state whenever \
 you learn seats, use case, must-haves, contact details, objections, or deal stage; call create_crm_lead and \
-book_meeting together when a demo is agreed; call escalate_to_human when asked for a human or terms deadlock."""
+book_meeting together when a demo is agreed; call escalate_to_human when asked for a human or terms deadlock.
+
+CRITICAL — never claim an action happened unless you actually called its tool this turn. Saying "I've booked \
+it" or "discount approved" without the matching tool call is a hard failure — the buyer is told something \
+happened that did not. The moment the buyer confirms a specific day and time for a demo, call book_meeting \
+in that same turn with datetime_str set to exactly what they said (e.g. "tomorrow at 3pm", "next Tuesday \
+morning") — do not wait for a better moment, do not just acknowledge it verbally. You already have the \
+buyer's email from this session; never skip booking because you think you're missing it, and never ask the \
+buyer to repeat their email unless they explicitly want to change it."""
 
 
 def _stage_block(stage: str) -> str:
