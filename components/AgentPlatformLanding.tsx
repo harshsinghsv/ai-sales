@@ -1,35 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  ArrowRight,
-  PhoneCall,
-  ShieldCheck,
-  Zap,
-  Activity,
-  Calendar,
-  Database,
-  Sliders,
-  Building2,
-  Cpu,
-  Headphones,
-  Lock,
-  Workflow,
-  Sparkles,
-  TrendingUp,
-  Radio,
-  FileCheck,
-  CheckCircle2,
-  Globe
-} from 'lucide-react';
+import React from 'react';
+import { ArrowRight, PhoneCall, Zap, ShieldCheck, Activity, Workflow, Globe } from 'lucide-react';
 import { DotPattern } from '@/components/ui/dot-pattern';
 import { ShimmerButton } from '@/components/ui/shimmer-button';
 import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { Marquee } from '@/components/ui/marquee';
 import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
+import { Navbar } from '@/components/Navbar';
+import { AnthropicShowcase } from '@/components/AnthropicShowcase';
 import { IntegrationBeams } from '@/components/IntegrationBeams';
+import { ConcessionSimulator } from '@/components/ConcessionSimulator';
 import { AgentVoiceConsole } from '@/components/AgentVoiceConsole';
+import { Footer } from '@/components/Footer';
 
 interface AgentPlatformLandingProps {
   onLaunchDemo: () => void;
@@ -50,79 +34,15 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   onLaunchDemo,
   onStartDirectCall,
 }) => {
-  // Concession Simulator State
-  const [seatCount, setSeatCount] = useState<number>(250);
-  const [termYears, setTermYears] = useState<number>(2);
-
-  const baseListPricePerSeat = 75;
-  const rawAnnualList = seatCount * baseListPricePerSeat * 12;
-
-  let maxConcessionPct = 0;
-  if (termYears === 1) {
-    maxConcessionPct = seatCount >= 200 ? 5 : 0;
-  } else if (termYears === 2) {
-    maxConcessionPct = seatCount >= 200 ? 12 : 10;
-  } else {
-    maxConcessionPct = seatCount >= 500 ? 18 : 15;
-  }
-
-  const discountAmount = rawAnnualList * (maxConcessionPct / 100);
-  const negotiatedAnnual = rawAnnualList - discountAmount;
-  const marginPreserved = rawAnnualList * (1 - maxConcessionPct / 100);
-
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] selection:bg-[#D97757]/20 selection:text-[#141413] antialiased">
       {/* ─────────────────────────────────────────────────────────────
-          1. HEADER NAVIGATION (21st.dev Clean Bar)
+          1. 21ST.DEV FLOATING PILL NAVBAR
          ───────────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-[#FAF9F5]/90 backdrop-blur-md border-b border-[#E8E6DC] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-[#D97757] text-2xl font-bold leading-none select-none">✻</span>
-            <div className="flex items-baseline gap-2">
-              <span className="font-serif text-xl font-bold tracking-tight text-[#141413]">
-                Agora Voice Agent
-              </span>
-              <span className="text-[10px] font-mono text-[#8C8984] px-1.5 py-0.5 rounded border border-[#E8E6DC] hidden sm:inline">
-                Enterprise
-              </span>
-            </div>
-          </div>
-
-          <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5E5D59] font-medium">
-            <a href="#demo-showcase" className="hover:text-[#141413] transition-colors">
-              Customer Story
-            </a>
-            <a href="#capabilities" className="hover:text-[#141413] transition-colors">
-              Capabilities
-            </a>
-            <a href="#pipeline" className="hover:text-[#141413] transition-colors">
-              RTC Pipeline
-            </a>
-            <a href="#simulator" className="hover:text-[#141413] transition-colors">
-              ROI Simulator
-            </a>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onStartDirectCall}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#141413] bg-[#F5F4ED] hover:bg-[#E8E6DC] border border-[#E8E6DC] transition-colors cursor-pointer"
-            >
-              <PhoneCall className="w-3.5 h-3.5 text-[#D97757]" />
-              <span>Talk to Emily</span>
-            </button>
-
-            <button
-              onClick={onLaunchDemo}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-[#141413] hover:bg-[#262624] shadow-xs hover:shadow transition-all cursor-pointer"
-            >
-              <span>Customer Demo</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#D97757]" />
-            </button>
-          </div>
-        </div>
-      </header>
+      <Navbar
+        onLaunchDemo={onLaunchDemo}
+        onStartDirectCall={onStartDirectCall}
+      />
 
       {/* ─────────────────────────────────────────────────────────────
           2. HERO SECTION (21st.dev DotPattern + Shimmer + BorderBeam)
@@ -168,13 +88,17 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
                   </span>
                 </ShimmerButton>
 
-                <button
+                <ShimmerButton
                   onClick={onStartDirectCall}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] font-semibold text-sm transition-all cursor-pointer shadow-xs"
+                  shimmerColor="#D97757"
+                  background="#262624"
+                  className="shadow-md"
                 >
-                  <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                  <span>Start Instant Voice Call</span>
-                </button>
+                  <span className="flex items-center gap-2 font-semibold text-sm">
+                    <PhoneCall className="w-4 h-4 text-[#D97757]" />
+                    <span>Start Voice Call with Emily</span>
+                  </span>
+                </ShimmerButton>
               </div>
 
               {/* Telemetry Strip */}
@@ -232,146 +156,9 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          4. CUSTOMER SHOWCASE SPOTLIGHT (Anthropic Story)
+          4. CUSTOMER SHOWCASE SPOTLIGHT (Anthropic Story - Rebuilt)
          ───────────────────────────────────────────────────────────── */}
-      <section id="demo-showcase" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-[#D97757] text-xs font-mono font-medium mb-3">
-                <Building2 className="w-3.5 h-3.5" />
-                <span>CUSTOMER SHOWCASE SPOTLIGHT</span>
-              </div>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
-                How Anthropic Deploys Emily for Claude Enterprise
-              </h2>
-            </div>
-            <p className="text-sm text-[#5E5D59] max-w-md">
-              Experience the live customer demo showcasing how Anthropic equips Emily to negotiate enterprise seat tiers, enforce compliance gates, and auto-book calendar invites.
-            </p>
-          </div>
-
-          <div className="rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-lg">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-7 space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] font-serif font-bold text-lg">
-                    ✻
-                  </div>
-                  <div>
-                    <h3 className="font-serif text-xl font-bold text-[#141413]">
-                      Claude Enterprise Solutions · Agent Emily
-                    </h3>
-                    <p className="text-xs text-[#8C8984] font-mono">
-                      Configured with seat pricing ($75/seat), HIPAA BAA requirements, and deal automation
-                    </p>
-                  </div>
-                </div>
-
-                <p className="text-sm sm:text-base text-[#4D4C47] leading-relaxed">
-                  When prospects explore Claude Enterprise solutions, they don't wait days for an SDR email. Instead, <span className="font-semibold text-[#141413]">Emily</span> conducts an instant real-time voice negotiation:
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-2xl bg-[#F5F4ED] border border-[#E8E6DC]">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-[#141413] mb-1">
-                      <ShieldCheck className="w-4 h-4 text-[#D97757]" />
-                      <span>Security & Compliance Check</span>
-                    </div>
-                    <p className="text-xs text-[#6B6966]">
-                      Validates zero-retention policies, HIPAA BAA readiness, SSO, and SCIM directory requirements.
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-[#F5F4ED] border border-[#E8E6DC]">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-[#141413] mb-1">
-                      <Sliders className="w-4 h-4 text-[#D97757]" />
-                      <span>Seat & Margin Defense</span>
-                    </div>
-                    <p className="text-xs text-[#6B6966]">
-                      Defends $75/seat list price and only concedes up to 18% in exchange for multi-year commitments.
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-[#F5F4ED] border border-[#E8E6DC]">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-emerald-700 mb-1">
-                      <Database className="w-4 h-4" />
-                      <span>HubSpot CRM Deal Creation</span>
-                    </div>
-                    <p className="text-xs text-[#6B6966]">
-                      Automatically generates enterprise deals in HubSpot with stage, ARR value, and objection notes.
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-[#F5F4ED] border border-[#E8E6DC]">
-                    <div className="flex items-center gap-2 font-semibold text-xs text-indigo-700 mb-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>Google Calendar Booking</span>
-                    </div>
-                    <p className="text-xs text-[#6B6966]">
-                      Dispatches direct calendar invites for Anthropic account executives upon term agreement.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    onClick={onLaunchDemo}
-                    className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#141413] hover:bg-[#262624] text-white font-semibold text-sm transition-all shadow-sm cursor-pointer"
-                  >
-                    <span>Launch Claude Enterprise Customer Experience</span>
-                    <ArrowRight className="w-4 h-4 text-[#D97757]" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Visual: Clean Dark Metric Ledger */}
-              <div className="lg:col-span-5">
-                <div className="rounded-2xl bg-[#141413] p-6 text-white shadow-xl border border-white/10 space-y-4 font-mono text-xs">
-                  <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                      <span className="text-white font-sans font-semibold">Live Deal Ledger</span>
-                    </div>
-                    <span className="text-[10px] text-white/40">CONFIG: CLAUDE ENTERPRISE</span>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2.5">
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-white/60">Target Tier:</span>
-                      <span className="text-[#D97757] font-semibold">Claude Enterprise (250 Seats)</span>
-                    </div>
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-white/60">List ARR:</span>
-                      <span className="text-white font-semibold">$225,000 / yr</span>
-                    </div>
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-white/60">Negotiated ARR:</span>
-                      <span className="text-emerald-400 font-semibold">$198,000 / yr (12% off)</span>
-                    </div>
-                    <div className="flex justify-between text-[11px]">
-                      <span className="text-white/60">Tradeoff:</span>
-                      <span className="text-amber-300">2-Year Prepay Agreement</span>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 text-[11px] leading-relaxed">
-                    <div className="text-[#D97757] font-bold mb-1">Emily (Voice):</div>
-                    <p className="text-white/80 font-sans italic">
-                      "I can unlock the 12% tier discount for 250 seats today if we align on a 24-month commitment. Shall I send the agreement to your email and set a sync with our solutions architect?"
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-1 text-[10px] text-white/40">
-                    <span>HubSpot: Deal Created</span>
-                    <span>GCal: Pending Confirmation</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AnthropicShowcase onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
           5. 21ST.DEV BENTO GRID (Core Architectural Moats)
@@ -383,7 +170,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               <Zap className="w-3.5 h-3.5" />
               <span>CORE ARCHITECTURAL MOATS</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141413] tracking-tight">
               Engineered to Protect Margin While Closing Faster
             </h2>
             <p className="mt-4 text-base text-[#5E5D59]">
@@ -428,16 +215,16 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. 21ST.DEV ANIMATED BEAM (Pipeline & Integrations Flow)
+          6. 21ST.DEV ANIMATED BEAM (Pipeline Flow Visualizer)
          ───────────────────────────────────────────────────────────── */}
       <section id="pipeline" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
-              <Radio className="w-3.5 h-3.5" />
+              <Zap className="w-3.5 h-3.5" />
               <span>LIVE BEAM FLOW VISUALIZER</span>
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141413] tracking-tight">
               Real-Time Conversational Data Path
             </h2>
             <p className="mt-3 text-base text-[#5E5D59]">
@@ -450,156 +237,16 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          7. INTERACTIVE ROI & CONCESSION SIMULATOR
+          7. INTERACTIVE ROI & CONCESSION SIMULATOR (Rebuilt)
          ───────────────────────────────────────────────────────────── */}
-      <section id="simulator" className="py-20 bg-[#F5F4ED] border-t border-[#E8E6DC]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
-              <Sliders className="w-3.5 h-3.5" />
-              <span>INTERACTIVE ROI SIMULATOR</span>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#141413] tracking-tight">
-              Test the Agent's Concession Trading Engine
-            </h2>
-            <p className="mt-3 text-sm text-[#5E5D59]">
-              See how the agent balances enterprise volume against strict margin defense floors.
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-10 shadow-lg">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-              {/* Controls */}
-              <div className="lg:col-span-6 space-y-8">
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <label className="text-xs font-mono uppercase tracking-wider text-[#6B6966]">
-                      Enterprise Seats Requested
-                    </label>
-                    <span className="font-serif text-2xl font-bold text-[#141413]">
-                      {seatCount.toLocaleString()} Seats
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={50}
-                    max={2500}
-                    step={25}
-                    value={seatCount}
-                    onChange={(e) => setSeatCount(Number(e.target.value))}
-                    className="w-full h-2 bg-[#E8E6DC] rounded-lg appearance-none cursor-pointer accent-[#D97757]"
-                  />
-                  <div className="flex justify-between text-[10px] font-mono text-[#8C8984] mt-1.5">
-                    <span>50 seats</span>
-                    <span>500 seats</span>
-                    <span>2,500 seats</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-mono uppercase tracking-wider text-[#6B6966] block mb-3">
-                    Contract Commitment Term
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1, 2, 3].map((yr) => (
-                      <button
-                        key={yr}
-                        onClick={() => setTermYears(yr)}
-                        className={`py-2.5 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                          termYears === yr
-                            ? 'bg-[#141413] text-white border-[#141413] shadow-xs'
-                            : 'bg-white text-[#4D4C47] border-[#E8E6DC] hover:border-[#D97757]/40'
-                        }`}
-                      >
-                        {yr} {yr === 1 ? 'Year' : 'Years'}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-[#FAF0EC] border border-[#D97757]/20 flex items-start gap-3">
-                  <Lock className="w-5 h-5 text-[#D97757] shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-xs font-semibold text-[#141413]">
-                      Autonomous Margin Policy: Enforced
-                    </div>
-                    <div className="text-[11px] text-[#6B6966] mt-0.5 leading-relaxed">
-                      If the buyer demands greater than {maxConcessionPct}% discount, the agent executes an objection pivot and alerts the sales director in Slack.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Readout */}
-              <div className="lg:col-span-6 rounded-2xl bg-[#141413] p-6 text-white flex flex-col justify-between shadow-lg">
-                <div>
-                  <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                    <span className="text-xs font-mono uppercase tracking-wider text-white/60">
-                      Live Deal Evaluation
-                    </span>
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">
-                      DEAL POLICY COMPLIANT
-                    </span>
-                  </div>
-
-                  <div className="space-y-4 my-6">
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-xs text-white/70">Base List ARR:</span>
-                      <span className="font-mono text-sm text-white/90 line-through">
-                        ${rawAnnualList.toLocaleString()}
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-xs text-white/70">Agent Concession:</span>
-                      <span className="font-mono text-sm text-[#D97757] font-semibold">
-                        -{maxConcessionPct}% (${discountAmount.toLocaleString()})
-                      </span>
-                    </div>
-
-                    <div className="pt-3 border-t border-white/10 flex justify-between items-baseline">
-                      <span className="text-sm font-semibold text-white">Closed Annual ARR:</span>
-                      <span className="font-serif text-2xl font-bold text-emerald-400">
-                        ${negotiatedAnnual.toLocaleString()}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-xs">
-                      <div className="flex justify-between text-white/70 mb-1">
-                        <span>ARR Margin Preserved:</span>
-                        <span className="font-mono font-bold text-white">
-                          ${marginPreserved.toLocaleString()}
-                        </span>
-                      </div>
-                      <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-                        <div
-                          className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500"
-                          style={{ width: `${100 - maxConcessionPct}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={onLaunchDemo}
-                  className="w-full py-3 rounded-xl bg-[#D97757] hover:bg-[#C96442] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>Experience This Negotiation in Live Voice</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ConcessionSimulator onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
-          8. CLOSING CTA BANNER
+          8. CLOSING CTA BANNER (With Matching 21st.dev ShimmerButtons)
          ───────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#141413] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[#D97757] text-xs font-mono mb-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 text-[#D97757] text-xs font-mono mb-6">
             <PhoneCall className="w-3.5 h-3.5" />
             <span>REAL-TIME VOICE SALES ENGINE</span>
           </div>
@@ -613,10 +260,11 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* Button 1: ShimmerButton */}
             <ShimmerButton
               onClick={onLaunchDemo}
               shimmerColor="#D97757"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto shadow-2xl"
             >
               <span className="flex items-center gap-2 font-semibold text-base">
                 <span>View Customer Demo (Claude Enterprise)</span>
@@ -624,37 +272,26 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
               </span>
             </ShimmerButton>
 
-            <button
+            {/* Button 2: Matching ShimmerButton (As requested by user!) */}
+            <ShimmerButton
               onClick={onStartDirectCall}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-semibold text-base transition-all cursor-pointer"
+              shimmerColor="#D97757"
+              background="#262624"
+              className="w-full sm:w-auto shadow-xl"
             >
-              <PhoneCall className="w-4 h-4 text-[#D97757]" />
-              <span>Talk Directly with Emily</span>
-            </button>
+              <span className="flex items-center gap-2 font-semibold text-base text-white">
+                <PhoneCall className="w-4 h-4 text-[#D97757]" />
+                <span>Start Voice Call with Emily</span>
+              </span>
+            </ShimmerButton>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          9. FOOTER
+          9. 21ST.DEV GLOWING SITEMAP FOOTER
          ───────────────────────────────────────────────────────────── */}
-      <footer className="py-12 bg-[#FAF9F5] border-t border-[#E8E6DC] text-xs text-[#6B6966]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-[#D97757] font-bold text-base">✻</span>
-            <span className="font-serif font-bold text-[#141413]">Agora Voice Agent</span>
-            <span>·</span>
-            <span>Built on Agora Conversational AI SDK</span>
-          </div>
-
-          <div className="flex items-center gap-6 font-mono text-[11px]">
-            <span>Deepgram Nova-3</span>
-            <span>MiniMax Turbo</span>
-            <span>HubSpot API</span>
-            <span>Google Calendar API</span>
-          </div>
-        </div>
-      </footer>
+      <Footer onLaunchDemo={onLaunchDemo} />
     </div>
   );
 };
