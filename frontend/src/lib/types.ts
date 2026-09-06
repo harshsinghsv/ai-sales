@@ -1,0 +1,108 @@
+/**
+ * Strict TypeScript types for the Adaptive AI Sales & Negotiation Agent.
+ * Strict mode enabled - zero `any` usage.
+ */
+
+export type VoiceState = 'idle' | 'listening' | 'thinking' | 'speaking';
+
+export interface CustomerProfile {
+  name: string | null;
+  company: string | null;
+  email: string | null;
+}
+
+export interface Requirements {
+  seat_count: number | null;
+  use_case: string | null;
+  must_haves: string[];
+}
+
+export interface ObjectionItem {
+  id: string;
+  type: 'pricing' | 'competitor' | 'trust' | 'implementation';
+  label: string;
+  resolved: boolean;
+  context: string;
+}
+
+export interface DealState {
+  tier: string;
+  tier_name: string;
+  list_price_per_seat: number;
+  effective_price_per_seat: number;
+  current_offer_pct_off: number;
+  margin_floor_pct: number;
+  concessions_given: string[];
+  trades_requested: string[];
+  margin_remaining_pct: number;
+}
+
+export interface SessionState {
+  conversation_id: string;
+  customer: CustomerProfile;
+  requirements: Requirements;
+  objections_raised: ObjectionItem[];
+  deal_state: DealState;
+  outcome: string | null;
+  escalated: boolean;
+  last_action_toast?: string | null;
+}
+
+export interface TranscriptTurn {
+  id: string;
+  speaker: 'customer' | 'agent';
+  text: string;
+  isFinal: boolean;
+  timestamp: number;
+  interrupted?: boolean;
+}
+
+export interface IntegrationToast {
+  id: string;
+  service: 'hubspot' | 'calendar' | 'slack' | 'deal';
+  title: string;
+  detail: string;
+  timestamp: number;
+}
+
+export interface PostCallDealMemo {
+  conversation_id: string;
+  customer: {
+    name: string;
+    company: string;
+    email: string;
+  };
+  requirements_captured: {
+    seat_count: number;
+    tier_matched: string;
+    use_case: string;
+    must_haves: string[];
+  };
+  negotiation_summary: {
+    list_price_per_seat: string;
+    final_negotiated_price: string;
+    discount_granted_pct: string;
+    margin_floor_pct: string;
+    margin_preserved: boolean;
+    concessions_given: string[];
+    trades_obtained: string[];
+  };
+  objections_audit: Array<{
+    type: string;
+    label: string;
+    resolved: boolean;
+    context: string;
+  }>;
+  financials: {
+    monthly_value: number;
+    annual_contract_value: number;
+    currency: string;
+  };
+  outcome: string;
+  escalated_to_human: boolean;
+  crm_record: {
+    crm_system: string;
+    status: string;
+    is_sandbox?: boolean;
+  };
+}

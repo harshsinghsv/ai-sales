@@ -1,0 +1,182 @@
+/* ============================================================
+   TeamSync Sales Cockpit — Global Stylesheet
+   Light "Awake" design language · Tailwind v4 · design tokens below
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Ink system */
+  --color-ink: #1b1d1e;
+  --color-secondary: rgba(27, 29, 30, 0.62);
+  --color-muted: rgba(27, 29, 30, 0.42);
+  --color-soft: rgba(27, 29, 30, 0.045);
+  --color-softhover: rgba(27, 29, 30, 0.08);
+  --color-bordersubtle: rgba(27, 29, 30, 0.06);
+  --color-border: rgba(27, 29, 30, 0.11);
+  --color-borderstrong: rgba(27, 29, 30, 0.18);
+
+  /* Brand */
+  --color-violet: #4928fd;
+  --color-violethover: #3b1ee6;
+  --color-violetbg: #eeeafe;
+
+  /* Signature */
+  --color-sun: #f6e683;
+
+  /* Awake pastels */
+  --color-porange: #ffaf68;
+  --color-pblue: #70b5ff;
+  --color-ppink: #f4889a;
+  --color-pgreen: #79d45e;
+  --color-plilac: #ba81ee;
+
+  /* Pastel tints (over white) */
+  --color-porangebg: #ffefda;
+  --color-pbluebg: #e2f0ff;
+  --color-ppinkbg: #fde7eb;
+  --color-pgreenbg: #e4f6df;
+  --color-plilacbg: #f1e6fb;
+
+  /* Deep pastel text */
+  --color-porangedeep: #b3661d;
+  --color-pbluedeep: #1d6fb3;
+  --color-ppinkdeep: #c74a62;
+  --color-pgreendeep: #2f7a1d;
+  --color-plilacdeep: #6b3fa8;
+
+  /* Dedicated alert red — reserved for real escalation/critical states,
+     distinct from the playful ppink used for decorative accents */
+  --color-alert: #d1293d;
+  --color-alertbg: #fce9eb;
+  --color-alertdeep: #a81f30;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+
+  /* Radius scale */
+  --radius-sm2: 8px;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --radius-cta: 30px;
+  --radius-pill: 100px;
+}
+
+/* ── BASE ───────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: #ffffff;
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-violet);
+  color: #ffffff;
+}
+
+/* ── SCROLLBARS ─────────────────────────────────────────────── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(27, 29, 30, 0.16);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(27, 29, 30, 0.28);
+}
+
+/* Soft dot-grid background, tuned for a white canvas */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(27, 29, 30, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(27, 29, 30, 0.05) 1px, transparent 1px);
+}
+
+/* ── SCROLL REVEAL ──────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── SOFT PULSE (status dots) ─────────────────────────────────── */
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.animate-softpulse {
+  animation: softPulse 2s infinite ease-in-out;
+}
+
+/* ── TOASTS ─────────────────────────────────────────────────── */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-toast-in {
+  animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── SKELETON (loading placeholders, shadcn-style) ───────────── */
+.skeleton {
+  animation: skeletonPulse 1.6s ease-in-out infinite;
+  background: rgba(27, 29, 30, 0.06);
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* ── FOCUS (keyboard-visible ring) ────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(73, 40, 253, 0.55);
+  outline-offset: 2px;
+}
+
+/* ── DETAILS/SUMMARY (demo controls drawer) ───────────────────── */
+details summary::-webkit-details-marker {
+  display: none;
+}
+details summary::marker {
+  content: '';
+}
+
+/* ── REDUCED MOTION ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-softpulse,
+  .animate-toast-in,
+  .skeleton,
+  .reveal {
+    animation: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
