@@ -17,6 +17,7 @@ import {
 interface LandingPageProps {
   onStartCall: (info: { name: string; company: string; email: string; seats: number }) => void;
   isConnecting: boolean;
+  onBackToPlatform?: () => void;
 }
 
 /* ==========================================================================
@@ -388,7 +389,7 @@ const FAQ_SECTIONS = [
    LANDING PAGE COMPONENT
    ========================================================================== */
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnecting }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnecting, onBackToPlatform }) => {
   // Buyer configuration state for Emily voice AI
   const [name, setName] = useState('Tina');
   const [company, setCompany] = useState('Razorpay');
@@ -430,6 +431,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] font-sans selection:bg-[#D97757] selection:text-white antialiased">
       {/* ─────────────────────────────────────────────────────────────
+          0. AGORA PLATFORM DEMO NAVIGATION BAR (Back to Platform)
+         ───────────────────────────────────────────────────────────── */}
+      {onBackToPlatform && (
+        <div className="bg-[#141413] text-white text-xs px-4 py-2 border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D97757] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D97757]" />
+              </span>
+              <span className="font-mono text-[#D97757] font-semibold tracking-wider text-[11px] uppercase">
+                Customer Demo Showcase
+              </span>
+              <span className="text-white/60 text-[11px] hidden sm:inline">
+                · Showing Anthropic Claude Enterprise equipped with the Agora Sales Agent
+              </span>
+            </div>
+            <button
+              onClick={onBackToPlatform}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 text-white text-[11px] font-medium transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-3 h-3 text-[#D97757]" />
+              <span>Back to Agent Platform</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
           1. TOP NAVIGATION BAR (Exact Claude Enterprise Header)
          ───────────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 w-full bg-[#FAF9F5] border-b border-[#E8E6DC]">
@@ -443,6 +473,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
                 Claude
               </span>
             </a>
+            {onBackToPlatform && (
+              <button
+                onClick={onBackToPlatform}
+                className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono text-[#6B6966] bg-[#F5F4ED] hover:bg-[#E8E6DC] border border-[#E8E6DC] transition-colors cursor-pointer ml-2"
+              >
+                <ArrowLeft className="w-3 h-3 text-[#D97757]" />
+                <span>Agent Platform</span>
+              </button>
+            )}
           </div>
 
           {/* Right Navigation & Action Items */}
