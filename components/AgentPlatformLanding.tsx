@@ -17,6 +17,7 @@ import { SpotlightCard } from '@/components/reactbits/SpotlightCard';
 import { TiltedCard } from '@/components/reactbits/TiltedCard';
 import { BorderBeam } from '@/components/ui/border-beam';
 import { Marquee } from '@/components/ui/marquee';
+import { RainbowButton } from '@/components/ui/rainbow-button';
 
 interface AgentPlatformLandingProps {
   onLaunchDemo: () => void;
@@ -122,20 +123,20 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             </button>
           </form>
 
-          {/* Symmetrical Quick Action Buttons */}
+          {/* Symmetrical Quick Action Buttons with 21st.dev Rainbow Button */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-            <button
+            <RainbowButton
               type="button"
               onClick={onStartDirectCall}
-              className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 backdrop-blur-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-[0_0_25px_rgba(217,119,87,0.3)] flex items-center gap-2.5 cursor-pointer"
+              className="py-3.5 sm:py-4 px-7 sm:px-8 rounded-full text-xs sm:text-sm font-semibold shadow-[0_0_30px_rgba(217,119,87,0.35)] active:scale-95"
             >
-              <PhoneCall className="w-4 h-4 text-[#D97757]" />
+              <PhoneCall className="w-4 h-4 text-[#FFA87D]" />
               <span>Start Voice Call with Emily</span>
-              <span className="relative flex h-1.5 w-1.5">
+              <span className="relative flex h-1.5 w-1.5 ml-1">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
-            </button>
+            </RainbowButton>
 
             <a
               href="#demo-showcase"
@@ -346,6 +347,14 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <RainbowButton
+              onClick={onStartDirectCall}
+              className="w-full sm:w-auto py-3.5 sm:py-4 px-8 rounded-full shadow-[0_0_30px_rgba(217,119,87,0.35)]"
+            >
+              <PhoneCall className="w-4 h-4 text-[#FFA87D]" />
+              <span>Start Voice Call with Emily</span>
+            </RainbowButton>
+
             <StarBorder
               onClick={onLaunchDemo}
               color="#D97757"
@@ -353,15 +362,6 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
             >
               <span>View Customer Demo (Claude Enterprise)</span>
               <ArrowRight className="w-4 h-4 text-[#D97757]" />
-            </StarBorder>
-
-            <StarBorder
-              onClick={onStartDirectCall}
-              color="#D97757"
-              className="w-full sm:w-auto"
-            >
-              <PhoneCall className="w-4 h-4 text-[#D97757]" />
-              <span>Start Voice Call with Emily</span>
             </StarBorder>
           </div>
         </div>

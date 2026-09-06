@@ -13,6 +13,7 @@ import {
   Sparkles,
   LucideIcon
 } from 'lucide-react';
+import { StatisticCard10 } from '@/components/ui/demo';
 
 interface StageNode {
   step: string;
@@ -147,6 +148,40 @@ export const AnthropicShowcase: React.FC<{ onLaunchDemo: () => void }> = ({ onLa
                 </button>
               );
             })}
+          </div>
+
+          {/* Active Stage Detailed Breakdown + 21st.dev StatisticCard10 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-2">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium">
+                <span>STAGE {activeStage.step} LIVE EXECUTION</span>
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-[#141413]">
+                {activeStage.title} · {activeStage.spec}
+              </h3>
+              <p className="text-sm text-[#5E5D59] leading-relaxed">
+                {activeStage.log}
+              </p>
+              <div className="p-3.5 rounded-xl bg-white border border-[#E8E6DC] flex items-center justify-between text-xs font-mono">
+                <span className="text-[#8C8984]">Current Stage Metric</span>
+                <span className={`font-semibold ${activeStage.metricColor}`}>{activeStage.metric}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-center w-full">
+              <StatisticCard10
+                title="Enterprise Revenue"
+                amount="$ 1,120,500"
+                currency="ARR"
+                trend="+34.8%"
+                trendLabel="pipeline growth this quarter"
+                metric1Label="Avg. Enterprise Contract:"
+                metric1Value="$198,000"
+                metric2Label="Floor Protected Deals:"
+                metric2Value="42 Won"
+                className="w-full shadow-xs"
+              />
+            </div>
           </div>
 
           {/* Minimal Live Event Status Strip */}
