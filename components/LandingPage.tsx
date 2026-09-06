@@ -1547,98 +1547,113 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
           12. BUYER CONFIGURATION MODAL (For Emily Voice AI)
          ───────────────────────────────────────────────────────────── */}
       {showConfigModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141413]/70 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-lg rounded-3xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-8 shadow-2xl relative text-[#141413]">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E8E6DC] mb-6">
-              <div className="flex items-center gap-2">
-                <span className="text-[#D97757] text-xl font-bold">✻</span>
-                <span className="font-serif-anthropic text-xl font-semibold text-[#141413]">
-                  Contact Enterprise Sales · Emily AI
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#141413]/65 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-[500px] rounded-2xl bg-[#FAF9F5] border border-[#E8E6DC] p-6 sm:p-8 shadow-[0_24px_50px_rgba(20,20,19,0.18)] relative text-[#141413]">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-4 mb-2">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[#D97757] text-2xl leading-none font-serif-anthropic">✻</span>
+                <span className="text-[11px] font-medium tracking-wider uppercase px-2 py-0.5 rounded-md bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/25">
+                  Emily · Solutions Lead
                 </span>
               </div>
               <button
                 onClick={() => setShowConfigModal(false)}
-                className="size-8 rounded-full bg-white border border-[#E8E6DC] flex items-center justify-center text-[#5E5D59] hover:text-[#141413] cursor-pointer"
+                className="size-8 rounded-full hover:bg-[#EBE8DF] flex items-center justify-center text-[#5E5D59] hover:text-[#141413] transition-colors cursor-pointer"
+                aria-label="Close modal"
               >
-                ✕
+                <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
-            <p className="text-xs sm:text-sm text-[#5E5D59] mb-6 leading-relaxed">
+            <h3 className="font-serif-anthropic text-2xl sm:text-[26px] font-normal tracking-tight text-[#141413] mt-3 mb-2">
+              Contact enterprise sales
+            </h3>
+
+            <p className="text-xs sm:text-[13px] text-[#5E5D59] leading-relaxed mb-6">
               Connect directly with Emily, our real-time AI enterprise specialist. She will evaluate your seat tier, calculate custom volume concessions, and walk through compliance prerequisites.
             </p>
 
             <div className="space-y-4 mb-6">
               <div>
-                <label className="block text-xs font-semibold text-[#141413] mb-1.5">
-                  Your Name
+                <label className="block text-xs font-medium text-[#5E5D59] mb-1.5">
+                  Your name
                 </label>
-                <div className="relative">
-                  <User className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#87867F]" />
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-[#E8E6DC] bg-white text-sm text-[#141413] focus:outline-none focus:border-[#D97757]"
-                    placeholder="Tina"
-                  />
-                </div>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D3CA] bg-white text-sm text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:border-[#141413] focus:ring-1 focus:ring-[#141413] transition-all"
+                  placeholder="Tina"
+                />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#141413] mb-1.5">
-                  Company Name
+                <label className="block text-xs font-medium text-[#5E5D59] mb-1.5">
+                  Company name
                 </label>
-                <div className="relative">
-                  <Building2 className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#87867F]" />
-                  <input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-[#E8E6DC] bg-white text-sm text-[#141413] focus:outline-none focus:border-[#D97757]"
-                    placeholder="Razorpay"
-                  />
-                </div>
+                <input
+                  type="text"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D3CA] bg-white text-sm text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:border-[#141413] focus:ring-1 focus:ring-[#141413] transition-all"
+                  placeholder="Razorpay"
+                />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#141413] mb-1.5">
-                  Work Email
+                <label className="block text-xs font-medium text-[#5E5D59] mb-1.5">
+                  Work email
                 </label>
-                <div className="relative">
-                  <Mail className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#87867F]" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-[#E8E6DC] bg-white text-sm text-[#141413] focus:outline-none focus:border-[#D97757]"
-                    placeholder="gargiesingh321@gmail.com"
-                  />
-                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-lg border border-[#D5D3CA] bg-white text-sm text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:border-[#141413] focus:ring-1 focus:ring-[#141413] transition-all"
+                  placeholder="gargiesingh321@gmail.com"
+                />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold text-[#141413]">
-                    Seat Count ({seats} seats)
+              <div className="pt-1">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-medium text-[#5E5D59]">
+                    Estimated seats ({seats} seats)
                   </label>
-                  <span className="text-xs font-mono text-[#D97757] font-semibold">
+                  <span className="text-xs font-mono font-medium text-[#D97757]">
                     ${seats * 20}/mo list
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min="20"
-                  max="500"
-                  step="5"
-                  value={seats}
-                  onChange={(e) => setSeats(Number(e.target.value))}
-                  className="w-full accent-[#141413] cursor-pointer"
-                />
-                <div className="flex justify-between text-[10px] text-[#87867F] mt-1 font-mono">
-                  <span>20 seats (min)</span>
-                  <span>100 seats</span>
-                  <span>500+ seats</span>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="20"
+                    max="500"
+                    step="5"
+                    value={seats}
+                    onChange={(e) => setSeats(Number(e.target.value))}
+                    className="flex-1 h-1.5 bg-[#E8E6DC] rounded-lg appearance-none cursor-pointer accent-[#141413]"
+                  />
+                  <div className="w-16 px-2.5 py-1.5 rounded-lg border border-[#D5D3CA] bg-white text-center font-mono text-xs font-semibold text-[#141413]">
+                    {seats}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 mt-2.5">
+                  {[20, 50, 100, 250, 500].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setSeats(preset)}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer border ${
+                        seats === preset
+                          ? 'bg-[#141413] text-white border-[#141413]'
+                          : 'bg-white text-[#5E5D59] border-[#E8E6DC] hover:border-[#D5D3CA]'
+                      }`}
+                    >
+                      {preset === 20 ? '20 min' : preset === 500 ? '500+' : `${preset}`}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1646,11 +1661,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartCall, isConnect
             <button
               onClick={handleConfirmCall}
               disabled={isConnecting}
-              className="w-full py-3.5 rounded-xl bg-[#141413] text-white font-medium text-sm hover:bg-[#30302E] transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="w-full py-3.5 rounded-lg bg-[#141413] text-white font-medium text-sm hover:bg-[#30302E] transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              <Sparkles className="size-4 text-[#D97757]" />
-              <span>{isConnecting ? 'Connecting with Emily...' : 'Start Voice Call with Emily'}</span>
+              <span className="text-[#D97757] text-base leading-none">✻</span>
+              <span>{isConnecting ? 'Connecting with Emily…' : 'Start voice call with Emily'}</span>
             </button>
+
+            <p className="mt-3 text-center text-[11px] text-[#87867F] leading-relaxed">
+              Private executive session · Agora ultra-low latency RTC · Zero data training
+            </p>
           </div>
         </div>
       )}

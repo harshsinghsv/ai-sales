@@ -117,37 +117,36 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
 
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] flex flex-col font-sans selection:bg-[#D97757] selection:text-white relative overflow-hidden">
-      {/* Ambient background */}
-      <div aria-hidden className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-140px] left-1/2 -translate-x-1/2 w-[1000px] h-[420px] bg-gradient-to-b from-[#F5D0C5]/40 via-[#FAF9F5] to-transparent blur-3xl opacity-80" />
-        <div className="absolute inset-0 bg-grid-pattern opacity-30" />
+      {/* Calm ambient background (No blueprint grid pattern) */}
+      <div aria-hidden className="fixed inset-0 pointer-events-none z-0 bg-[#FAF9F5]">
+        <div className="absolute top-[-180px] left-1/2 -translate-x-1/2 w-[1100px] h-[440px] bg-gradient-to-b from-[#F2ECE4]/70 via-[#FAF9F5] to-[#FAF9F5] blur-3xl opacity-80" />
       </div>
 
       {/* Top Bar Navigation */}
-      <header className="border-b border-[#E8E6DC] bg-[#FAF9F5]/90 backdrop-blur-xl sticky top-0 z-40 px-4 sm:px-6 h-14 flex items-center justify-between shadow-sm relative">
+      <header className="border-b border-[#E8E6DC] bg-[#FAF9F5]/90 backdrop-blur-xl sticky top-0 z-40 px-4 sm:px-6 h-14 flex items-center justify-between relative">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="size-7 rounded-lg bg-[#D97757] flex items-center justify-center shadow-sm shrink-0">
-            <span className="text-white text-base font-bold leading-none">✻</span>
+          <div className="size-7 rounded-md bg-[#FAF0EC] border border-[#D97757]/30 flex items-center justify-center shrink-0">
+            <span className="text-[#D97757] text-sm font-bold font-serif-anthropic">✻</span>
           </div>
           <div className="flex items-center gap-2 min-w-0">
-            <span className="font-serif-anthropic font-semibold text-sm tracking-tight text-[#141413] truncate">
+            <span className="font-serif-anthropic font-medium text-sm tracking-tight text-[#141413] truncate">
               Claude Enterprise
             </span>
-            <span className="text-[#87867F] shrink-0">/</span>
-            <span className="text-xs text-[#5E5D59] font-medium truncate hidden min-[400px]:block">
-              Sales Specialist (Emily)
+            <span className="text-[#D5D3CA] shrink-0">/</span>
+            <span className="text-xs text-[#5E5D59] font-normal truncate hidden min-[420px]:block">
+              Executive Session · Emily AI
             </span>
           </div>
           <div
             aria-live="polite"
             className="flex items-center gap-2 ml-1 sm:ml-3 pl-2 sm:pl-3 border-l border-[#E8E6DC] shrink-0"
           >
-            <span aria-hidden className={cn('size-2 rounded-full', pill.dot)} />
-            <span className="text-xs font-mono font-semibold text-[#141413] tabular-nums">
+            <span aria-hidden className={cn('size-1.5 rounded-full', pill.dot)} />
+            <span className="text-xs font-mono font-medium text-[#141413] tabular-nums">
               {formatTime(callDuration)}
             </span>
             <span className="text-[11px] text-[#5E5D59] hidden md:inline">
-              · {connecting ? 'Connecting…' : pill.label} · Live Executive Session
+              · {connecting ? 'Connecting…' : pill.label}
             </span>
           </div>
         </div>
@@ -160,30 +159,30 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
             aria-label={isMuted ? 'Unmute microphone' : 'Mute microphone'}
             aria-pressed={isMuted}
             className={cn(
-              'size-9 rounded-full flex items-center justify-center transition-all cursor-pointer border',
+              'size-8 rounded-lg flex items-center justify-center transition-all cursor-pointer border',
               isMuted
                 ? 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/40'
                 : 'bg-white hover:bg-[#F5F4ED] text-[#141413] border-[#E8E6DC]'
             )}
           >
-            {isMuted ? <MicOff className="size-4" /> : <Mic className="size-4" />}
+            {isMuted ? <MicOff className="size-3.5" /> : <Mic className="size-3.5" />}
           </button>
 
           <button
             onClick={onReturnToLanding}
             title="Return to site"
             aria-label="Return to site"
-            className="size-9 rounded-full flex items-center justify-center bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] transition-all cursor-pointer"
+            className="size-8 rounded-lg flex items-center justify-center bg-white hover:bg-[#F5F4ED] text-[#141413] border border-[#E8E6DC] transition-all cursor-pointer"
           >
-            <RotateCcw className="size-4" />
+            <RotateCcw className="size-3.5" />
           </button>
 
           <button
             onClick={endCall}
-            className="ml-1 flex items-center gap-2 pl-3.5 pr-4 py-2 rounded-full text-xs font-semibold border border-[#D97757] bg-[#141413] hover:bg-[#D97757] text-white transition-colors cursor-pointer"
+            className="ml-1 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#141413] hover:bg-[#30302E] text-white transition-colors cursor-pointer"
           >
-            <PhoneOff className="size-3.5" aria-hidden />
-            <span>End Call</span>
+            <PhoneOff className="size-3" aria-hidden />
+            <span>End session</span>
           </button>
         </div>
       </header>
@@ -194,20 +193,20 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
         <div className="lg:col-span-5 flex flex-col min-h-0">
           <div className="rounded-2xl bg-white border border-[#E8E6DC] p-5 sm:p-6 flex flex-col shadow-sm h-full">
             {/* Agent Header Tag */}
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#E8E6DC]">
+            <div className="flex items-center justify-between gap-2 pb-3.5 border-b border-[#E8E6DC]">
               <div className="flex items-center gap-2 min-w-0">
-                <span aria-hidden className={cn('size-2 rounded-full shrink-0', pill.dot)} />
-                <span className="text-xs font-semibold text-[#141413] truncate">
-                  Emily · Solutions Lead (Anthropic)
+                <span className="text-[#D97757] text-sm leading-none font-serif-anthropic">✻</span>
+                <span className="text-xs font-medium text-[#141413] truncate">
+                  Emily · Solutions Lead
                 </span>
               </div>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-[#D97757] shrink-0">
-                Claude Enterprise · Opus 5
+              <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/20 shrink-0">
+                Opus 5 Engine
               </span>
             </div>
 
             {/* Center: Voice Orb */}
-            <div className="py-5 sm:py-6 flex flex-col items-center justify-center my-auto gap-3">
+            <div className="py-6 sm:py-7 flex flex-col items-center justify-center my-auto gap-3">
               {connecting ? (
                 <div className="flex flex-col items-center gap-4 py-4" aria-label="Connecting to call">
                   <div className="size-44 sm:size-52 rounded-full skeleton" />
@@ -215,7 +214,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     <div className="skeleton h-3 w-full rounded-full" />
                     <div className="skeleton h-3 w-2/3 mx-auto rounded-full" />
                   </div>
-                  <span className="text-xs font-medium text-[rgba(27,29,30,0.55)]">
+                  <span className="text-xs font-medium text-[#5E5D59]">
                     Connecting to Agora RTC…
                   </span>
                 </div>
@@ -225,13 +224,12 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     state={voiceState}
                     volume={volumeLevel}
                     interrupted={interrupted}
-                    isRecordingSTT={isRecordingSTT}
                   />
-                  <div className="flex items-center gap-2 flex-wrap justify-center">
+                  <div className="flex items-center gap-2 flex-wrap justify-center pt-2">
                     <span
                       aria-live="polite"
                       className={cn(
-                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border',
+                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border',
                         pill.classes
                       )}
                     >
@@ -242,19 +240,19 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                       type="button"
                       onClick={toggleRecordingSTT}
                       aria-pressed={isRecordingSTT}
-                      title={isRecordingSTT ? 'Stop push-to-talk capture' : 'Start push-to-talk capture'}
+                      title={isRecordingSTT ? 'Stop voice capture' : 'Push to talk'}
                       className={cn(
-                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border transition-colors cursor-pointer',
+                        'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border transition-colors cursor-pointer',
                         isRecordingSTT
                           ? 'bg-[#FAF0EC] text-[#D97757] border-[#D97757]/40'
-                          : 'bg-white text-[#5E5D59] border-[#E8E6DC] hover:border-[#D97757]/40 hover:text-[#D97757]'
+                          : 'bg-white text-[#5E5D59] border-[#E8E6DC] hover:border-[#D5D3CA] hover:text-[#141413]'
                       )}
                     >
                       <Radio className="size-3" aria-hidden />
                       {isRecordingSTT ? 'Capturing…' : 'Push to talk'}
                     </button>
                     {hasQueuedTurn && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/30">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#FAF0EC] text-[#D97757] border border-[#D97757]/30">
                         <span aria-hidden className="size-1.5 rounded-full bg-[#D97757] animate-pulse" />
                         Queued…
                       </span>
@@ -266,12 +264,12 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
 
             {/* Bottom: Demo controls + Input */}
             <div className="space-y-3 pt-4 border-t border-[#E8E6DC]">
-              <details className="group rounded-xl border border-[#E8E6DC] bg-[#FAF9F5] open:bg-white transition-colors">
-                <summary className="flex items-center justify-between gap-2 px-3.5 py-2.5 cursor-pointer list-none">
-                  <span className="text-[10px] uppercase tracking-wider text-[#87867F] font-semibold flex items-center gap-1.5">
+              <details className="group rounded-lg border border-[#E8E6DC] bg-[#FAF9F5] open:bg-white transition-colors">
+                <summary className="flex items-center justify-between gap-2 px-3.5 py-2 cursor-pointer list-none">
+                  <span className="text-[11px] tracking-wide text-[#5E5D59] font-medium flex items-center gap-1.5">
                     <Command className="size-3 text-[#87867F]" aria-hidden />
-                    Demo controls
-                    <span className="px-1.5 py-px rounded-full bg-[#FAF0EC] text-[#D97757] font-mono tabular-nums">
+                    Evaluation scenarios
+                    <span className="px-1.5 py-px rounded-full bg-[#FAF0EC] text-[#D97757] font-mono text-[10px] tabular-nums">
                       {demoScenarios.length}
                     </span>
                   </span>
@@ -280,14 +278,14 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     aria-hidden
                   />
                 </summary>
-                <div className="px-3.5 pb-3.5 flex flex-wrap gap-1.5">
+                <div className="px-3.5 pb-3 flex flex-wrap gap-1.5">
                   {demoScenarios.map((scen, idx) => (
                     <button
                       key={idx}
                       onClick={() => sendManualMessage(scen.text)}
                       disabled={busy}
                       title={scen.text}
-                      className="px-3 py-1.5 rounded-full text-[11px] font-medium bg-white border border-[#E8E6DC] hover:bg-[#FAF0EC] text-[#5E5D59] hover:text-[#D97757] hover:border-[#D97757]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+                      className="px-2.5 py-1 rounded-md text-[11px] font-medium bg-white border border-[#E8E6DC] hover:bg-[#FAF0EC] text-[#5E5D59] hover:text-[#D97757] hover:border-[#D97757]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
                     >
                       {scen.label}
                     </button>
@@ -295,8 +293,8 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                 </div>
               </details>
 
-              {/* Floating Input Bar */}
-              <form onSubmit={handleSendCustom} className="flex items-center gap-2 pt-1">
+              {/* Message Input Bar */}
+              <form onSubmit={handleSendCustom} className="flex items-center gap-2 pt-0.5">
                 <div className="relative flex-1">
                   <input
                     type="text"
@@ -304,10 +302,10 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                     onChange={(e) => setCustomInput(e.target.value)}
                     placeholder="Ask Emily or negotiate deal terms…"
                     aria-label="Message Emily"
-                    className="w-full pl-4 pr-9 py-2.5 rounded-full bg-[#FAF9F5] border border-[#E8E6DC] text-xs text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:bg-white focus:border-[#D97757] font-sans transition-all"
+                    className="w-full pl-3.5 pr-8 py-2 rounded-lg bg-[#FAF9F5] border border-[#D5D3CA] text-xs sm:text-sm text-[#141413] placeholder:text-[#87867F] focus:outline-none focus:bg-white focus:border-[#141413] focus:ring-1 focus:ring-[#141413] font-sans transition-all"
                   />
                   <CornerDownLeft
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 size-3.5 text-[#87867F] pointer-events-none"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 size-3.5 text-[#87867F] pointer-events-none"
                     aria-hidden
                   />
                 </div>
@@ -315,7 +313,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                   type="submit"
                   disabled={!customInput.trim()}
                   aria-label="Send message"
-                  className="size-9 rounded-full bg-[#D97757] hover:bg-[#C96442] disabled:opacity-30 disabled:hover:bg-[#D97757] disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                  className="size-8 rounded-lg bg-[#141413] hover:bg-[#30302E] disabled:opacity-30 disabled:hover:bg-[#141413] disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
                 >
                   <Send className="size-3.5" aria-hidden />
                 </button>

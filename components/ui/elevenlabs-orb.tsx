@@ -412,29 +412,35 @@ void main() {
     );
 
     // Add noise to the angle for a flow-like distortion
-    float noise = flow(decomposed, radius * 0.03 - uAnimation * 0.2) - 0.5;
-    theta += noise * mix(0.08, 0.25, uOutputVolume);
+    // Add fluid perlin noise distortion to theta and radius
+    float flowNoise = flow(decomposed, radius * 0.04 - uAnimation * 0.25) - 0.5;
+    theta += flowNoise * mix(0.15, 0.4, uOutputVolume + uInputVolume);
 
-    // Initialize the base color to white
-    vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+    // Continuous liquid core blending
+    vec2 flowUv = uv + vec2(
+        sin(uTime * 0.4 + uv.y * 1.5) * 0.08,
+        cos(uTime * 0.35 + uv.x * 1.5) * 0.08
+    );
+    float p1 = texture(uPerlinTexture, flowUv * 0.5 + vec2(uTime * 0.04, 0.1)).r;
+    float p2 = texture(uPerlinTexture, flowUv * 0.8 - vec2(0.2, uTime * 0.05)).r;
+    float liquidBase = mix(p1, p2, 0.5);
 
-    // Original parameters for the ovals in polar coordinates
+    // Base grayscale value driven by radial distance and fluid noise
+    float baseGrad = clamp(1.0 - radius * 0.85 + (liquidBase - 0.5) * 0.45, 0.0, 1.0);
+    vec4 color = vec4(vec3(baseGrad), 1.0);
+
+    // Animated organic energy lobes (wide, smoothly blended without sharp cuts)
     float originalCenters[7] = float[7](0.0, 0.5 * PI, 1.0 * PI, 1.5 * PI, 2.0 * PI, 2.5 * PI, 3.0 * PI);
-
-    // Parameters for the animated centers in polar coordinates
     float centers[7];
     for (int i = 0; i < 7; i++) {
-        centers[i] = originalCenters[i] + 0.5 * sin(uTime / 20.0 + uOffsets[i]);
+        centers[i] = originalCenters[i] + 0.35 * sin(uTime / 12.0 + uOffsets[i]);
     }
 
-    float a, b;
     vec4 ovalColor;
-
-    // Check if the pixel is inside any of the ovals
     for (int i = 0; i < 7; i++) {
-        float noise = texture(uPerlinTexture, vec2(mod(centers[i] + uTime * 0.05, 1.0), 0.5)).r;
-        a = 0.5 + noise * 0.3;
-        b = noise * mix(3.5, 2.5, uInputVolume);
+        float noiseVal = texture(uPerlinTexture, vec2(mod(centers[i] + uTime * 0.03, 1.0), 0.5)).r;
+        float a = 1.1 + noiseVal * 0.6;
+        float b = 1.4 + noiseVal * mix(1.2, 0.8, uInputVolume);
         bool reverseGradient = (i % 2 == 1);
 
         float distTheta = min(
@@ -445,41 +451,34 @@ void main() {
             )
         );
         float distRadius = radius;
-        float softness = 0.6;
+        float softness = 0.95;
 
         if (drawOval(vec2(distTheta, distRadius), vec2(0.0, 0.0), a, b, reverseGradient, softness, ovalColor)) {
-            color.rgb = mix(color.rgb, ovalColor.rgb, ovalColor.a);
+            color.rgb = mix(color.rgb, ovalColor.rgb, ovalColor.a * 0.7);
             color.a = max(color.a, ovalColor.a);
         }
     }
     
-    // Calculate both noisy rings
-    float ringRadius1 = sharpRing(decomposed, uTime * 0.1);
-    float ringRadius2 = smoothRing(decomposed, uTime * 0.1);
-    
-    float inputRadius1 = radius + uInputVolume * 0.2;
-    float inputRadius2 = radius + uInputVolume * 0.15;
-    float opacity1 = mix(0.2, 0.6, uInputVolume);
-    float opacity2 = mix(0.15, 0.45, uInputVolume);
-
-    float ringAlpha1 = (inputRadius2 >= ringRadius1) ? opacity1 : 0.0;
-    float ringAlpha2 = smoothstep(ringRadius2 - 0.05, ringRadius2 + 0.05, inputRadius1) * opacity2;
-    
-    float totalRingAlpha = max(ringAlpha1, ringAlpha2);
+    // Smooth energetic rings responding to voice volume
+    float ringRadius = smoothRing(decomposed, uTime * 0.08);
+    float inputRadius = radius + (uInputVolume + uOutputVolume) * 0.25;
+    float ringAlpha = smoothstep(ringRadius - 0.12, ringRadius + 0.12, inputRadius) * mix(0.15, 0.45, uInputVolume + uOutputVolume);
     
     vec3 ringColor = vec3(1.0);
-    color.rgb = 1.0 - (1.0 - color.rgb) * (1.0 - ringColor * totalRingAlpha);
+    color.rgb = mix(color.rgb, ringColor, ringAlpha * 0.6);
 
-    // Define colours to ramp against greyscale
-    vec3 color1 = vec3(0.0, 0.0, 0.0);
-    vec3 color2 = uColor1;
-    vec3 color3 = uColor2;
-    vec3 color4 = vec3(1.0, 1.0, 1.0);
+    // Harmonic Claude color ramp
+    vec3 color1 = vec3(0.18, 0.08, 0.05); // Deep espresso/clay
+    vec3 color2 = uColor1;                // Primary Claude terracotta
+    vec3 color3 = uColor2;                // Warm apricot / champagne highlight
+    vec3 color4 = vec3(0.98, 0.97, 0.95); // Luminous warm ivory
 
     float luminance = mix(color.r, 1.0 - color.r, uInverted);
     color.rgb = colorRamp(luminance, color1, color2, color3, color4);
 
-    color.a *= uOpacity;
+    // Smooth antialiased circular edge falloff
+    float edgeFalloff = smoothstep(1.0, 0.96, radius);
+    color.a *= edgeFalloff * uOpacity;
 
     gl_FragColor = color;
 }
