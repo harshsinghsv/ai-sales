@@ -396,91 +396,71 @@ float flow(vec3 decomposed, float time) {
 }
 
 void main() {
-    // Normalize vUv to be centered around (0.0, 0.0)
     vec2 uv = vUv * 2.0 - 1.0;
-
-    // Convert uv to polar coordinates
     float radius = length(uv);
-    float theta = atan(uv.y, uv.x);
-    if (theta < 0.0) theta += 2.0 * PI; // Normalize theta to [0, 2*PI]
+    if (radius > 1.0) {
+        discard;
+    }
 
-    // Decomposed angle is used for sampling noise textures without seams:
-    vec3 decomposed = vec3(
-        theta / (2.0 * PI),
-        mod(theta / (2.0 * PI) + 0.5, 1.0) + 1.0,
-        abs(theta / PI - 1.0)
+    // 3D Spherical Normal Mapping
+    float z = sqrt(max(0.0, 1.0 - radius * radius));
+    vec3 normal = normalize(vec3(uv.x, uv.y, z * 1.25));
+
+    // Directional Lighting from top-left (warm key light)
+    vec3 lightDir = normalize(vec3(-0.45, 0.55, 0.7));
+    float diffuse = clamp(dot(normal, lightDir) * 0.5 + 0.5, 0.0, 1.0);
+
+    // Specular Highlight (warm pearlescent sheen)
+    vec3 viewDir = vec3(0.0, 0.0, 1.0);
+    vec3 halfVec = normalize(lightDir + viewDir);
+    float spec = pow(max(0.0, dot(normal, halfVec)), 28.0) * 0.45;
+
+    // Fresnel Rim Glow (iridescent limb lighting)
+    float fresnel = pow(1.0 - max(0.0, normal.z), 2.4);
+
+    // Audio & Time Parameters
+    float time = uTime * 0.5;
+    float vol = clamp(uInputVolume * 0.8 + uOutputVolume * 1.3, 0.0, 1.0);
+
+    // Multi-Octave Liquid Perlin Flow Distortion
+    vec2 flowUv = uv * 0.75 + vec2(
+        sin(time * 0.35 + uv.y * 2.2) * 0.12,
+        cos(time * 0.3 + uv.x * 2.2) * 0.12
     );
+    float n1 = texture(uPerlinTexture, flowUv * 0.5 + vec2(time * 0.04, time * 0.02)).r;
+    float n2 = texture(uPerlinTexture, flowUv * 0.9 - vec2(time * 0.03, time * 0.05)).r;
+    float fluidNoise = mix(n1, n2, 0.5);
 
-    // Add noise to the angle for a flow-like distortion
-    float noise = flow(decomposed, radius * 0.03 - uAnimation * 0.2) - 0.5;
-    theta += noise * mix(0.08, 0.25, uOutputVolume);
+    // Dynamic Swirling Ribbons
+    float swirl = sin(atan(uv.y, uv.x) * 3.0 + radius * 5.0 - time * 2.5 + fluidNoise * 3.5) * 0.5 + 0.5;
+    float dynamicSwirl = swirl * mix(0.15, 0.4, vol);
 
-    // Initialize the base color to white
-    vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+    // Depth Gradient across the sphere
+    float depth = diffuse * 0.55 + fluidNoise * 0.35 + dynamicSwirl - fresnel * 0.15;
+    depth = clamp(depth, 0.0, 1.0);
 
-    // Original parameters for the ovals in polar coordinates
-    float originalCenters[7] = float[7](0.0, 0.5 * PI, 1.0 * PI, 1.5 * PI, 2.0 * PI, 2.5 * PI, 3.0 * PI);
+    // Luxury Claude Editorial Palette
+    vec3 shadowCol = vec3(0.24, 0.09, 0.05);     // Deep espresso / roasted clay
+    vec3 terracotta = uColor1;                   // Claude Terracotta (#D97757)
+    vec3 apricot    = uColor2;                   // Warm Apricot / Amber (#F2A385)
+    vec3 pearlGlow  = vec3(0.99, 0.97, 0.94);     // Luminous warm ivory pearl
 
-    // Parameters for the animated centers in polar coordinates
-    float centers[7];
-    for (int i = 0; i < 7; i++) {
-        centers[i] = originalCenters[i] + 0.5 * sin(uTime / 20.0 + uOffsets[i]);
+    vec3 finalColor = vec3(0.0);
+    if (depth < 0.35) {
+        finalColor = mix(shadowCol, terracotta, depth / 0.35);
+    } else if (depth < 0.7) {
+        finalColor = mix(terracotta, apricot, (depth - 0.35) / 0.35);
+    } else {
+        finalColor = mix(apricot, pearlGlow, (depth - 0.7) / 0.3);
     }
 
-    float a, b;
-    vec4 ovalColor;
+    // Composite specular highlight and rim fresnel
+    finalColor += spec * pearlGlow;
+    finalColor = mix(finalColor, pearlGlow, fresnel * 0.4);
 
-    // Check if the pixel is inside any of the ovals
-    for (int i = 0; i < 7; i++) {
-        float noise = texture(uPerlinTexture, vec2(mod(centers[i] + uTime * 0.05, 1.0), 0.5)).r;
-        a = 0.5 + noise * 0.3;
-        b = noise * mix(3.5, 2.5, uInputVolume);
-        bool reverseGradient = (i % 2 == 1);
+    // Smooth Antialiased Circular Boundary
+    float alpha = smoothstep(1.0, 0.96, radius) * uOpacity;
 
-        float distTheta = min(
-            abs(theta - centers[i]),
-            min(
-                abs(theta + 2.0 * PI - centers[i]),
-                abs(theta - 2.0 * PI - centers[i])
-            )
-        );
-        float distRadius = radius;
-        float softness = 0.6;
-
-        if (drawOval(vec2(distTheta, distRadius), vec2(0.0, 0.0), a, b, reverseGradient, softness, ovalColor)) {
-            color.rgb = mix(color.rgb, ovalColor.rgb, ovalColor.a);
-            color.a = max(color.a, ovalColor.a);
-        }
-    }
-    
-    // Calculate both noisy rings
-    float ringRadius1 = sharpRing(decomposed, uTime * 0.1);
-    float ringRadius2 = smoothRing(decomposed, uTime * 0.1);
-    
-    float inputRadius1 = radius + uInputVolume * 0.2;
-    float inputRadius2 = radius + uInputVolume * 0.15;
-    float opacity1 = mix(0.2, 0.6, uInputVolume);
-    float opacity2 = mix(0.15, 0.45, uInputVolume);
-
-    float ringAlpha1 = (inputRadius2 >= ringRadius1) ? opacity1 : 0.0;
-    float ringAlpha2 = smoothstep(ringRadius2 - 0.05, ringRadius2 + 0.05, inputRadius1) * opacity2;
-    
-    float totalRingAlpha = max(ringAlpha1, ringAlpha2);
-    
-    vec3 ringColor = vec3(1.0);
-    color.rgb = 1.0 - (1.0 - color.rgb) * (1.0 - ringColor * totalRingAlpha);
-
-    // Define colours to ramp against greyscale
-    vec3 color1 = vec3(0.0, 0.0, 0.0);
-    vec3 color2 = uColor1;
-    vec3 color3 = uColor2;
-    vec3 color4 = vec3(1.0, 1.0, 1.0);
-
-    float luminance = mix(color.r, 1.0 - color.r, uInverted);
-    color.rgb = colorRamp(luminance, color1, color2, color3, color4);
-
-    color.a *= uOpacity;
-
-    gl_FragColor = color;
+    gl_FragColor = vec4(finalColor, alpha);
 }
 `

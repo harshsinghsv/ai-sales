@@ -32,53 +32,39 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
   state,
   volume,
   interrupted,
-  isRecordingSTT,
 }) => {
-  // Warm terracotta, clay & amber ramps tuned for Claude Enterprise theme
+  // Harmonic Claude palettes: Primary (uColor1) and Secondary (uColor2)
   let agentState: AgentState = null;
-  let colors: [string, string] = ['#FAF0EC', '#D97757'];
-  let glow = 'rgba(217,119,87,0.24)';
+  let colors: [string, string] = ['#D97757', '#F2A385'];
+  let glow = 'rgba(217,119,87,0.22)';
 
   if (state === 'listening') {
     agentState = 'listening';
-    colors = ['#E8E6DC', '#D97757'];
-    glow = 'rgba(217,119,87,0.30)';
+    colors = ['#788C5D', '#D97757'];
+    glow = 'rgba(120,140,93,0.25)';
   } else if (state === 'thinking') {
     agentState = 'thinking';
-    colors = ['#F6E683', '#D97757'];
-    glow = 'rgba(246,230,131,0.35)';
+    colors = ['#D97757', '#C96442'];
+    glow = 'rgba(217,119,87,0.28)';
   } else if (state === 'speaking') {
     agentState = 'talking';
-    colors = ['#D97757', '#C96442'];
-    glow = 'rgba(217,119,87,0.42)';
+    colors = ['#D97757', '#F5BA9E'];
+    glow = 'rgba(217,119,87,0.38)';
   }
 
   const manualInput = state === 'listening' ? Math.min(1, Math.max(0, volume * 1.6)) : 0;
   const manualOutput = state === 'speaking' ? Math.min(1, Math.max(0, volume * 1.6)) : 0;
-
-  // One line of truth for what's happening, instead of two overlapping pills
-  const statusLabel = isRecordingSTT
-    ? 'Capturing your voice...'
-    : state === 'listening'
-    ? 'Listening — speak naturally'
-    : state === 'thinking'
-    ? 'Evaluating terms...'
-    : state === 'speaking'
-    ? 'Emily is speaking'
-    : 'Ready';
-
-  const dotColor =
-    state === 'listening' ? '#788C5D' : state === 'thinking' ? '#D97757' : state === 'speaking' ? '#D97757' : '#87867F';
+  const isAudioActive = (state === 'listening' || state === 'speaking') && volume > 0.03;
 
   return (
     <div className="relative flex flex-col items-center justify-center">
-      {/* Orb — sits directly on the page, with subtle Claude terracotta glow */}
-      <div className="relative size-44 sm:size-52">
+      {/* Floating 3D Celestial Orb (Seamless without plastic frame border) */}
+      <div className="relative size-48 sm:size-56 flex items-center justify-center">
         <div
-          className="absolute inset-[-10px] rounded-full transition-all duration-500 blur-2xl opacity-75"
+          className="absolute inset-[-14px] rounded-full transition-all duration-700 blur-3xl opacity-65 pointer-events-none scale-105"
           style={{ background: glow }}
         />
-        <div className="relative h-full w-full overflow-hidden rounded-full border border-[#E8E6DC]/40 shadow-xl">
+        <div className="relative h-full w-full overflow-hidden rounded-full drop-shadow-[0_16px_32px_rgba(217,119,87,0.18)]">
           <ElevenLabsOrb
             agentState={agentState}
             colors={colors}
@@ -94,48 +80,18 @@ export const VoiceOrb: React.FC<VoiceOrbProps> = ({
         )}
       </div>
 
-      {/* Live Audio Waveform in Claude Terracotta */}
-      <div className="mt-5 h-7 flex items-center justify-center">
-        <ElevenLabsWaveform
-          active={state === 'listening' || state === 'speaking'}
-          volume={volume}
-          barColor={
-            state === 'listening'
-              ? '#788C5D'
-              : state === 'speaking'
-              ? '#D97757'
-              : state === 'thinking'
-              ? '#F6E683'
-              : '#D97757'
-          }
-          barCount={24}
-          height={28}
-        />
-      </div>
-
-      {/* Single consolidated status line */}
-      <div
-        className={`mt-4 flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
-          isRecordingSTT ? 'bg-[#e4f6df] text-[#2f7a1d]' : 'bg-[rgba(27,29,30,0.04)] text-[#1b1d1e]/70'
-        }`}
-      >
-        {isRecordingSTT ? (
-          <Mic className="size-3.5 text-[#2f7a1d] animate-pulse" />
+      {/* Audio Waveform: Only displays active dancing bars, avoiding static dots */}
+      <div className="mt-3 h-6 flex items-center justify-center">
+        {isAudioActive ? (
+          <ElevenLabsWaveform
+            active={true}
+            volume={volume}
+            barColor={state === 'listening' ? '#788C5D' : '#D97757'}
+            barCount={20}
+            height={20}
+          />
         ) : (
-          <span className="size-1.5 rounded-full" style={{ backgroundColor: dotColor }} />
-        )}
-        <span>{statusLabel}</span>
-        {interrupted && <span className="text-[11px] text-[#a81f30]">· cut off</span>}
-        {isRecordingSTT && (
-          <span className="flex gap-0.5">
-            {[0, 1, 2].map((i) => (
-              <span
-                key={i}
-                className="inline-block w-0.5 h-2.5 bg-[#2f7a1d] rounded-full animate-bounce"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
-            ))}
-          </span>
+          <div className="h-1 w-12 rounded-full bg-[#E8E6DC]/80 transition-opacity opacity-60" />
         )}
       </div>
     </div>
