@@ -43,6 +43,55 @@ class Settings(BaseSettings):
     SARVAM_TTS_VOICE: str = os.getenv("SARVAM_TTS_VOICE", "meera")
     SARVAM_TTS_MODEL: str = os.getenv("SARVAM_TTS_MODEL", "bulbul:v3")
 
+    # Sarvam vendor settings for Agora's native ASR/TTS slots. The Agora
+    # `sarvam` TTS vendor takes a bulbul:v3 speaker id + BCP-47 target language,
+    # which is a different namespace from SARVAM_TTS_VOICE above (used by our
+    # own /v1/audio/speech shim). "abhilash" is the male v3 voice for Aarav.
+    # Only used when AGORA_STT_VENDOR / AGORA_TTS_VENDOR are set to "sarvam"
+    # (BYOK); the default pipeline uses Agora-managed models instead.
+    SARVAM_STT_LANGUAGE: str = os.getenv("SARVAM_STT_LANGUAGE", "hi-IN")
+    SARVAM_TTS_SPEAKER: str = os.getenv("SARVAM_TTS_SPEAKER", "abhilash")
+    SARVAM_TTS_TARGET_LANGUAGE: str = os.getenv("SARVAM_TTS_TARGET_LANGUAGE", "hi-IN")
+    SARVAM_TTS_SAMPLE_RATE: int = int(os.getenv("SARVAM_TTS_SAMPLE_RATE", "24000"))
+
+    # --- Agora-managed pipeline (no provider API keys required) --------------
+    # Vendor selection for Agora's ASR/TTS slots. "deepgram"/"minimax" run on
+    # Agora-managed credentials; "sarvam" switches to BYOK using the keys above.
+    AGORA_STT_VENDOR: str = os.getenv("AGORA_STT_VENDOR", "deepgram")
+    AGORA_TTS_VENDOR: str = os.getenv("AGORA_TTS_VENDOR", "minimax")
+
+    # Deepgram ASR. Managed mode accepts the preset models nova-2 / nova-3.
+    # Set DEEPGRAM_LANGUAGE to "hi" for Hindi, or "multi" (nova-3) for
+    # Hindi/English code-switching, which is how Aarav's buyers actually speak.
+    DEEPGRAM_MODEL: str = os.getenv("DEEPGRAM_MODEL", "nova-3")
+    DEEPGRAM_LANGUAGE: str = os.getenv("DEEPGRAM_LANGUAGE", "multi")
+
+    # MiniMax TTS. Managed mode accepts speech-2.6-turbo / speech-2.8-turbo.
+    # MINIMAX_VOICE_ID selects the voice; leave blank to use Agora's default.
+    # Set it to a Hindi voice id from the MiniMax voice list for a Hindi Aarav.
+    MINIMAX_MODEL: str = os.getenv("MINIMAX_MODEL", "speech-2.8-turbo")
+    MINIMAX_VOICE_ID: str = os.getenv("MINIMAX_VOICE_ID", "")
+
+    # --- Human handoff ------------------------------------------------------
+    # Public origin of the Next.js app, used to build the live-handoff link a
+    # human specialist opens to join the buyer's Agora RTC channel.
+    HUMAN_HANDOFF_BASE_URL: str = os.getenv(
+        "HUMAN_HANDOFF_BASE_URL", "http://localhost:3000"
+    )
+    # RTC uid the human specialist joins as.
+    HUMAN_AGENT_RTC_UID: int = int(os.getenv("HUMAN_AGENT_RTC_UID", "7777"))
+
+    # --- Agora MCP ----------------------------------------------------------
+    # Comma-separated MCP server URLs the Conversational AI agent may call
+    # tools from (transport: streamable_http). Wired into llm.mcp_servers.
+    AGORA_MCP_SERVER_URLS: str = os.getenv("AGORA_MCP_SERVER_URLS", "")
+
+    # Expose our own Deal Engine MCP server (mounted at /mcp) to the agent.
+    # Requires PUBLIC_BASE_URL to be reachable from Agora's cloud.
+    AGORA_MCP_ENABLE_DEAL_ENGINE: bool = (
+        os.getenv("AGORA_MCP_ENABLE_DEAL_ENGINE", "true").lower() == "true"
+    )
+
     # LLM Providers (OpenAI, Groq, Gemini) for raw real-time dynamic intelligence
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")

@@ -10,10 +10,33 @@ trigger: always_on
   - Never propose, scaffold, or silently pull in LiveKit, Pipecat, Twilio,
     Vapi, Daily.co, raw WebRTC, or any other RTC/voice SDK, even as a
     "simpler alternative" or "just for testing."
-- STT/LLM/TTS: Sarvam AI, wired through Agora's native/custom vendor slots
-  as already architected (STT = native Agora "sarvam" vendor, LLM = our
-  own FastAPI custom-LLM middleware calling Sarvam, TTS = our FastAPI
-  shim calling Sarvam Bulbul, exposed to Agora as generic_http).
+- Repo shape: built on the Agora Conversational AI Next.js quickstart
+  (AgoraIO-Conversational-AI/agent-quickstart-nextjs). The Next.js app
+  lives at the repo root (app/, components/, hooks/, lib/, types/); the
+  agent lifecycle is owned by app/api/{generate-agora-token,invite-agent,
+  stop-conversation,agent-think}. Do not reintroduce a separate frontend/
+  directory or move the agent join back into Python.
+- STT/LLM/TTS: Agora-MANAGED models by default, wired through Agora's
+  native vendor slots via the agora-agents SDK -- STT = DeepgramSTT
+  (nova-3, language "multi" for Hindi/English code-switching), LLM =
+  Agora-managed OpenAI carrying our persona, TTS = MiniMaxTTS
+  (speech-2.8-turbo). No provider API keys are required for this path.
+  Sarvam remains supported as a BYOK alternative via AGORA_STT_VENDOR /
+  AGORA_TTS_VENDOR=sarvam, and CustomLLM still points at the FastAPI
+  /v1/chat/completions middleware when AGORA_LLM_MODE=custom.
+- Agentic actions should be exposed to the agent through Agora's own
+  tool-calling surfaces (llm.mcp_servers via the vendor `mcpServers`
+  option, or llm.tools REST definitions) rather than only living inside
+  the custom-LLM middleware -- otherwise the agent has NO tools on the
+  managed path.
+- Voice runs ONLY in Agora's cloud pipeline. Never reintroduce browser
+  SpeechRecognition, a client-side VAD loop, client-side TTS playback, or a
+  direct browser call to an LLM endpoint — that was the duplicate-audio bug
+  this architecture removed. Transcripts and agent state come from RTM via
+  agora-agent-client-toolkit, never from browser-side recognition.
+- Business logic stays in Python. The persona (sales_persona.py), deal
+  engine, and session state must not be duplicated in TypeScript; the
+  invite route fetches them from GET /api/agent/pipeline-config.
 - CRM: HubSpot API. Calendar: Google Calendar API. Escalation: Slack/email
   webhook. Do not swap these for a different provider without asking first.
 

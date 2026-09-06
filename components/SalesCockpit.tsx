@@ -6,6 +6,7 @@ import { VoiceOrb } from '@/components/VoiceOrb';
 import { DealCockpitPanel } from '@/components/DealCockpitPanel';
 import { LiveTranscript } from '@/components/LiveTranscript';
 import { IntegrationToasts } from '@/components/IntegrationToasts';
+import { AgoraPipelinePanel } from '@/components/AgoraPipelinePanel';
 import { VoiceState } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import {
@@ -64,6 +65,9 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
     partialText,
     partialSpeaker,
     toasts,
+    metrics,
+    toolCalls,
+    interruptions,
     endCall,
     toggleMute,
     dismissToast,
@@ -200,7 +204,7 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
                 </span>
               </div>
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#eeeafe] border border-[#4928fd]/20 text-[#4928fd] shrink-0">
-                Sarvam Multilingual
+                Agora Convo AI · MiniMax
               </span>
             </div>
 
@@ -325,6 +329,13 @@ export const SalesCockpit: React.FC<SalesCockpitProps> = ({ onReturnToLanding, v
         {/* Right Column: Deal Operations Cockpit & Live Turn Transcript (7 Cols) */}
         <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-5 min-h-0">
           <DealCockpitPanel session={sessionState} />
+
+          <AgoraPipelinePanel
+            metrics={metrics}
+            toolCalls={toolCalls}
+            interruptions={interruptions}
+            inCall={inCall}
+          />
 
           <div className="flex-1 min-h-[340px] flex flex-col">
             <LiveTranscript

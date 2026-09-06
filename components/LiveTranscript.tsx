@@ -105,7 +105,7 @@ export const LiveTranscript: React.FC<LiveTranscriptProps> = ({
         </div>
         <div className="flex items-center gap-1.5 text-[10px] font-semibold text-[#1e6b1a] shrink-0">
           <span aria-hidden className="size-1.5 rounded-full bg-[#22a06b] animate-softpulse" />
-          <span>Sarvam STT · Hinglish</span>
+          <span>Deepgram STT · Hinglish</span>
         </div>
       </div>
 

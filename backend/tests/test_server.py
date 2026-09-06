@@ -156,3 +156,139 @@ def test_discount_offer_survives_later_requote():
     memo = generate_deal_memo_dict(session)
     assert memo["negotiation_summary"]["final_negotiated_price"] == "$29.75/mo"
     assert memo["financials"]["annual_contract_value"] == 17850.0
+
+
+def test_pipeline_config_serves_persona_and_sarvam_settings(client):
+    """The Next.js /api/invite-agent route builds the Agora agent from this
+    payload, so it must carry the stage-aware persona and the Sarvam vendor
+    settings — never a duplicated prompt on the TypeScript side."""
+    res = client.get(
+        "/api/agent/pipeline-config",
+        params={
+            "conversation_id": "test_pipeline_01",
+            "customer_name": "Rahul Sharma",
+            "company": "Razorpay",
+            "seat_count": 80,
+        },
+    )
+    assert res.status_code == 200
+    data = res.json()
+
+    assert data["conversation_id"] == "test_pipeline_01"
+    assert data["llm_mode"] in ("managed_openai", "custom")
+    # Seeded buyer context must already be reflected in the prompt.
+    assert "Seats: 80" in data["system_prompt"]
+    assert "Razorpay" in data["system_prompt"]
+    assert data["greeting_message"]
+    assert data["failure_message"]
+
+    sarvam = data["sarvam"]
+    assert sarvam["stt_language"]
+    assert sarvam["tts_speaker"]
+    assert sarvam["tts_target_language_code"]
+    assert isinstance(sarvam["tts_sample_rate"], int)
+
+
+def test_pipeline_config_custom_mode_points_at_middleware(client, monkeypatch):
+    """AGORA_LLM_MODE=custom must route Agora back to our FastAPI brain."""
+    from backend.config import settings
+
+    monkeypatch.setattr(settings, "AGORA_LLM_MODE", "custom")
+    res = client.get(
+        "/api/agent/pipeline-config",
+        params={"conversation_id": "test_pipeline_02"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["llm_mode"] == "custom"
+    assert data["custom_llm_url"].endswith("/v1/chat/completions")
+    assert data["custom_llm_api_key"]
+
+
+def test_pipeline_config_defaults_to_agora_managed_models(client):
+    """The hackathon-recommended pipeline is Agora-managed Deepgram + OpenAI +
+    MiniMax, so no provider keys are needed to run a full call."""
+    res = client.get(
+        "/api/agent/pipeline-config",
+        params={"conversation_id": "test_pipeline_03"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+
+    assert data["stt_vendor"] == "deepgram"
+    assert data["tts_vendor"] == "minimax"
+    # Managed mode only accepts these preset models.
+    assert data["deepgram"]["model"] in ("nova-2", "nova-3")
+    assert data["minimax"]["model"] in ("speech-2.6-turbo", "speech-2.8-turbo")
+    assert isinstance(data["mcp_server_urls"], list)
+
+
+def test_pipeline_config_exposes_configured_mcp_servers(client, monkeypatch):
+    """MCP server URLs are passed straight through to llm.mcp_servers so the
+    Agora engine performs tool calls itself."""
+    from backend.config import settings
+
+    monkeypatch.setattr(
+        settings,
+        "AGORA_MCP_SERVER_URLS",
+        "https://a.example/mcp, https://b.example/mcp",
+    )
+    res = client.get(
+        "/api/agent/pipeline-config",
+        params={"conversation_id": "test_pipeline_04"},
+    )
+    assert res.status_code == 200
+    assert res.json()["mcp_server_urls"] == [
+        "https://a.example/mcp",
+        "https://b.example/mcp",
+    ]
+
+
+def test_pipeline_config_exposes_deal_engine_mcp_url(client):
+    """The deal engine is offered to Agora as an MCP server scoped to this
+    conversation, so the agent has real tools on the managed LLM path."""
+    res = client.get(
+        "/api/agent/pipeline-config",
+        params={"conversation_id": "test_mcp_url_01"},
+    )
+    assert res.status_code == 200
+    url = res.json()["deal_engine_mcp_url"]
+    assert url is not None
+    assert url.endswith("/mcp/?cid=test_mcp_url_01")
+
+
+def test_mcp_tools_are_registered():
+    """All six sales actions must be exposed over MCP — this is what makes the
+    agent agentic when Agora's managed OpenAI drives the conversation."""
+    import asyncio
+    from backend.mcp_server import mcp
+
+    tools = asyncio.run(mcp.list_tools())
+    names = {t.name for t in tools}
+    assert names == {
+        "get_pricing",
+        "apply_discount",
+        "create_crm_lead",
+        "book_meeting",
+        "update_session_state",
+        "escalate_to_human",
+    }
+
+
+def test_mcp_tool_delegates_to_deal_engine():
+    """MCP tools must reuse execute_tool_call, not reimplement pricing."""
+    import asyncio
+    from backend.mcp_server import get_pricing
+    from backend.middleware.custom_llm import get_or_create_session
+
+    async def run():
+        return await get_pricing(
+            seat_count=120, ctx=None, conversation_id="test_mcp_tool_01"
+        )
+
+    result = asyncio.run(run())
+    assert result["tier"] == "enterprise"
+    assert result["seat_count"] == 120
+
+    session = get_or_create_session("test_mcp_tool_01")
+    assert session.requirements.seat_count == 120
