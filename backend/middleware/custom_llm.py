@@ -52,6 +52,29 @@ class ConnectionManager:
 
 ws_manager = ConnectionManager()
 
+# In-memory queue of human-escalation requests, so the Sales Team Console
+# (app/team) can show pending calls even if it connects to the WebSocket after
+# the escalation already fired — a live broadcast alone would be missed by a
+# console that wasn't open yet. Capped so a long-running demo doesn't leak
+# memory; oldest entries drop off first.
+ESCALATION_QUEUE_MAX = 50
+escalation_queue: List[Dict[str, Any]] = []
+
+
+def record_escalation(entry: Dict[str, Any]) -> None:
+    escalation_queue.append(entry)
+    del escalation_queue[:-ESCALATION_QUEUE_MAX]
+
+
+def resolve_escalation(conversation_id: str) -> bool:
+    """Marks the most recent open escalation for a conversation as handled.
+    Returns False if none was found (already resolved, or never existed)."""
+    for entry in reversed(escalation_queue):
+        if entry["conversation_id"] == conversation_id and not entry["resolved"]:
+            entry["resolved"] = True
+            return True
+    return False
+
 
 # In-Memory Session State Store keyed by conversation_id
 class CustomerProfile(BaseModel):
@@ -439,15 +462,34 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
         meeting_type = args.get("meeting_type") or "Enterprise Solution Architecture Demo"
         res = await calendar_client.book_meeting(
             attendee_email=email_val,
+            # The buyer's requested time, in their own words ("tomorrow at 3pm").
+            # Previously dropped, which silently booked every demo at the same
+            # default slot no matter what was agreed on the call.
+            start_time_iso=args.get("datetime_str"),
             meeting_type=meeting_type,
             notes=f"Seats: {session.requirements.seat_count}. Tier: {session.deal_state.tier_name}"
         )
         session.outcome = "demo_booked"
+
+        # Never claim an invite was sent when it was only simulated.
+        is_real = not res.get("is_sandbox", True)
+        if is_real:
+            toast_title = "Meeting Booked - Invite Sent"
+            toast_detail = (
+                f"{res.get('start_time')} - Google Calendar invite emailed to {email_val}"
+            )
+        else:
+            toast_title = "Meeting Booked (Simulated)"
+            toast_detail = (
+                f"{res.get('start_time')} - no real invite sent; "
+                "connect Google Calendar to make this live"
+            )
+
         await broadcast_session_update(
             session,
             toast_service="calendar",
-            toast_title="Google Calendar Demo Booked",
-            toast_detail=f"Google Meet invite sent to {email_val} ({res.get('start_time')})"
+            toast_title=toast_title,
+            toast_detail=toast_detail
         )
         return res
 
@@ -485,15 +527,25 @@ async def execute_tool_call(name: str, args: Dict[str, Any], session: SessionSta
         if isinstance(res, dict):
             res["handoff_url"] = handoff_url
 
+        escalation_record = {
+            "conversation_id": session.conversation_id,
+            "customer_name": session.customer.name or "Prospective Buyer",
+            "company": session.customer.company or "Unspecified",
+            "seat_count": session.requirements.seat_count,
+            "tier_name": session.deal_state.tier_name,
+            "reason": reason,
+            "urgency": urgency,
+            "handoff_url": handoff_url,
+            "timestamp": int(time.time() * 1000),
+            "resolved": False,
+        }
+        record_escalation(escalation_record)
+
+        # HUMAN_HANDOFF_REQUESTED is the live "ring" — a Sales Team Console
+        # already connected sees it instantly. A console that connects later
+        # hydrates the same data from GET /api/escalations instead.
         await ws_manager.broadcast(
-            {
-                "type": "HUMAN_HANDOFF_REQUESTED",
-                "conversation_id": session.conversation_id,
-                "reason": reason,
-                "urgency": urgency,
-                "handoff_url": handoff_url,
-                "timestamp": int(time.time() * 1000),
-            }
+            {"type": "HUMAN_HANDOFF_REQUESTED", **escalation_record}
         )
         await broadcast_session_update(
             session,

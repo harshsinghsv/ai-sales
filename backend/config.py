@@ -4,6 +4,7 @@ Loads credentials and endpoints from environment variables or .env file.
 """
 import os
 from pathlib import Path
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -100,14 +101,47 @@ class Settings(BaseSettings):
     # HubSpot CRM configuration
     HUBSPOT_ACCESS_TOKEN: str = os.getenv("HUBSPOT_ACCESS_TOKEN", "")
 
-    # Google Calendar configuration
+    # Google Calendar configuration.
+    # Legacy: a raw OAuth access token (expires in ~1 hour) — kept for
+    # backwards compatibility only. Prefer the refresh-token flow below.
     GOOGLE_CALENDAR_CREDENTIALS: str = os.getenv("GOOGLE_CALENDAR_CREDENTIALS", "")
+
+    # Google Calendar OAuth (user credentials). A refresh token acts as the
+    # signed-in user, so events land on a real calendar AND attendees can be
+    # invited — a service account cannot invite attendees without Google
+    # Workspace domain-wide delegation. Obtain the refresh token once with:
+    #   python -m backend.scripts.google_calendar_auth
+    GOOGLE_OAUTH_CLIENT_ID: str = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "")
+    GOOGLE_OAUTH_CLIENT_SECRET: str = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "")
+    GOOGLE_OAUTH_REFRESH_TOKEN: str = os.getenv("GOOGLE_OAUTH_REFRESH_TOKEN", "")
+
+    # Which calendar to write to ("primary" = the authorising user's own).
+    GOOGLE_CALENDAR_ID: str = os.getenv("GOOGLE_CALENDAR_ID", "primary")
+    # IANA timezone used when the buyer says a bare time like "3pm".
+    GOOGLE_CALENDAR_TIMEZONE: str = os.getenv("GOOGLE_CALENDAR_TIMEZONE", "Asia/Kolkata")
+    # Default meeting length in minutes.
+    GOOGLE_CALENDAR_MEETING_MINUTES: int = int(
+        os.getenv("GOOGLE_CALENDAR_MEETING_MINUTES", "45")
+    )
 
     # Human Escalation (Slack Webhook)
     SLACK_WEBHOOK_URL: str = os.getenv("SLACK_WEBHOOK_URL", "")
 
     # Public Middleware Base URL (the URL Agora will call for Custom LLM & TTS shim)
     PUBLIC_BASE_URL: str = os.getenv("PUBLIC_BASE_URL", "http://localhost:8000")
+
+    @field_validator(
+        "PUBLIC_BASE_URL", "HUMAN_HANDOFF_BASE_URL", mode="after"
+    )
+    @classmethod
+    def _strip_trailing_slash(cls, value: str) -> str:
+        """
+        Base URLs are always concatenated as f"{base}/path", so a trailing
+        slash in the environment produces a double slash ("https://host//mcp/")
+        which Agora's cloud resolves to 404. Tunnel tools (cloudflared, ngrok)
+        print URLs with a trailing slash, so this is easy to hit.
+        """
+        return value.rstrip("/") if isinstance(value, str) else value
 
 
 settings = Settings()

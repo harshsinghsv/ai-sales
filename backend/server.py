@@ -25,7 +25,9 @@ from backend.middleware.custom_llm import (
     ws_manager,
     sessions,
     get_or_create_session,
-    broadcast_session_update
+    broadcast_session_update,
+    escalation_queue,
+    resolve_escalation,
 )
 
 # Configure structured logging
@@ -458,6 +460,31 @@ class ConcessionRequest(BaseModel):
 async def post_concession(req: ConcessionRequest):
     decision = evaluate_concession_request(req.seat_count, req.requested_discount_pct, req.current_tier)
     return decision
+
+
+# -------------------------------------------------------------
+# 5b. Human Escalation Queue (Sales Team Console)
+# -------------------------------------------------------------
+@app.get("/api/escalations")
+async def list_escalations(include_resolved: bool = False):
+    """
+    Returns pending (and optionally resolved) human-handoff requests, newest
+    first. The Sales Team Console calls this on load to hydrate its queue,
+    then relies on the /ws HUMAN_HANDOFF_REQUESTED broadcast for live updates —
+    this covers a console that opens after the escalation already fired.
+    """
+    items = escalation_queue if include_resolved else [
+        e for e in escalation_queue if not e["resolved"]
+    ]
+    return {"escalations": list(reversed(items))}
+
+
+@app.post("/api/escalations/{conversation_id}/resolve")
+async def resolve_escalation_endpoint(conversation_id: str):
+    """Marks an escalation as picked up once a specialist opens the handoff
+    console for it, so it drops off other specialists' pending queues."""
+    found = resolve_escalation(conversation_id)
+    return {"resolved": found}
 
 
 # -------------------------------------------------------------

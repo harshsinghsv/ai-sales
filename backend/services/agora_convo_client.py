@@ -14,11 +14,16 @@ from backend.config import settings
 
 logger = logging.getLogger("agora_convo_client")
 
+# Pure Hindi (Devanagari) so a single-language TTS voice (e.g. MiniMax's
+# hindi_female_2_v1) pronounces these cleanly — these are fixed strings spoken
+# verbatim before the buyer has said anything, so language-mirroring doesn't
+# apply yet. TeamSync stays as-is: a proper noun, spoken the same in either
+# language. If the TTS voice is switched to an English/bilingual voice, these
+# should switch back to English or Hinglish accordingly.
 MANAGED_GREETING = (
-    "Namaste! Welcome to TeamSync. Main Aarav hoon. I understand you are exploring "
-    "our collaboration platform — how can I help you today?"
+    "नमस्ते! TeamSync में आपका स्वागत है। मैं आरव हूँ। बताइए, मैं आपकी किस तरह मदद कर सकता हूँ?"
 )
-MANAGED_FAILURE_MESSAGE = "Maaf kijiye, could you please repeat that?"
+MANAGED_FAILURE_MESSAGE = "माफ़ कीजिए, क्या आप दोबारा बता सकते हैं?"
 
 
 def build_llm_config(session_id: Optional[str] = None) -> Dict[str, Any]:

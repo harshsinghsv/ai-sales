@@ -292,3 +292,128 @@ def test_mcp_tool_delegates_to_deal_engine():
 
     session = get_or_create_session("test_mcp_tool_01")
     assert session.requirements.seat_count == 120
+
+
+def test_meeting_datetime_parses_natural_language():
+    """The agent passes the buyer's own words, not ISO timestamps, so booking
+    at the agreed time depends entirely on this parser."""
+    import datetime
+    from backend.services.calendar_client import parse_meeting_datetime, _local_timezone
+
+    tz = _local_timezone()
+    now = datetime.datetime.now(tz)
+
+    tomorrow_3pm = parse_meeting_datetime("tomorrow at 3pm", tz)
+    assert tomorrow_3pm.hour == 15 and tomorrow_3pm.minute == 0
+    assert tomorrow_3pm.date() == (now + datetime.timedelta(days=1)).date()
+
+    half_past = parse_meeting_datetime("tomorrow 10:30 am", tz)
+    assert (half_past.hour, half_past.minute) == (10, 30)
+
+    # Named parts of the day map to business-hours defaults.
+    assert parse_meeting_datetime("friday afternoon", tz).hour == 15
+    assert parse_meeting_datetime("monday morning", tz).hour == 10
+
+    # A weekday name lands on that weekday.
+    assert parse_meeting_datetime("next tuesday at 11am", tz).weekday() == 1
+
+    # Explicit ISO input is honoured verbatim.
+    iso = parse_meeting_datetime("2030-09-10T14:00:00+05:30", tz)
+    assert (iso.year, iso.month, iso.day, iso.hour) == (2030, 9, 10, 14)
+
+
+def test_meeting_datetime_never_books_in_the_past():
+    """A stale time (e.g. '9am' said at 6pm) must roll forward, never book
+    a slot that has already happened."""
+    import datetime
+    from backend.services.calendar_client import parse_meeting_datetime, _local_timezone
+
+    tz = _local_timezone()
+    now = datetime.datetime.now(tz)
+    for phrase in ("today at 9am", "at 1am", "tomorrow at 3pm", ""):
+        assert parse_meeting_datetime(phrase, tz) > now
+
+
+def test_calendar_sandbox_result_is_clearly_labelled():
+    """Without Google credentials the result must be unmistakably simulated,
+    so the UI never claims an invite was emailed when none was."""
+    import asyncio
+    from backend.config import settings
+    from backend.services.calendar_client import GoogleCalendarClient
+
+    client = GoogleCalendarClient()
+    if client.is_configured:
+        import pytest
+
+        pytest.skip("Google Calendar is configured; sandbox path not exercised")
+
+    res = asyncio.run(
+        client.book_meeting(
+            attendee_email="buyer@example.com",
+            start_time_iso="tomorrow at 3pm",
+            meeting_type="Enterprise Demo",
+        )
+    )
+    assert res["is_sandbox"] is True
+    assert "SIMULATED" in res["message"]
+    assert res["attendee_email"] == "buyer@example.com"
+
+
+def test_escalation_queue_hydrates_the_team_console(client):
+    """escalate_to_human must land in the queue with enough context for the
+    Sales Team Console to render a card without a second round-trip."""
+    import asyncio
+    from backend.middleware.custom_llm import get_or_create_session, execute_tool_call
+
+    async def run():
+        session = get_or_create_session("test_escalation_01")
+        session.customer.name = "Priya Nair"
+        session.customer.company = "Zeta Corp"
+        session.requirements.seat_count = 200
+        await execute_tool_call(
+            "escalate_to_human",
+            {"reason": "Wants to speak to a person about a multi-year deal", "urgency": "high"},
+            session,
+        )
+
+    asyncio.run(run())
+
+    res = client.get("/api/escalations")
+    assert res.status_code == 200
+    items = res.json()["escalations"]
+    match = next(e for e in items if e["conversation_id"] == "test_escalation_01")
+    assert match["customer_name"] == "Priya Nair"
+    assert match["company"] == "Zeta Corp"
+    assert match["seat_count"] == 200
+    assert match["urgency"] == "high"
+    assert match["resolved"] is False
+    assert match["handoff_url"].endswith("/human/test_escalation_01")
+
+
+def test_resolving_an_escalation_removes_it_from_the_pending_queue(client):
+    """Once a specialist picks up a call it must drop off other specialists'
+    queues — otherwise two people join the same buyer at once."""
+    import asyncio
+    from backend.middleware.custom_llm import get_or_create_session, execute_tool_call
+
+    async def run():
+        session = get_or_create_session("test_escalation_02")
+        await execute_tool_call(
+            "escalate_to_human", {"reason": "Pricing deadlock", "urgency": "medium"}, session
+        )
+
+    asyncio.run(run())
+
+    pending_before = client.get("/api/escalations").json()["escalations"]
+    assert any(e["conversation_id"] == "test_escalation_02" for e in pending_before)
+
+    res = client.post("/api/escalations/test_escalation_02/resolve")
+    assert res.status_code == 200
+    assert res.json()["resolved"] is True
+
+    pending_after = client.get("/api/escalations").json()["escalations"]
+    assert not any(e["conversation_id"] == "test_escalation_02" for e in pending_after)
+
+    # Resolving something already resolved (or nonexistent) is reported, not an error.
+    res2 = client.post("/api/escalations/test_escalation_02/resolve")
+    assert res2.json()["resolved"] is False
