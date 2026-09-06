@@ -4,6 +4,12 @@
    ============================================================ */
 
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --color-destructive-foreground: oklch(1 0 0);
+  --color-color-destructive-foreground: var(--color-destructive-foreground);
+}
 
 @font-face {
   font-family: 'Anthropic Sans';
@@ -277,5 +283,50 @@ details summary::marker {
 
 .animate-spin-around {
   animation: spin-around calc(var(--speed, 3s) * 2) infinite linear;
+}
+
+:root {
+  --destructive-foreground: oklch(1 0 0);
+  --color-1: 0 100% 63%;
+  --color-2: 270 100% 63%;
+  --color-3: 210 100% 63%;
+  --color-4: 195 100% 63%;
+  --color-5: 90 100% 63%;
+  --color-success-accent: #16a34a;
+  --color-success-soft: #dcfce7;
+  --color-primary-accent: #2563eb;
+  --color-primary-soft: #dbeafe;
+  --color-warning-accent: #d97706;
+  --color-warning-soft: #fef3c7;
+  --color-info-accent: #7c3aed;
+  --color-info-soft: #ede9fe;
+  --color-destructive-accent: #dc2626;
+  --color-destructive-soft: #fee2e2;
+}
+
+.dark {
+  --destructive-foreground: oklch(1 0 0);
+}
+
+@keyframes rainbow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+.animate-rainbow {
+  animation: rainbow var(--speed, 2s) infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 

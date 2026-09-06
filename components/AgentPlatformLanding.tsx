@@ -2,38 +2,36 @@
 
 import React from 'react';
 import { ArrowRight, PhoneCall, Zap, ShieldCheck, Activity, Workflow, Globe } from 'lucide-react';
-import { DotPattern } from '@/components/ui/dot-pattern';
-import { ShimmerButton } from '@/components/ui/shimmer-button';
-import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
-import { BorderBeam } from '@/components/ui/border-beam';
-import { Marquee } from '@/components/ui/marquee';
-import { BentoGrid, BentoCard } from '@/components/ui/bento-grid';
 import { Navbar } from '@/components/Navbar';
 import { AnthropicShowcase } from '@/components/AnthropicShowcase';
 import { IntegrationBeams } from '@/components/IntegrationBeams';
 import { ConcessionSimulator } from '@/components/ConcessionSimulator';
 import { AgentVoiceConsole } from '@/components/AgentVoiceConsole';
 import { Footer } from '@/components/Footer';
+import { GradientBars } from '@/components/reactbits/GradientBars';
+import { DotField } from '@/components/reactbits/DotField';
+import { Squares } from '@/components/reactbits/Squares';
+import { BlurText } from '@/components/reactbits/BlurText';
+import { StarBorder } from '@/components/reactbits/StarBorder';
+import { SpotlightCard } from '@/components/reactbits/SpotlightCard';
+import { TiltedCard } from '@/components/reactbits/TiltedCard';
+import { BorderBeam } from '@/components/ui/border-beam';
+import { Marquee } from '@/components/ui/marquee';
+import { RainbowButton } from '@/components/ui/rainbow-button';
+import { MovingBorderButton } from '@/components/ui/moving-border-button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge-2';
 
 interface AgentPlatformLandingProps {
   onLaunchDemo: () => void;
   onStartDirectCall: () => void;
 }
 
-const TICKER_ITEMS = [
-  { label: 'RTC Turn Latency', val: '418ms (Agora SD-RTN)', color: 'text-[#D97757]' },
-  { label: 'Margin Defense', val: '18.0% Floor Enforced', color: 'text-amber-700' },
-  { label: 'HubSpot Sync', val: 'Deal #AG-9428 Created ($198,000 ARR)', color: 'text-emerald-700' },
-  { label: 'Google Calendar', val: 'Exec Architecture Slot Booked', color: 'text-blue-700' },
-  { label: 'STT Pipeline', val: 'Deepgram Nova-3 Multi (Code-Switching)', color: 'text-purple-700' },
-  { label: 'Voice Synthesis', val: 'MiniMax Speech-2.8 Turbo', color: 'text-[#D97757]' },
-  { label: 'Compliance Gate', val: 'Zero Data Retention · HIPAA BAA', color: 'text-emerald-700' },
-];
-
 export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
   onLaunchDemo,
   onStartDirectCall,
 }) => {
+
   return (
     <div className="min-h-screen bg-[#FAF9F5] text-[#141413] selection:bg-[#D97757]/20 selection:text-[#141413] antialiased">
       {/* ─────────────────────────────────────────────────────────────
@@ -45,115 +43,71 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       />
 
       {/* ─────────────────────────────────────────────────────────────
-          2. HERO SECTION (21st.dev DotPattern + Shimmer + BorderBeam)
+          2. 21ST.DEV GRADIENT BARS HERO SECTION (From 21st.dev)
          ───────────────────────────────────────────────────────────── */}
-      <section className="relative pt-12 pb-16 sm:pt-16 sm:pb-24 overflow-hidden border-b border-[#E8E6DC]">
-        {/* 21st.dev Background DotPattern with radial fade */}
-        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] opacity-35" />
+      <section className="relative min-h-[95vh] flex flex-col justify-center items-center bg-[#0A070D] text-white pt-36 pb-24 overflow-hidden border-b border-white/10">
+        {/* 21st.dev Vertical Glowing Gradient Bars Background */}
+        <GradientBars barCount={32} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Column: Value Prop */}
-            <div className="lg:col-span-6 flex flex-col items-start text-left">
-              {/* 21st.dev Animated Shiny Text Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF0EC] border border-[#D97757]/30 text-xs font-mono mb-6 cursor-pointer hover:border-[#D97757]/60 transition-colors">
-                <span className="w-2 h-2 rounded-full bg-[#D97757] animate-pulse" />
-                <AnimatedShinyText className="font-semibold text-xs text-[#D97757]">
-                  Agora Conversational AI · Sub-500ms Voice RTC
-                </AnimatedShinyText>
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-[#141413] leading-[1.08] mb-6">
-                The Autonomous Sales Agent that{' '}
-                <span className="italic font-normal text-[#D97757]">Negotiates</span> in Real-Time Voice.
-              </h1>
-
-              {/* Editorial Subtitle */}
-              <p className="text-base sm:text-lg text-[#5E5D59] leading-relaxed max-w-xl mb-8 font-sans">
-                Trained on enterprise margin policies, objection handling trees, and multi-tier procurement strategies. Listens, defends pricing floors, and closes high-ticket deals over voice — syncing directly with HubSpot, Google Calendar, and Slack.
-              </p>
-
-              {/* Primary Call to Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto mb-10">
-                {/* 21st.dev Shimmer Button */}
-                <ShimmerButton
-                  onClick={onLaunchDemo}
-                  shimmerColor="#D97757"
-                  className="shadow-xl"
-                >
-                  <span className="flex items-center gap-2 font-semibold text-sm">
-                    <span>Experience Claude Enterprise Demo</span>
-                    <ArrowRight className="w-4 h-4 text-[#D97757]" />
-                  </span>
-                </ShimmerButton>
-
-                <ShimmerButton
-                  onClick={onStartDirectCall}
-                  shimmerColor="#D97757"
-                  background="#262624"
-                  className="shadow-md"
-                >
-                  <span className="flex items-center gap-2 font-semibold text-sm">
-                    <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                    <span>Start Voice Call with Emily</span>
-                  </span>
-                </ShimmerButton>
-              </div>
-
-              {/* Telemetry Strip */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full pt-6 border-t border-[#E8E6DC]">
-                <div>
-                  <div className="text-2xl font-serif font-bold text-[#141413]">420ms</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">RTC Turn Latency</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-serif font-bold text-[#D97757]">18.0%</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Margin Floor Guard</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-serif font-bold text-[#141413]">100%</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">Cloud Pipeline (No Dups)</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-serif font-bold text-emerald-700">Tri-Stack</div>
-                  <div className="text-xs text-[#8C8984] font-mono mt-0.5">HubSpot · GCal · Slack</div>
-                </div>
-              </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center flex flex-col items-center">
+          {/* 21st.dev Avatar Social Proof Pill */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl shadow-lg mb-8 hover:bg-white/10 transition-colors">
+            {/* Avatar Stack */}
+            <div className="flex -space-x-2 overflow-hidden">
+              <span className="inline-block h-5 w-5 rounded-full ring-1 ring-black bg-[#D97757] text-[10px] font-bold text-white flex items-center justify-center">
+                S
+              </span>
+              <span className="inline-block h-5 w-5 rounded-full ring-1 ring-black bg-emerald-600 text-[10px] font-bold text-white flex items-center justify-center">
+                M
+              </span>
+              <span className="inline-block h-5 w-5 rounded-full ring-1 ring-black bg-indigo-600 text-[10px] font-bold text-white flex items-center justify-center">
+                E
+              </span>
             </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-mono text-white/90">
+              1,240+ Deals Negotiated · Agora SD-RTN 418ms
+            </span>
+          </div>
 
-            {/* Right Column: 21st.dev BorderBeam Container + Agent Voice Console */}
-            <div className="lg:col-span-6 w-full relative">
-              <div className="relative rounded-2xl border border-[#E8E6DC] bg-[#141413] p-1 shadow-2xl overflow-hidden">
-                <AgentVoiceConsole onLaunchDemo={onLaunchDemo} />
-                <BorderBeam
-                  size={280}
-                  duration={12}
-                  colorFrom="#D97757"
-                  colorTo="#F59E0B"
-                />
-              </div>
-            </div>
+          {/* 21st.dev Headline: Bold Modern Sans + Editorial Italic Serif */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08] mb-6 max-w-4xl mx-auto">
+            <span>Redefining Autonomous Sales,</span>
+            <br />
+            <span className="font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#FFA87D] via-[#D97757] to-[#F59E0B] drop-shadow-[0_0_45px_rgba(217,119,87,0.55)]">
+              One Negotiation at a Time.
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-base sm:text-lg text-white/75 leading-relaxed max-w-2xl mx-auto mb-10 font-normal">
+            Trained on enterprise margin policies, objection trees, and compliance gates. Emily defends pricing floors, syncs HubSpot deals, and books Google Calendar slots in sub-500ms voice turns.
+          </p>
+
+          {/* Symmetrical Action Buttons: Launch Live Demo (Moving Border) & Contact Us (Transparent) */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+            <MovingBorderButton
+              type="button"
+              onClick={onLaunchDemo}
+              className="h-auto w-full sm:w-auto"
+              faceClassName="py-3.5 sm:py-4 px-8 text-sm sm:text-base font-semibold text-white whitespace-nowrap gap-2"
+            >
+              <span>Launch Live Demo</span>
+              <ArrowRight className="w-4 h-4 text-white" />
+            </MovingBorderButton>
+
+            <button
+              type="button"
+              onClick={onStartDirectCall}
+              className="w-full sm:w-auto h-12 sm:h-[52px] px-8 py-3.5 sm:py-4 rounded-full text-sm sm:text-base font-semibold text-white/90 hover:text-white bg-white/5 hover:bg-white/10 border border-white/15 hover:border-white/30 backdrop-blur-md transition-all duration-300 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+            >
+              <span>Contact Us</span>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* ─────────────────────────────────────────────────────────────
-          3. 21ST.DEV MARQUEE TICKER (Live Platform Signals)
-         ───────────────────────────────────────────────────────────── */}
-      <div className="py-4 bg-[#F5F4ED] border-b border-[#E8E6DC] overflow-hidden">
-        <Marquee pauseOnHover repeat={4} className="[--gap:2rem]">
-          {TICKER_ITEMS.map((item, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E8E6DC] text-xs font-mono shadow-2xs"
-            >
-              <span className="text-[#8C8984]">{item.label}:</span>
-              <span className={`font-semibold ${item.color}`}>{item.val}</span>
-            </div>
-          ))}
-        </Marquee>
-      </div>
+
 
       {/* ─────────────────────────────────────────────────────────────
           4. CUSTOMER SHOWCASE SPOTLIGHT (Anthropic Story - Rebuilt)
@@ -161,61 +115,153 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       <AnthropicShowcase onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
-          5. 21ST.DEV BENTO GRID (Core Architectural Moats)
+          5. CAPABILITIES (Minimal 4-Pillar Architectural Moats)
          ───────────────────────────────────────────────────────────── */}
-      <section id="capabilities" className="py-20 bg-[#F5F4ED] border-y border-[#E8E6DC]">
+      <section id="capabilities" className="py-20 bg-[#FAF9F5] border-y border-[#E8E6DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] text-[#D97757] text-xs font-mono font-medium mb-3">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0EC] border border-[#D97757]/20 text-[#D97757] text-xs font-mono font-medium mb-3">
               <Zap className="w-3.5 h-3.5" />
               <span>CORE ARCHITECTURAL MOATS</span>
             </div>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#141413] tracking-tight">
               Engineered to Protect Margin While Closing Faster
             </h2>
-            <p className="mt-4 text-base text-[#5E5D59]">
-              Built with 21st-century voice and negotiation primitives.
+            <p className="mt-3 text-sm sm:text-base text-[#5E5D59]">
+              Four core engineering primitives that turn real-time voice into an autonomous negotiation engine.
             </p>
           </div>
 
-          <BentoGrid>
-            <BentoCard
-              name="Sub-500ms Voice RTC Pipeline"
-              className="col-span-1 md:col-span-2"
-              Icon={Activity}
-              description="Zero browser SpeechRecognition quirks. Traverses Agora SD-RTN with Deepgram Nova-3 Multi STT and MiniMax Speech-2.8 Turbo synthesis, delivering sub-half-second turnaround latency."
-              cta="Explore Pipeline Spec"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Pillar 1 */}
+            <Card className="bg-white border border-[#E8E6DC] shadow-xs hover:border-[#D97757]/40 hover:shadow-md transition-all flex flex-col justify-between">
+              <CardHeader className="border-0 px-5 pt-5 pb-3 min-h-auto">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] shrink-0">
+                    <Activity className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base font-bold text-[#141413]">
+                      Sub-500ms Voice RTC
+                    </CardTitle>
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-[#D97757] font-semibold">
+                      Turn Latency
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-5 pb-5 pt-0 space-y-3.5">
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Agora SD-RTN edge routing, Deepgram Nova-3 Multi, and MiniMax 2.8 Turbo in a unified cloud pipeline.
+                </p>
+                <div className="p-2.5 bg-muted/60 flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-[#8C8984]">Routing</span>
+                  <span className="font-semibold text-[#141413] flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Agora SD-RTN
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
 
-            <BentoCard
-              name="18% Margin Floor Guard"
-              className="col-span-1 md:col-span-1"
-              Icon={ShieldCheck}
-              description="Algorithmic concession boundary. Human reps frequently cave to 30% discounts; our engine strictly bounds concessions while demanding multi-year commitments in reciprocity."
-              cta="Test Concession Engine"
-            />
+            {/* Pillar 2 */}
+            <Card className="bg-white border border-[#E8E6DC] shadow-xs hover:border-[#D97757]/40 hover:shadow-md transition-all flex flex-col justify-between">
+              <CardHeader className="border-0 px-5 pt-5 pb-3 min-h-auto">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] shrink-0">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base font-bold text-[#141413]">
+                      18% Floor Guard
+                    </CardTitle>
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-amber-700 font-semibold">
+                      Margin Defense
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-5 pb-5 pt-0 space-y-3.5">
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Strict algorithmic boundary that prevents excessive discounting and requires multi-year reciprocal terms.
+                </p>
+                <div className="p-2.5 bg-muted/60 flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-[#8C8984]">Enforcement</span>
+                  <span className="font-semibold text-[#141413] flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    Policy Guardrail
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
 
-            <BentoCard
-              name="Tri-Channel Autonomous Stack"
-              className="col-span-1 md:col-span-1"
-              Icon={Workflow}
-              description="Autonomous execution across HubSpot CRM deals, Google Calendar appointments, and Slack notification webhooks with real-time sentiment analytics."
-              cta="View CRM Sync Flow"
-            />
+            {/* Pillar 3 */}
+            <Card className="bg-white border border-[#E8E6DC] shadow-xs hover:border-[#D97757]/40 hover:shadow-md transition-all flex flex-col justify-between">
+              <CardHeader className="border-0 px-5 pt-5 pb-3 min-h-auto">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] shrink-0">
+                    <Workflow className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base font-bold text-[#141413]">
+                      Tri-Channel Sync
+                    </CardTitle>
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-emerald-700 font-semibold">
+                      Autonomous Stack
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-5 pb-5 pt-0 space-y-3.5">
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Autonomous tool execution across HubSpot CRM deals, Google Calendar appointments, and Slack rooms.
+                </p>
+                <div className="p-2.5 bg-muted/60 flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-[#8C8984]">Integrations</span>
+                  <span className="font-semibold text-[#141413] flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    HubSpot · GCal
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
 
-            <BentoCard
-              name="Multi-Language Code Switching"
-              className="col-span-1 md:col-span-2"
-              Icon={Globe}
-              description="Fluent code-switching across English and Hindi (Hinglish) using Deepgram's multi-language acoustic model, perfectly suited for global procurement teams."
-              cta="Inspect Acoustic Models"
-            />
-          </BentoGrid>
+            {/* Pillar 4 */}
+            <Card className="bg-white border border-[#E8E6DC] shadow-xs hover:border-[#D97757]/40 hover:shadow-md transition-all flex flex-col justify-between">
+              <CardHeader className="border-0 px-5 pt-5 pb-3 min-h-auto">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#FAF0EC] flex items-center justify-center text-[#D97757] shrink-0">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base font-bold text-[#141413]">
+                      Code-Switching
+                    </CardTitle>
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-indigo-700 font-semibold">
+                      Bilingual Acoustic
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="px-5 pb-5 pt-0 space-y-3.5">
+                <p className="text-xs text-[#5E5D59] leading-relaxed">
+                  Native English and Hindi (Hinglish) code-switching for multinational enterprise buyers and procurement.
+                </p>
+                <div className="p-2.5 bg-muted/60 flex items-center justify-between rounded-lg text-xs font-mono">
+                  <span className="text-[#8C8984]">Model</span>
+                  <span className="font-semibold text-[#141413] flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                    Nova-3 Multi
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. 21ST.DEV ANIMATED BEAM (Pipeline Flow Visualizer)
+          6. REAL-TIME DATA PATH (Kept & Highlighted - As Requested!)
          ───────────────────────────────────────────────────────────── */}
       <section id="pipeline" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -242,7 +288,7 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
       <ConcessionSimulator onLaunchDemo={onLaunchDemo} />
 
       {/* ─────────────────────────────────────────────────────────────
-          8. CLOSING CTA BANNER (With Matching 21st.dev ShimmerButtons)
+          8. CLOSING CTA BANNER (With React Bits StarBorder Buttons)
          ───────────────────────────────────────────────────────────── */}
       <section className="py-20 bg-[#141413] text-white relative overflow-hidden">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -260,36 +306,29 @@ export const AgentPlatformLanding: React.FC<AgentPlatformLandingProps> = ({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            {/* Button 1: ShimmerButton */}
-            <ShimmerButton
-              onClick={onLaunchDemo}
-              shimmerColor="#D97757"
-              className="w-full sm:w-auto shadow-2xl"
-            >
-              <span className="flex items-center gap-2 font-semibold text-base">
-                <span>View Customer Demo (Claude Enterprise)</span>
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </ShimmerButton>
-
-            {/* Button 2: Matching ShimmerButton (As requested by user!) */}
-            <ShimmerButton
+            <MovingBorderButton
               onClick={onStartDirectCall}
-              shimmerColor="#D97757"
-              background="#262624"
-              className="w-full sm:w-auto shadow-xl"
+              className="w-full sm:w-auto h-auto"
+              faceClassName="py-3.5 sm:py-4 px-8 text-sm font-semibold text-white"
             >
-              <span className="flex items-center gap-2 font-semibold text-base text-white">
-                <PhoneCall className="w-4 h-4 text-[#D97757]" />
-                <span>Start Voice Call with Emily</span>
-              </span>
-            </ShimmerButton>
+              <PhoneCall className="w-4 h-4 text-[#D97757]" />
+              <span>Start Voice Call with Emily</span>
+            </MovingBorderButton>
+
+            <StarBorder
+              onClick={onLaunchDemo}
+              color="#D97757"
+              className="w-full sm:w-auto"
+            >
+              <span>View Customer Demo (Claude Enterprise)</span>
+              <ArrowRight className="w-4 h-4 text-[#D97757]" />
+            </StarBorder>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          9. 21ST.DEV GLOWING SITEMAP FOOTER
+          9. ENTERPRISE FOOTER
          ───────────────────────────────────────────────────────────── */}
       <Footer onLaunchDemo={onLaunchDemo} />
     </div>
