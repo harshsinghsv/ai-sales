@@ -46,7 +46,7 @@ export interface StopConversationRequest {
 /**
  * Pipeline configuration served by the FastAPI backend
  * (GET /api/agent/pipeline-config). The Python side stays the single source of
- * truth for the Aarav persona, stage detection, and brain selection — this
+ * truth for the Emily persona, stage detection, and brain selection — this
  * route only transports it into the Agora agent definition.
  */
 export interface AgentPipelineConfig {
