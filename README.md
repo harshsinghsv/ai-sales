@@ -19,7 +19,7 @@
 ---
 <img width="1902" height="917" alt="image" src="https://github.com/user-attachments/assets/9c389de0-2a93-42d8-bc93-9ebcbfd03907" />
 
-<img width="965" height="597" alt="image" src="https://github.com/user-attachments/assets/f945640e-2334-4b76-966f-c8d570c28f28" />
+<img width="1257" height="835" alt="image" src="https://github.com/user-attachments/assets/c92e8d3b-7669-425e-92bc-cbac884b4c3e" />
 
 Demo Video:
 https://www.youtube.com/watch?v=wTz0yxd5yR0
