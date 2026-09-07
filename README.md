@@ -17,6 +17,12 @@
 </p>
 
 ---
+<img width="1902" height="917" alt="image" src="https://github.com/user-attachments/assets/9c389de0-2a93-42d8-bc93-9ebcbfd03907" />
+
+<img width="965" height="597" alt="image" src="https://github.com/user-attachments/assets/f945640e-2334-4b76-966f-c8d570c28f28" />
+
+Demo Video:
+https://www.youtube.com/watch?v=wTz0yxd5yR0
 
 This is a **adaptive voice AI sales & negotiation agent** a real-time voice rep that runs a complete sales negotiation over a live, phone-quality call for *any* product with tiered seat pricing. It isn't a scripted IVR or a text chatbot wearing a microphone: it's built end-to-end on **Agora's Conversational AI Engine**, quotes real pricing from a data-driven tier config, holds a margin floor, trades a discount for a concession, remembers everything the buyer said earlier in the call, books a genuine Google Calendar meeting, and hands off to a live human over **Agora RTC** when asked. None of that logic — the negotiation engine, the MCP tool layer, the RTC handoff — is specific to any one product.
 
