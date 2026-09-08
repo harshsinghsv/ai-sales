@@ -21,6 +21,12 @@
 
 <img width="1257" height="835" alt="image" src="https://github.com/user-attachments/assets/c92e8d3b-7669-425e-92bc-cbac884b4c3e" />
 
+<p align="center">
+  <img width="300" height="650" alt="image" src="https://github.com/user-attachments/assets/b004af7d-7578-4de9-b5aa-3501874ddffd" />
+</p>
+
+
+
 Demo Video:
 https://www.youtube.com/watch?v=wTz0yxd5yR0
 
